@@ -1,0 +1,20 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+/* Boxicons CSS */
+@import url('https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css');
+
+/* Custom Dashboard icon using Boxicons */
+.fi-icon-bxs-dashboard::before {
+    content: '\e9d1';
+    font-family: 'boxicons' !important;
+    font-size: 1.25rem;
+}
+
+/* Alternative selector for navigation icon */
+.fi-sidebar-nav-item-icon.fi-icon-bxs-dashboard::before {
+    content: '\e9d1';
+    font-family: 'boxicons' !important;
+    font-size: 1.25rem;
+}
