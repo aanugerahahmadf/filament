@@ -134,4 +134,96 @@ class NotificationApiController extends Controller
             ], 500);
         }
     }
+
+    /**
+     * Delete a notification
+     */
+    public function destroy(Request $request, string $id): JsonResponse
+    {
+        try {
+            $user = $request->user();
+
+            if (! $user) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Unauthenticated',
+                ], 401);
+            }
+
+            $notification = Notification::where('id', $id)
+                ->where('user_id', $user->id)
+                ->first();
+
+            if (! $notification) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Notification not found',
+                ], 404);
+            }
+
+            $notification->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Notification deleted successfully',
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error deleting notification: '.$e->getMessage(), [
+                'exception' => $e,
+                'user_id' => $request->user()?->id,
+                'notification_id' => $id,
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Error deleting notification',
+            ], 500);
+        }
+    }
+
+    /**
+     * Mark a notification as unread
+     */
+    public function markAsUnread(Request $request, string $id): JsonResponse
+    {
+        try {
+            $user = $request->user();
+
+            if (! $user) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Unauthenticated',
+                ], 401);
+            }
+
+            $notification = Notification::where('id', $id)
+                ->where('user_id', $user->id)
+                ->first();
+
+            if (! $notification) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Notification not found',
+                ], 404);
+            }
+
+            $notification->markAsUnread();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Notification marked as unread',
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error marking notification as unread: '.$e->getMessage(), [
+                'exception' => $e,
+                'user_id' => $request->user()?->id,
+                'notification_id' => $id,
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Error marking notification as unread',
+            ], 500);
+        }
+    }
 }

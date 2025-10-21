@@ -140,6 +140,30 @@ class NotificationService
         }
     }
 
+    public function sendMessageNotification(User $recipient, User $sender, string $messageBody, array $data = []): void
+    {
+        $notificationData = array_merge([
+            'sender_id' => $sender->id,
+            'sender_name' => $sender->name,
+            'message' => $messageBody,
+            'message_body' => $messageBody, // For consistency with existing code
+        ], $data);
+
+        $notification = Notification::create([
+            'user_id' => $recipient->id,
+            'type' => 'message',
+            'notifiable_type' => User::class,
+            'notifiable_id' => $sender->id,
+            'data' => $notificationData,
+        ]);
+        NotificationCreated::dispatch($notification);
+
+        // Send email notification if enabled
+        if ($this->settingsService->get('notifications_email', true)) {
+            $this->sendEmailNotification($recipient, 'message', $messageBody, $notificationData);
+        }
+    }
+
     protected function sendEmailNotification(User $user, string $type, string $message, array $data): void
     {
         try {
