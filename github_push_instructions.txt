@@ -1,0 +1,33 @@
+GitHub Push Instructions
+========================
+
+To push the notification system changes to GitHub, follow these steps:
+
+1. First, make sure you have a Personal Access Token (PAT) from GitHub:
+   - Go to GitHub.com
+   - Click on your profile picture → Settings
+   - Developer settings → Personal access tokens → Tokens (classic)
+   - Generate new token with "repo" permissions
+   - Copy the token (you won't see it again)
+
+2. Push the changes using your token:
+   git push https://<your-username>:<your-token>@github.com/aanugerahahmadf/atcs-kpi-vi.git main
+
+3. Alternatively, you can set up your credentials:
+   git config --global credential.helper store
+   git push origin main
+   (You'll be prompted for username and password - use the PAT as password)
+
+Files that were committed:
+- app/Http/Controllers/Api/NotificationApiController.php
+- app/Services/NotificationService.php
+- resources/views/notifications.blade.php
+- app/Observers/NotificationObserver.php
+
+These files implement:
+- Complete notification system with message notifications
+- Modal popup for notification details
+- Mark as read/unread functionality
+- Delete notification capability
+- Proper 'x-bxs' prefixed icons
+- Laravel starter kit coding standards
