@@ -19,19 +19,21 @@ new #[Title('Settings')] class extends Component {
     public string $date_of_birth = '';
     public string $phone_number = '';
     public $avatar;
+    public $user; // Add the missing user property
 
     /**
      * Mount the component.
      */
     public function mount(): void
     {
-        $this->name = Auth::user()->name;
-        $this->username = Auth::user()->username;
-        $this->email = Auth::user()->email;
-        $this->place_of_birth = Auth::user()->place_of_birth ?? '';
-        $this->city = Auth::user()->city ?? '';
-        $this->date_of_birth = Auth::user()->date_of_birth ? Auth::user()->date_of_birth->format('Y-m-d') : '';
-        $this->phone_number = Auth::user()->phone_number ?? '';
+        $this->user = Auth::user();
+        $this->name = $this->user->name;
+        $this->username = $this->user->username;
+        $this->email = $this->user->email;
+        $this->place_of_birth = $this->user->place_of_birth ?? '';
+        $this->city = $this->user->city ?? '';
+        $this->date_of_birth = $this->user->date_of_birth ? $this->user->date_of_birth->format('Y-m-d') : '';
+        $this->phone_number = $this->user->phone_number ?? '';
     }
 
     /**
@@ -79,62 +81,6 @@ new #[Title('Settings')] class extends Component {
 
         Session::flash('status', 'verification-link-sent');
     }
-
-    /**
-     * Send SMS OTP for phone verification
-     */
-    public function sendSmsOtp(): void
-    {
-        $user = Auth::user();
-
-        // Update phone number if it has changed
-        if ($this->phone_number !== $user->phone_number) {
-            $user->update(['phone_number' => $this->phone_number]);
-        }
-
-        // Send SMS OTP
-        if ($user->sendSmsOtp()) {
-            $this->dispatch('notification', [
-                'title' => 'OTP Sent',
-                'body' => 'OTP has been sent to your phone number via SMS.',
-                'type' => 'success'
-            ]);
-        } else {
-            $this->dispatch('notification', [
-                'title' => 'Error',
-                'body' => 'Failed to send OTP via SMS. Please try again.',
-                'type' => 'error'
-            ]);
-        }
-    }
-
-    /**
-     * Send WhatsApp OTP for phone verification
-     */
-    public function sendWhatsAppOtp(): void
-    {
-        $user = Auth::user();
-
-        // Update phone number if it has changed
-        if ($this->phone_number !== $user->phone_number) {
-            $user->update(['phone_number' => $this->phone_number]);
-        }
-
-        // Send WhatsApp OTP
-        if ($user->sendWhatsAppOtp()) {
-            $this->dispatch('notification', [
-                'title' => 'OTP Sent',
-                'body' => 'OTP has been sent to your phone number via WhatsApp.',
-                'type' => 'success'
-            ]);
-        } else {
-            $this->dispatch('notification', [
-                'title' => 'Error',
-                'body' => 'Failed to send OTP via WhatsApp. Please try again.',
-                'type' => 'error'
-            ]);
-        }
-    }
 }; ?>
 
 <section class="w-full">
@@ -143,7 +89,14 @@ new #[Title('Settings')] class extends Component {
     <x-settings.layout :heading="__('Profile')" :subheading="__('Update your name and email address')">
         <!-- Notification display -->
         @if (session('status'))
-            <flux:alert :variant="session('status') === 'verification-link-sent' ? 'success' : 'info'" :message="session('status') === 'verification-link-sent' ? __('A new verification link has been sent to your email address.') : session('status')" />
+            <div class="p-4 mb-4 rounded-lg
+                @if(session('status') === 'verification-link-sent')
+                    bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200
+                @else
+                    bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200
+                @endif">
+                {{ session('status') === 'verification-link-sent' ? __('A new verification link has been sent to your email address.') : session('status') }}
+            </div>
         @endif
 
         <form wire:submit="updateProfileInformation" class="my-6 w-full space-y-6">
@@ -152,10 +105,13 @@ new #[Title('Settings')] class extends Component {
                 document.addEventListener('livewire:init', () => {
                     Livewire.on('notification', (data) => {
                         const notification = data[0];
-                        const alert = document.createElement('flux-alert');
-                        alert.variant = notification.type === 'error' ? 'danger' : notification.type;
-                        alert.message = notification.body;
-                        alert.setAttribute('class', 'mb-4');
+                        const alert = document.createElement('div');
+                        alert.className = 'p-4 mb-4 rounded-lg ' +
+                            (notification.type === 'error' ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200' :
+                            notification.type === 'success' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' :
+                            'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200');
+                        alert.textContent = notification.body;
+
                         document.querySelector('form').insertAdjacentElement('beforebegin', alert);
 
                         // Remove alert after 5 seconds
@@ -174,11 +130,11 @@ new #[Title('Settings')] class extends Component {
                 <div class="flex items-center gap-6 mt-2">
                     <!-- Current avatar preview -->
                     <div class="relative">
-                        @if (Auth::user()->avatar)
-                            <img src="{{ asset('storage/' . Auth::user()->avatar) }}" alt="{{ Auth::user()->name }}" class="w-16 h-16 rounded-full object-cover">
+                        @if ($user->avatar)
+                            <img src="{{ asset('storage/' . $user->avatar) }}" alt="{{ $user->name }}" class="w-16 h-16 rounded-full object-cover">
                         @else
                             <div class="w-16 h-16 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-white font-bold">
-                                {{ Auth::user()->initials() }}
+                                {{ $user->initials() }}
                             </div>
                         @endif
                     </div>
@@ -186,7 +142,7 @@ new #[Title('Settings')] class extends Component {
                     <!-- File upload -->
                     <div class="flex-1">
                         <flux:input.file
-                            wire:model="avatar"
+                            wire:model.live="avatar"
                             accept="image/*"
                         />
                         <flux:text class="mt-2 text-sm text-gray-500 dark:text-gray-400">
@@ -200,22 +156,22 @@ new #[Title('Settings')] class extends Component {
             </div>
 
             <!-- Name -->
-            <flux:input wire:model="name" :label="__('Name')" type="text" required autofocus autocomplete="name" />
+            <flux:input wire:model.live="name" :label="__('Name')" type="text" required autofocus autocomplete="name" />
 
             <!-- Username -->
-            <flux:input wire:model="username" :label="__('Username')" type="text" required autocomplete="username" />
+            <flux:input wire:model.live="username" :label="__('Username')" type="text" required autocomplete="username" />
 
             <!-- Place of Birth -->
-            <flux:input wire:model="place_of_birth" :label="__('Tempat Lahir')" type="text" autocomplete="place_of_birth" />
+            <flux:input wire:model.live="place_of_birth" :label="__('Tempat Lahir')" type="text" autocomplete="place_of_birth" />
 
             <!-- City -->
-            <flux:input wire:model="city" :label="__('Kota')" type="text" autocomplete="city" />
+            <flux:input wire:model.live="city" :label="__('Kota')" type="text" autocomplete="city" />
 
             <!-- Date of Birth -->
             <div>
                 <flux:label for="date_of_birth">{{ __('Tanggal Lahir') }}</flux:label>
                 <input
-                    wire:model="date_of_birth"
+                    wire:model.live="date_of_birth"
                     id="date_of_birth"
                     type="date"
                     class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-zinc-100 dark:bg-zinc-800 focus:ring-2 focus:ring-blue-500 focus:ring-offset-0 focus:ring-offset-white dark:focus:ring-offset-zinc-900 focus:outline-none py-3 px-4 text-zinc-900 dark:text-white placeholder-zinc-500 dark:placeholder-zinc-400 transition duration-200"
@@ -224,45 +180,14 @@ new #[Title('Settings')] class extends Component {
 
             <!-- Phone Number -->
             <div class="space-y-2">
-                <flux:input wire:model="phone_number" :label="__('No. Handphone / WhatsApp')" type="text" autocomplete="phone_number" />
-
-                <!-- Phone Verification Status and Actions -->
-                @if($phone_number)
-                    <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                        <div class="flex items-center gap-2">
-                            @if($this->user->phone_verified)
-                                <flux:icon name="check-circle" class="w-5 h-5 text-green-500" />
-                                <span class="text-sm text-green-600 dark:text-green-400">{{ __('Phone Verified') }}</span>
-                                @if($this->user->phone_verification_method)
-                                    <span class="text-xs px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded">
-                                        {{ ucfirst($this->user->phone_verification_method) }}
-                                    </span>
-                                @endif
-                            @else
-                                <flux:icon name="x-circle" class="w-5 h-5 text-red-500" />
-                                <span class="text-sm text-red-600 dark:text-red-400">{{ __('Phone Not Verified') }}</span>
-                            @endif
-                        </div>
-
-                        @if($phone_number && !$this->user->phone_verified)
-                            <div class="flex gap-2">
-                                <flux:button wire:click="sendSmsOtp" size="sm" variant="primary">
-                                    {{ __('Verify via SMS') }}
-                                </flux:button>
-                                <flux:button wire:click="sendWhatsAppOtp" size="sm" variant="primary">
-                                    {{ __('Verify via WhatsApp') }}
-                                </flux:button>
-                            </div>
-                        @endif
-                    </div>
-                @endif
+                <flux:input wire:model.live="phone_number" :label="__('No. Handphone / WhatsApp')" type="text" autocomplete="phone_number" />
             </div>
 
             <!-- Email -->
             <div>
-                <flux:input wire:model="email" :label="__('Email')" type="email" required autocomplete="email" />
+                <flux:input wire:model.live="email" :label="__('Email')" type="email" required autocomplete="email" />
 
-                @if (auth()->user() instanceof \Illuminate\Contracts\Auth\MustVerifyEmail &&! auth()->user()->hasVerifiedEmail())
+                @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail &&! $user->hasVerifiedEmail())
                     <div>
                         <flux:text class="mt-4">
                             {{ __('Your email address is unverified.') }}

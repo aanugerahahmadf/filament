@@ -24,14 +24,6 @@ class CctvsTable
                     ->searchable(),
                 TextColumn::make('room.name')
                     ->searchable(),
-                TextColumn::make('name')
-                    ->searchable(),
-                TextColumn::make('model')
-                    ->searchable(),
-                TextColumn::make('serial_number')
-                    ->searchable(),
-                TextColumn::make('firmware_version')
-                    ->searchable(),
                 TextColumn::make('stream_username')
                     ->searchable(),
                 TextColumn::make('ip_rtsp')
@@ -39,23 +31,16 @@ class CctvsTable
                 TextColumn::make('port')
                     ->formatStateUsing(fn (string $state): string => number_format((float) $state))
                     ->sortable(),
-                TextColumn::make('resolution')
-                    ->searchable(),
-                TextColumn::make('fps')
-                    ->formatStateUsing(fn (string $state): string => number_format((float) $state))
-                    ->sortable(),
-                TextColumn::make('recording_schedule')
-                    ->searchable(),
+                TextColumn::make('connection_type')
+                    ->formatStateUsing(fn (string $state): string => ucfirst($state))
+                    ->badge()
+                    ->color(fn (string $state): string => $state === 'wired' ? 'success' : 'info'),
                 TextColumn::make('status')
                     ->badge(),
-                TextColumn::make('latitude')
-                    ->formatStateUsing(fn (string $state): string => number_format((float) $state, 6))
-                    ->sortable(),
-                TextColumn::make('longitude')
-                    ->formatStateUsing(fn (string $state): string => number_format((float) $state, 6))
-                    ->sortable(),
-                TextColumn::make('hls_path')
-                    ->searchable(),
+                TextColumn::make('recording')
+                    ->formatStateUsing(fn (bool $state): string => $state ? 'Yes' : 'No')
+                    ->badge()
+                    ->color(fn (bool $state): string => $state ? 'success' : 'danger'),
                 TextColumn::make('last_seen_at')
                     ->dateTime()
                     ->sortable(),
@@ -73,21 +58,21 @@ class CctvsTable
             ])
             ->recordActions([
                 ViewAction::make()
-                    ->iconButton()
+                    ->button()
                     ->color('info')
                     ->size('xl')
                     ->extraAttributes([
                         'class' => 'shadow-lg',
                     ]),
                 EditAction::make()
-                    ->iconButton()
+                    ->button()
                     ->color('warning')
                     ->size('xl')
                     ->extraAttributes([
                         'class' => 'shadow-lg',
                     ]),
                 DeleteAction::make()
-                    ->iconButton()
+                    ->button()
                     ->color('danger')
                     ->size('xl')
                     ->extraAttributes([
@@ -97,7 +82,7 @@ class CctvsTable
                     ->icon('heroicon-o-video-camera')
                     ->color('success')
                     ->size('xl')
-                    ->iconButton()
+                    ->button()
                     ->extraAttributes([
                         'class' => 'shadow-lg',
                     ])

@@ -44,6 +44,71 @@
             </div>
         </div>
     </div>
+    
+    <!-- Mobile Live Stream Responsive -->
+    <style>
+        @media (max-width: 768px) {
+            .live-stream-container {
+                padding: 1rem !important;
+                min-height: 60vh !important;
+            }
+            .live-stream-header {
+                flex-direction: column !important;
+                gap: 1rem !important;
+                align-items: stretch !important;
+            }
+            .live-stream-header h1 {
+                font-size: 1.875rem !important;
+                text-align: center !important;
+            }
+            .live-stream-header .btn {
+                width: 100% !important;
+                text-align: center !important;
+            }
+            .live-stream-player {
+                border-radius: 0.5rem !important;
+                box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1) !important;
+            }
+            .live-stream-no-stream {
+                width: 200px !important;
+                height: 200px !important;
+            }
+            .live-stream-no-stream i {
+                font-size: 4rem !important;
+            }
+            .live-stream-no-stream h2 {
+                font-size: 1.125rem !important;
+            }
+            .live-stream-no-stream p {
+                font-size: 0.875rem !important;
+            }
+        }
+        @media (max-width: 480px) {
+            .live-stream-container {
+                padding: 0.75rem !important;
+                min-height: 50vh !important;
+            }
+            .live-stream-header h1 {
+                font-size: 1.5rem !important;
+            }
+            .live-stream-player {
+                border-radius: 0.375rem !important;
+            }
+            .live-stream-no-stream {
+                width: 150px !important;
+                height: 150px !important;
+            }
+            .live-stream-no-stream i {
+                font-size: 3rem !important;
+            }
+            .live-stream-no-stream h2 {
+                font-size: 1rem !important;
+            }
+            .live-stream-no-stream p {
+                font-size: 0.75rem !important;
+            }
+        }
+    </style>
 
     <!-- Add JavaScript for click functionality -->
     <script>

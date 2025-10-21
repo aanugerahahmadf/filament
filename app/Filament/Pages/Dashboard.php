@@ -2,9 +2,17 @@
 
 namespace App\Filament\Pages;
 
-use Filament\Pages\Page;
+use App\Filament\Widgets\AdditionalLineChart;
+use App\Filament\Widgets\CctvOperationalTable;
+use App\Filament\Widgets\CctvStatusChart;
+use App\Filament\Widgets\CctvStatusTrendChart;
+use App\Filament\Widgets\DashboardStats;
+use App\Filament\Widgets\OfflineAlerts;
+use App\Filament\Widgets\StreamingPerformanceChart;
+use App\Filament\Widgets\UserActivityChart;
+use Filament\Pages\Dashboard as BaseDashboard;
 
-class Dashboard extends Page
+class Dashboard extends BaseDashboard
 {
     protected static ?int $navigationSort = 1;
 
@@ -16,13 +24,14 @@ class Dashboard extends Page
     public function getWidgets(): array
     {
         return [
-            \App\Filament\Widgets\DashboardStats::class,
-            \App\Filament\Widgets\CctvStatusChart::class,
-            \App\Filament\Widgets\CctvStatusTrendChart::class,
-            \App\Filament\Widgets\UserActivityChart::class,
-            \App\Filament\Widgets\StreamingPerformanceChart::class,
-            \App\Filament\Widgets\CctvOperationalTable::class,
-            \App\Filament\Widgets\OfflineAlerts::class,
+            DashboardStats::class,
+            CctvStatusChart::class,
+            CctvStatusTrendChart::class,
+            UserActivityChart::class,
+            StreamingPerformanceChart::class,
+            AdditionalLineChart::class, // Added the new line chart
+            CctvOperationalTable::class,
+            OfflineAlerts::class,
         ];
     }
 

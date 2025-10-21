@@ -116,6 +116,41 @@
                 <p class="text-red-100 text-sm mb-3">aanugerahahmad27@gmail.com</p>
                 <div class="text-xs text-white/80 opacity-0 group-hover:opacity-100 transition-opacity">Click to send email</div>
             </a>
+            
+            <!-- Mobile Contact Cards Responsive -->
+            <style>
+                @media (max-width: 768px) {
+                    .contact-cards-grid {
+                        grid-template-columns: 1fr !important;
+                        gap: 1rem !important;
+                    }
+                    .contact-card {
+                        padding: 1rem !important;
+                        border-radius: 1rem !important;
+                    }
+                    .contact-card h3 {
+                        font-size: 1.125rem !important;
+                    }
+                    .contact-card p {
+                        font-size: 0.75rem !important;
+                    }
+                }
+                @media (max-width: 480px) {
+                    .contact-cards-grid {
+                        gap: 0.75rem !important;
+                    }
+                    .contact-card {
+                        padding: 0.75rem !important;
+                        border-radius: 0.75rem !important;
+                    }
+                    .contact-card h3 {
+                        font-size: 1rem !important;
+                    }
+                    .contact-card p {
+                        font-size: 0.625rem !important;
+                    }
+                }
+            </style>
 
             <!-- Phone Card -->
             <a href="tel:+62" class="contact-card group bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 backdrop-blur-sm border-2 border-blue-400/50 hover:border-blue-300 rounded-2xl p-6 text-center fade-in shadow-lg hover:shadow-blue-500/25 transition-all duration-300 cursor-pointer h-full">

@@ -16,37 +16,21 @@ class CctvInfolist
                 TextEntry::make('room.name')
                     ->label('Room')
                     ->placeholder('-'),
-                TextEntry::make('name'),
-                TextEntry::make('model')
-                    ->placeholder('-'),
-                TextEntry::make('serial_number')
-                    ->placeholder('-'),
-                TextEntry::make('firmware_version')
-                    ->placeholder('-'),
-                TextEntry::make('description')
-                    ->placeholder('-')
-                    ->columnSpanFull(),
                 TextEntry::make('stream_username')
                     ->placeholder('-'),
                 TextEntry::make('ip_rtsp'),
                 TextEntry::make('port')
                     ->numeric(),
-                TextEntry::make('resolution')
-                    ->placeholder('-'),
-                TextEntry::make('fps')
-                    ->numeric(),
-                TextEntry::make('recording_schedule')
-                    ->placeholder('-'),
+                TextEntry::make('connection_type')
+                    ->formatStateUsing(fn (string $state): string => ucfirst($state))
+                    ->badge()
+                    ->color(fn (string $state): string => $state === 'wired' ? 'success' : 'info'),
                 TextEntry::make('status')
                     ->badge(),
-                TextEntry::make('latitude')
-                    ->numeric()
-                    ->placeholder('-'),
-                TextEntry::make('longitude')
-                    ->numeric()
-                    ->placeholder('-'),
-                TextEntry::make('hls_path')
-                    ->placeholder('-'),
+                TextEntry::make('recording')
+                    ->formatStateUsing(fn (bool $state): string => $state ? 'Yes' : 'No')
+                    ->badge()
+                    ->color(fn (bool $state): string => $state ? 'success' : 'danger'),
                 TextEntry::make('last_seen_at')
                     ->dateTime()
                     ->placeholder('-'),

@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources\Buildings;
 
-
 use App\Filament\Resources\Buildings\Pages\CreateBuilding;
 use App\Filament\Resources\Buildings\Pages\EditBuilding;
 use App\Filament\Resources\Buildings\Pages\ListBuildings;
@@ -11,7 +10,6 @@ use App\Filament\Resources\Buildings\Schemas\BuildingForm;
 use App\Filament\Resources\Buildings\Schemas\BuildingInfolist;
 use App\Filament\Resources\Buildings\Tables\BuildingsTable;
 use App\Models\Building;
-use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables\Table;
@@ -23,7 +21,7 @@ class BuildingResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'name';
 
-    protected static string|UnitEnum|null $navigationGroup = 'Location And Maps';
+    protected static string|UnitEnum|null $navigationGroup = 'Playlist And Maps';
 
     protected static ?string $navigationLabel = 'Building';
 

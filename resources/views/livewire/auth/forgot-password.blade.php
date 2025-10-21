@@ -153,7 +153,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
         <!-- Email Address -->
         @if (!$otpSent)
             <flux:input
-                wire:model="email"
+                wire:model.live="email"
                 :label="__('Email Address')"
                 type="email"
                 required
@@ -162,7 +162,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
         @else
             <div>
                 <flux:input
-                    wire:model="email"
+                    wire:model.live="email"
                     :label="__('Email Address')"
                     type="email"
                     disabled
@@ -172,7 +172,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
             <!-- OTP Input -->
             <div class="relative">
                 <flux:input
-                    wire:model="otp"
+                    wire:model.live="otp"
                     :label="__('OTP Code')"
                     type="text"
                     inputmode="numeric"

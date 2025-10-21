@@ -214,10 +214,10 @@ new #[Layout('components.layouts.auth')] class extends Component {
         </div>
     @endif
 
-    <form method="POST" wire:submit.prevent="verifyOtp" class="flex flex-col gap-6">
+    <form method="POST" wire:submit="verifyOtp" class="flex flex-col gap-6">
         <!-- Email Address -->
         <flux:input
-            wire:model="email"
+            wire:model.live="email"
             :label="__('Email address')"
             type="email"
             required
@@ -229,7 +229,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
         @if ($otpSent)
             <div class="relative">
                 <flux:input
-                    wire:model="otp"
+                    wire:model.live="otp"
                     :label="__('OTP Code')"
                     type="text"
                     inputmode="numeric"

@@ -19,6 +19,64 @@
                         <input type="text" id="search-users" class="block w-full p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ __('Search users...') }}">
                     </div>
                 </div>
+                
+                <!-- Mobile Messages Responsive -->
+                <style>
+                    @media (max-width: 768px) {
+                        .messages-container {
+                            flex-direction: column !important;
+                            height: calc(100vh - 8rem) !important;
+                        }
+                        .messages-sidebar {
+                            display: flex !important;
+                            width: 100% !important;
+                            height: 40% !important;
+                            border-right: none !important;
+                            border-bottom: 1px solid #e5e7eb !important;
+                        }
+                        .messages-chat {
+                            height: 60% !important;
+                        }
+                        .messages-search {
+                            padding: 0.75rem !important;
+                        }
+                        .messages-search input {
+                            font-size: 0.875rem !important;
+                            padding: 0.5rem !important;
+                        }
+                        .messages-conversation {
+                            padding: 0.75rem !important;
+                        }
+                        .messages-conversation .w-12 {
+                            width: 2.5rem !important;
+                            height: 2.5rem !important;
+                        }
+                        .messages-conversation h4 {
+                            font-size: 0.875rem !important;
+                        }
+                        .messages-conversation p {
+                            font-size: 0.75rem !important;
+                        }
+                    }
+                    @media (max-width: 480px) {
+                        .messages-sidebar {
+                            height: 35% !important;
+                        }
+                        .messages-chat {
+                            height: 65% !important;
+                        }
+                        .messages-search {
+                            padding: 0.5rem !important;
+                        }
+                        .messages-conversation {
+                            padding: 0.5rem !important;
+                        }
+                        .messages-conversation .w-12 {
+                            width: 2rem !important;
+                            height: 2rem !important;
+                        }
+                    }
+                </style>
 
                 <!-- Conversations list -->
                 <div class="flex-1 overflow-y-auto">

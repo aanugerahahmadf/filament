@@ -28,7 +28,7 @@ class OfflineAlerts extends BaseWidget
             ->columns([
                 TextColumn::make('building.name')->label('Building'),
                 TextColumn::make('room.name')->label('Room'),
-                TextColumn::make('name')->label('CCTV'),
+                TextColumn::make('ip_rtsp')->label('CCTV IP'), // Changed from 'name' to 'ip_rtsp'
                 TextColumn::make('last_seen_at')->dateTime()->label('Last Seen'),
             ])
             ->paginated([5, 10, 25, 50]);

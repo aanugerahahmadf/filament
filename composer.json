@@ -8,6 +8,8 @@
     "require": {
         "php": "^8.2",
         "blade-ui-kit/blade-heroicons": "^2.6",
+        "codeat3/blade-elusive-icons": "^1.5",
+        "codeat3/blade-eos-icons": "^1.15",
         "codeat3/blade-vaadin-icons": "^1.6",
         "filament/filament": "~4.0",
         "inerba/filament-db-config": "^1.1",
@@ -16,12 +18,14 @@
         "laravel/framework": "^12.0",
         "laravel/reverb": "^1.6",
         "laravel/tinker": "^2.10.1",
+        "laravel/ui": "^4.6",
         "livewire/flux": "^2.1.1",
         "livewire/volt": "^1.7.0",
         "maatwebsite/excel": "^3.1",
         "mallardduck/blade-boxicons": "^2.4",
         "pragmarx/google2fa-laravel": "^2.3",
         "predis/predis": "^3.2",
+        "pusher/pusher-php-server": "^7.2",
         "secondnetwork/blade-tabler-icons": "^3.35",
         "spatie/laravel-permission": "^6.21",
         "twilio/sdk": "^7.0"

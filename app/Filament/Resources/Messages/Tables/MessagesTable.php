@@ -2,16 +2,16 @@
 
 namespace App\Filament\Resources\Messages\Tables;
 
+use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Table;
-use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Columns\IconColumn;
-use Filament\Actions\Action;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Table;
 
 class MessagesTable
 {
@@ -88,20 +88,21 @@ class MessagesTable
                         } elseif ($data['value'] === '0') {
                             return $query->whereNull('read_at');
                         }
+
                         return $query;
                     }),
             ])
             ->recordActions([
                 ViewAction::make()
-                    ->iconButton()
+                    ->button()
                     ->color('info')
                     ->size('lg'),
                 EditAction::make()
-                    ->iconButton()
+                    ->button()
                     ->color('warning')
                     ->size('lg'),
                 DeleteAction::make()
-                    ->iconButton()
+                    ->button()
                     ->color('danger')
                     ->size('lg'),
                 Action::make('chatInterface')
@@ -109,7 +110,7 @@ class MessagesTable
                     ->icon('heroicon-o-chat-bubble-left-right')
                     ->color('success')
                     ->size('lg')
-                    ->iconButton()
+                    ->button()
                     ->url(fn ($record) => route('messages.conversation', $record->id)),
             ])
             ->bulkActions([

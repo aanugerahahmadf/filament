@@ -14,14 +14,11 @@ class RoomInfolist
                 TextEntry::make('building.name')
                     ->label('Building'),
                 TextEntry::make('name'),
-
+                TextEntry::make('marker_icon')
+                    ->placeholder('-'),
                 TextEntry::make('latitude')
-                    ->numeric()
                     ->placeholder('-'),
                 TextEntry::make('longitude')
-                    ->numeric()
-                    ->placeholder('-'),
-                TextEntry::make('marker_icon_path')
                     ->placeholder('-'),
                 TextEntry::make('created_at')
                     ->dateTime()

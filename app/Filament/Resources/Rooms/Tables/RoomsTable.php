@@ -23,19 +23,15 @@ class RoomsTable
                     ->searchable(),
                 TextColumn::make('name')
                     ->searchable(),
-                TextColumn::make('floor')
-                    ->formatStateUsing(fn (string $state): string => number_format((float) $state))
-                    ->sortable(),
-                TextColumn::make('capacity')
-                    ->formatStateUsing(fn (string $state): string => number_format((float) $state))
-                    ->sortable(),
                 TextColumn::make('latitude')
-                    ->formatStateUsing(fn (string $state): string => number_format((float) $state, 6))
-                    ->sortable(),
+                    ->searchable()
+                    ->toggleable(),
                 TextColumn::make('longitude')
-                    ->formatStateUsing(fn (string $state): string => number_format((float) $state, 6))
-                    ->sortable(),
-
+                    ->searchable()
+                    ->toggleable(),
+                TextColumn::make('marker_icon')
+                    ->searchable()
+                    ->toggleable(),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -50,15 +46,15 @@ class RoomsTable
             ])
             ->recordActions([
                 ViewAction::make()
-                    ->iconButton()
+                    ->button()
                     ->color('info')
                     ->size('lg'),
                 EditAction::make()
-                    ->iconButton()
+                    ->button()
                     ->color('warning')
                     ->size('lg'),
                 DeleteAction::make()
-                    ->iconButton()
+                    ->button()
                     ->color('danger')
                     ->size('lg'),
             ])

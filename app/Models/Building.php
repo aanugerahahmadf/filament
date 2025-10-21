@@ -14,7 +14,7 @@ class Building extends Model
         'name',
         'latitude',
         'longitude',
-        'marker_icon_path',
+        'marker_icon',
     ];
 
     public function rooms(): HasMany

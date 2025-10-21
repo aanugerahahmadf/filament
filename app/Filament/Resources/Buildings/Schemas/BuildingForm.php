@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources\Buildings\Schemas;
 
-use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
 
@@ -14,7 +13,6 @@ class BuildingForm
             ->components([
                 TextInput::make('name')
                     ->required(),
-                TextInput::make('address'),
                 TextInput::make('latitude')
                     ->numeric(),
                 TextInput::make('longitude')
@@ -24,7 +22,6 @@ class BuildingForm
                     ->placeholder('https://.../icon.png')
                     ->default('https://cdn.jsdelivr.net/gh/pointhi/leaflet-color-markers@master/img/marker-icon-blue.png')
                     ->helperText('Kosongkan untuk pakai default pin peta. Jika diisi, gunakan URL ikon kustom.'),
-
             ]);
     }
 }

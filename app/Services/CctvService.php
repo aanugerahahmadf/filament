@@ -75,11 +75,17 @@ class CctvService
 
             // Use ffprobe to check if the stream is accessible
             $ffprobe = config('services.ffprobe.binary', 'ffprobe');
+
+            // Adjust transport method based on connection type
+            $transportMethod = $cctv->connection_type === 'wireless' ? 'udp' : 'tcp';
+
             $args = [
                 $ffprobe,
                 '-v', 'quiet',
                 '-print_format', 'json',
                 '-show_streams',
+                '-rtsp_transport', $transportMethod,
+                '-stimeout', '5000000', // 5 seconds timeout
                 $rtspUrl,
             ];
 
@@ -106,12 +112,13 @@ class CctvService
                     'title' => 'CCTV Offline',
                     'message' => 'CCTV camera went offline: '.$cctv->name,
                     'severity' => Alert::SEVERITY_HIGH,
-                    'category' => 'hardware',
+                    'category' => 'network',
                     'source' => 'cctv_service',
                     'triggered_at' => now(),
                     'data' => [
                         'cctv_id' => $cctv->id,
                         'cctv_name' => $cctv->name,
+                        'connection_type' => $cctv->connection_type,
                     ],
                 ]);
             }

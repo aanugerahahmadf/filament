@@ -2,6 +2,8 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Pages\Dashboard;
+use App\Filament\Widgets\AdditionalLineChart;
 use App\Filament\Widgets\CctvOperationalTable;
 use App\Filament\Widgets\CctvStatusChart;
 use App\Filament\Widgets\CctvStatusTrendChart;
@@ -16,7 +18,6 @@ use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Navigation\MenuItem;
 use Filament\Navigation\NavigationGroup;
-use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
@@ -67,13 +68,14 @@ class AdminPanelProvider extends PanelProvider
                 CctvStatusTrendChart::class,
                 UserActivityChart::class,
                 StreamingPerformanceChart::class,
+                // AdditionalLineChart::class, // Removed as it's auto-discovered
             ])
             ->navigationGroups([
                 NavigationGroup::make()
-                     ->label('User Interface')
-                     ->icon('bxs-user-detail'),
+                    ->label('User Interface')
+                    ->icon('bxs-user-detail'),
                 NavigationGroup::make()
-                    ->label('Location And Maps')
+                    ->label('Playlist And Maps')
                     ->icon('bxs-map-pin'),
                 NavigationGroup::make()
                     ->label('Communication')
@@ -87,6 +89,7 @@ class AdminPanelProvider extends PanelProvider
             ->databaseNotificationsPolling('5s')
             ->sidebarCollapsibleOnDesktop()
             ->collapsedSidebarWidth('9rem')
+            ->sidebarWidth('17rem')
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
@@ -111,13 +114,14 @@ class AdminPanelProvider extends PanelProvider
                     ->shouldShowAvatarForm(
                         value: true,
                         directory: 'avatars', // image will be stored in 'storage/app/public/avatars
-                        rules: 'mimes:jpeg,png|max:51200' //only accept jpeg and png files with a maximum size of 50MB (51200 KB)
+                        rules: 'mimes:jpeg,png|max:51200' // only accept jpeg and png files with a maximum size of 50MB (51200 KB)
                     )
             )
             ->userMenuItems([
                 'profile' => MenuItem::make()
-                    ->label(fn(): string => Auth::user()?->name ?? 'Profile')
-                    ->url(fn(): string => EditProfilePage::getUrl())
+                    ->label(fn (): string => Auth::user()?->name ?? 'Profile')
+                    ->url(fn (): string => EditProfilePage::getUrl())
+                    ->icon('elusive-adjust-alt')
                     ->visible(function (): bool {
                         return Auth::check();
                     }),

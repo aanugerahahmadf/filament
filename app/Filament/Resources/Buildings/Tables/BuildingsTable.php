@@ -21,9 +21,9 @@ class BuildingsTable
             ->columns([
                 TextColumn::make('name')
                     ->searchable(),
-                TextColumn::make('address')
-                    ->searchable(),
-
+                TextColumn::make('marker_icon')
+                    ->searchable()
+                    ->toggleable(),
                 TextColumn::make('latitude')
                     ->formatStateUsing(fn (string $state): string => number_format((float) $state, 6))
                     ->sortable(),
@@ -44,15 +44,15 @@ class BuildingsTable
             ])
             ->recordActions([
                 ViewAction::make()
-                    ->iconButton()
+                    ->button()
                     ->color('info')
                     ->size('lg'),
                 EditAction::make()
-                    ->iconButton()
+                    ->button()
                     ->color('warning')
                     ->size('lg'),
                 DeleteAction::make()
-                    ->iconButton()
+                    ->button()
                     ->color('danger')
                     ->size('lg'),
             ])

@@ -45,6 +45,87 @@
     ::file-selector-button {
         border-color: var(--color-gray-200, currentColor);
     }
+
+    /* Ensure text visibility across all modes */
+    body {
+        color: #111827; /* gray-900 for light mode */
+    }
+
+    .dark body {
+        color: #f9fafb; /* gray-50 for dark mode */
+    }
+
+    @media (prefers-color-scheme: dark) {
+        .system-mode body {
+            color: #f9fafb; /* gray-50 for system dark mode */
+        }
+    }
+}
+
+/* Text visibility enhancements for all modes */
+.text-visible,
+.text-primary,
+.text-secondary,
+.text-tertiary,
+.text-error,
+.text-success,
+.text-warning,
+.text-info {
+    color: #111827 !important; /* gray-900 for maximum contrast in light mode */
+}
+
+.dark .text-visible,
+.dark .text-primary,
+.dark .text-secondary,
+.dark .text-tertiary,
+.dark .text-error,
+.dark .text-success,
+.dark .text-warning,
+.dark .text-info {
+    color: #f9fafb !important; /* gray-50 for maximum contrast in dark mode */
+}
+
+@media (prefers-color-scheme: dark) {
+    .system-mode .text-visible,
+    .system-mode .text-primary,
+    .system-mode .text-secondary,
+    .system-mode .text-tertiary,
+    .system-mode .text-error,
+    .system-mode .text-success,
+    .system-mode .text-warning,
+    .system-mode .text-info {
+        color: #f9fafb !important; /* gray-50 for maximum contrast in system dark mode */
+    }
+}
+
+/* Ensure text in cards and containers is visible */
+.card-3d,
+.notification-card,
+.message-bubble,
+.conversation-item,
+.flux-header,
+.flux-navbar-item {
+    color: #111827 !important; /* gray-900 for light mode */
+}
+
+.dark .card-3d,
+.dark .notification-card,
+.dark .message-bubble,
+.dark .conversation-item,
+.dark .flux-header,
+.dark .flux-navbar-item {
+    color: #f9fafb !important; /* gray-50 for dark mode */
+}
+
+@media (prefers-color-scheme: dark) {
+    .system-mode .card-3d,
+    .system-mode .notification-card,
+    .system-mode .message-bubble,
+    .system-mode .conversation-item,
+    .system-mode .flux-header,
+    .system-mode .flux-navbar-item {
+        color: #f9fafb !important; /* gray-50 for system dark mode */
+    }
 }
 
 /* 3D and modern transitions */

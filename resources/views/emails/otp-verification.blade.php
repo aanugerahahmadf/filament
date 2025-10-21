@@ -31,6 +31,15 @@
             max-width: 150px;
             height: auto;
         }
+        .company-name {
+            font-size: 24px;
+            margin: 10px 0 5px 0;
+        }
+        .unit-name {
+            font-size: 18px;
+            margin: 5px 0 10px 0;
+            font-weight: normal;
+        }
         .content {
             padding: 30px;
         }
@@ -80,8 +89,8 @@
 <body>
     <div class="container">
         <div class="header">
-            <img src="{{ url('images/logo-pertamina.png') }}" alt="Pertamina Logo" class="logo">
-            <h1>PT KILANG PERTAMINA INTERNASIONAL</h1>
+            <h1 class="company-name">PT KILANG PERTAMINA INTERNASIONAL</h1>
+            <h2 class="unit-name">REFINERY UNIT VI BALONGAN</h2>
         </div>
 
         <div class="content">

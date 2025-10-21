@@ -236,7 +236,7 @@ new #[Title('Settings')] class extends Component {
         name="two-factor-setup-modal"
         class="max-w-md md:min-w-md"
         @close="closeModal"
-        wire:model="showModal"
+        wire:model.live="showModal"
     >
         <div class="space-y-6">
             <div class="flex flex-col items-center space-y-4">
@@ -270,7 +270,7 @@ new #[Title('Settings')] class extends Component {
                         <x-input-otp
                             :digits="6"
                             name="code"
-                            wire:model="code"
+                            wire:model.live="code"
                             autocomplete="one-time-code"
                         />
                         @error('code')

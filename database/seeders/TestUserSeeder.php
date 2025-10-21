@@ -13,12 +13,13 @@ class TestUserSeeder extends Seeder
      */
     public function run(): void
     {
-        // Create a test user with an avatar
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-            'password' => Hash::make('password'),
-            'avatar' => 'avatars/test-avatar.jpg'
-        ]);
+        User::updateOrCreate(
+            ['email' => 'admin@pertamina.com'],
+            [
+                'name' => 'Admin User',
+                'password' => Hash::make('@Admin123'),
+                'is_admin' => true,
+            ]
+        );
     }
 }

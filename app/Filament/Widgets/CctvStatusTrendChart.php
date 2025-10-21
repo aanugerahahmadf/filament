@@ -11,7 +11,9 @@ class CctvStatusTrendChart extends ChartWidget
 
     protected ?string $pollingInterval = '10s';
 
-    protected int|string|array $columnSpan = 'full';
+    protected int|string|array $columnSpan = 1;
+
+    protected ?string $maxHeight = '300px';
 
     protected function getData(): array
     {
@@ -48,6 +50,7 @@ class CctvStatusTrendChart extends ChartWidget
                     'backgroundColor' => 'rgba(16, 185, 129, 0.1)',
                     'fill' => true,
                     'tension' => 0.4,
+                    'borderWidth' => 2,
                 ],
                 [
                     'label' => 'Offline',
@@ -56,6 +59,7 @@ class CctvStatusTrendChart extends ChartWidget
                     'backgroundColor' => 'rgba(239, 68, 68, 0.1)',
                     'fill' => true,
                     'tension' => 0.4,
+                    'borderWidth' => 2,
                 ],
                 [
                     'label' => 'Maintenance',
@@ -64,6 +68,7 @@ class CctvStatusTrendChart extends ChartWidget
                     'backgroundColor' => 'rgba(245, 158, 11, 0.1)',
                     'fill' => true,
                     'tension' => 0.4,
+                    'borderWidth' => 2,
                 ],
             ],
         ];
@@ -72,5 +77,48 @@ class CctvStatusTrendChart extends ChartWidget
     protected function getType(): string
     {
         return 'line';
+    }
+
+    protected function getOptions(): array
+    {
+        return [
+            'plugins' => [
+                'legend' => [
+                    'labels' => [
+                        'font' => [
+                            'size' => 10,
+                        ],
+                        'padding' => 10,
+                    ],
+                ],
+            ],
+            'scales' => [
+                'x' => [
+                    'ticks' => [
+                        'font' => [
+                            'size' => 9,
+                        ],
+                    ],
+                    'grid' => [
+                        'display' => false,
+                    ],
+                ],
+                'y' => [
+                    'ticks' => [
+                        'font' => [
+                            'size' => 9,
+                        ],
+                    ],
+                    'grid' => [
+                        'color' => 'rgba(0, 0, 0, 0.05)',
+                    ],
+                ],
+            ],
+            'interaction' => [
+                'mode' => 'index',
+                'intersect' => false,
+            ],
+            'maintainAspectRatio' => false,
+        ];
     }
 }

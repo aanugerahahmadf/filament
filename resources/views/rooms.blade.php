@@ -12,6 +12,71 @@
             <div id="rooms" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6"></div>
         </div>
     </div>
+    
+    <!-- Mobile Rooms Responsive -->
+    <style>
+        @media (max-width: 768px) {
+            .rooms-container {
+                padding: 1rem !important;
+            }
+            .rooms-header {
+                flex-direction: column !important;
+                gap: 1rem !important;
+                align-items: stretch !important;
+            }
+            .rooms-header h1 {
+                font-size: 1.875rem !important;
+                text-align: center !important;
+            }
+            .rooms-header .btn {
+                width: 100% !important;
+                text-align: center !important;
+            }
+            .rooms-grid {
+                grid-template-columns: 1fr !important;
+                gap: 1rem !important;
+            }
+            .rooms-card {
+                padding: 1rem !important;
+                border-radius: 0.75rem !important;
+            }
+            .rooms-card .font-semibold {
+                font-size: 1rem !important;
+            }
+            .rooms-card .text-sm {
+                font-size: 0.75rem !important;
+            }
+            .rooms-card .btn {
+                padding: 0.75rem !important;
+                font-size: 0.75rem !important;
+            }
+        }
+        @media (max-width: 480px) {
+            .rooms-container {
+                padding: 0.75rem !important;
+            }
+            .rooms-header h1 {
+                font-size: 1.5rem !important;
+            }
+            .rooms-grid {
+                gap: 0.75rem !important;
+            }
+            .rooms-card {
+                padding: 0.75rem !important;
+                border-radius: 0.5rem !important;
+            }
+            .rooms-card .font-semibold {
+                font-size: 0.875rem !important;
+            }
+            .rooms-card .text-sm {
+                font-size: 0.625rem !important;
+            }
+            .rooms-card .btn {
+                padding: 0.5rem !important;
+                font-size: 0.625rem !important;
+            }
+        }
+    </style>
 
     <script>
         let DATA = { buildings: [] };

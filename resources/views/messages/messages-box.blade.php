@@ -1,4 +1,4 @@
-<x-layouts.app :title="__('Chat')">
+<x-layouts.app :title="__('Message')">
     @php
         $recipient = \App\Models\User::findOrFail($userId);
     @endphp
@@ -6,7 +6,7 @@
     <div class="flex flex-col h-full">
         <!-- Page header -->
         <div class="mb-6">
-            <h1 class="text-2xl font-bold text-gray-900 dark:text-white">{{ __('Chat') }}</h1>
+            <h1 class="text-2xl font-bold text-gray-900 dark:text-white">{{ __('Message') }}</h1>
             <p class="text-gray-600 dark:text-gray-400 mt-1">{{ __('Messaging with') }} {{ $recipient->name }}</p>
         </div>
 
@@ -35,10 +35,10 @@
                             </div>
                         </div>
                         <div class="flex items-center space-x-2">
-                            <button type="button" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200" onclick="showCallModal('audio')">
+                            <button type="button" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200" onclick="initiateAudioCall()">
                                 <x-bxs-phone class="w-5 h-5 text-gray-600 dark:text-gray-300" />
                             </button>
-                            <button type="button" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200" onclick="showCallModal('video')">
+                            <button type="button" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200" onclick="initiateVideoCall()">
                                 <x-bxs-video class="w-5 h-5 text-gray-600 dark:text-gray-300" />
                             </button>
                             <button type="button" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200" onclick="showUserInfo()">
@@ -57,13 +57,13 @@
                         </div>
                     </div>
 
-                    @foreach($messages as $message)
+                    @forelse($messages as $message)
                         @if($message->from_user_id === auth()->id())
                             <!-- Sent message -->
                             <div class="flex justify-end mb-4" data-message-id="{{ $message->id }}">
                                 <div class="max-w-xs lg:max-w-md">
                                     <div class="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-2xl rounded-tr-none px-4 py-2 shadow-sm">
-                                        <p class="text-sm text-white">{{ $message->body }}</p>
+                                        <p class="text-sm text-white">{{ $message->body ?? $message->message }}</p>
                                         <div class="flex justify-end mt-1">
                                             <span class="text-xs text-blue-100">{{ $message->created_at->format('g:i A') }}</span>
                                             @if($message->isRead())
@@ -87,7 +87,7 @@
                                 </div>
                                 <div class="max-w-xs lg:max-w-md">
                                     <div class="bg-white dark:bg-gray-700 rounded-2xl rounded-tl-none px-4 py-2 shadow-sm">
-                                        <p class="text-sm text-gray-800 dark:text-gray-200">{{ $message->body }}</p>
+                                        <p class="text-sm text-gray-800 dark:text-gray-200">{{ $message->body ?? $message->message }}</p>
                                         <div class="flex justify-end mt-1">
                                             <span class="text-xs text-gray-500 dark:text-gray-400">{{ $message->created_at->format('g:i A') }}</span>
                                         </div>
@@ -95,7 +95,11 @@
                                 </div>
                             </div>
                         @endif
-                    @endforeach
+                    @empty
+                        <div class="flex justify-center items-center h-full">
+                            <p class="text-gray-500 dark:text-gray-400">{{ __('No messages yet. Start a conversation!') }}</p>
+                        </div>
+                    @endforelse
                 </div>
 
                 <!-- Typing indicator -->
@@ -132,7 +136,7 @@
                             </div>
                             <div class="flex-1">
                                 <input type="text"
-                                       name="message"
+                                       name="body"
                                        id="message-input"
                                        class="block w-full px-4 py-2 text-sm text-gray-900 border border-gray-300 rounded-full bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                        placeholder="{{ __('Type a message...') }}"
@@ -150,42 +154,143 @@
         </div>
     </div>
 
-    <!-- Call Modal -->
-    <div id="call-modal" class="fixed inset-0 z-50 hidden overflow-y-auto">
-        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <div class="fixed inset-0 transition-opacity" aria-hidden="true">
-                <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
-            </div>
-            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-            <div class="inline-block align-bottom bg-white dark:bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-                <div class="px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                    <div class="sm:flex sm:items-start">
-                        <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-blue-100 sm:mx-0 sm:h-10 sm:w-10">
-                            <x-bxs-phone class="h-6 w-6 text-blue-600" id="call-modal-icon" />
-                        </div>
-                        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                            <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white" id="call-modal-title">
-                                {{ __('Start Call') }}
-                            </h3>
-                            <div class="mt-2">
-                                <p class="text-sm text-gray-500 dark:text-gray-300">
-                                    {{ __('Would you like to start a call with') }} <span id="call-recipient-name">{{ $recipient->name }}</span>?
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                    <button type="button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm" onclick="callType === 'video' ? initiateVideoCall() : initiateAudioCall()">
-                        {{ __('Call') }}
-                    </button>
-                    <button type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white dark:bg-gray-700 text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" onclick="hideCallModal()">
-                        {{ __('Cancel') }}
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
+    <!-- Mobile Messages Box Responsive -->
+    <style>
+        @media (max-width: 768px) {
+            .messages-box-container {
+                height: calc(100vh - 8rem) !important;
+            }
+            .messages-box-header {
+                margin-bottom: 1rem !important;
+            }
+            .messages-box-header h1 {
+                font-size: 1.5rem !important;
+            }
+            .messages-box-header p {
+                font-size: 0.875rem !important;
+            }
+            .messages-box-chat-header {
+                padding: 0.75rem !important;
+            }
+            .messages-box-chat-header .w-10 {
+                width: 2rem !important;
+                height: 2rem !important;
+            }
+            .messages-box-chat-header h4 {
+                font-size: 0.875rem !important;
+            }
+            .messages-box-chat-header p {
+                font-size: 0.625rem !important;
+            }
+            .messages-box-chat-header button {
+                padding: 0.5rem !important;
+            }
+            .messages-box-chat-header button svg {
+                width: 1rem !important;
+                height: 1rem !important;
+            }
+            .messages-box-messages {
+                padding: 0.75rem !important;
+            }
+            .messages-box-message {
+                margin-bottom: 0.75rem !important;
+            }
+            .messages-box-message .max-w-xs {
+                max-width: 16rem !important;
+            }
+            .messages-box-message .w-8 {
+                width: 1.5rem !important;
+                height: 1.5rem !important;
+            }
+            .messages-box-message .text-sm {
+                font-size: 0.75rem !important;
+            }
+            .messages-box-message .text-xs {
+                font-size: 0.625rem !important;
+            }
+            .messages-box-input {
+                padding: 0.75rem !important;
+            }
+            .messages-box-input button {
+                padding: 0.5rem !important;
+            }
+            .messages-box-input button svg {
+                width: 1rem !important;
+                height: 1rem !important;
+            }
+            .messages-box-input input {
+                padding: 0.5rem !important;
+                font-size: 0.875rem !important;
+            }
+        }
+        @media (max-width: 480px) {
+            .messages-box-container {
+                height: calc(100vh - 6rem) !important;
+            }
+            .messages-box-header {
+                margin-bottom: 0.75rem !important;
+            }
+            .messages-box-header h1 {
+                font-size: 1.25rem !important;
+            }
+            .messages-box-header p {
+                font-size: 0.75rem !important;
+            }
+            .messages-box-chat-header {
+                padding: 0.5rem !important;
+            }
+            .messages-box-chat-header .w-10 {
+                width: 1.75rem !important;
+                height: 1.75rem !important;
+            }
+            .messages-box-chat-header h4 {
+                font-size: 0.75rem !important;
+            }
+            .messages-box-chat-header p {
+                font-size: 0.625rem !important;
+            }
+            .messages-box-chat-header button {
+                padding: 0.375rem !important;
+            }
+            .messages-box-chat-header button svg {
+                width: 0.875rem !important;
+                height: 0.875rem !important;
+            }
+            .messages-box-messages {
+                padding: 0.5rem !important;
+            }
+            .messages-box-message {
+                margin-bottom: 0.5rem !important;
+            }
+            .messages-box-message .max-w-xs {
+                max-width: 12rem !important;
+            }
+            .messages-box-message .w-8 {
+                width: 1.25rem !important;
+                height: 1.25rem !important;
+            }
+            .messages-box-message .text-sm {
+                font-size: 0.625rem !important;
+            }
+            .messages-box-message .text-xs {
+                font-size: 0.5rem !important;
+            }
+            .messages-box-input {
+                padding: 0.5rem !important;
+            }
+            .messages-box-input button {
+                padding: 0.375rem !important;
+            }
+            .messages-box-input button svg {
+                width: 0.875rem !important;
+                height: 0.875rem !important;
+            }
+            .messages-box-input input {
+                padding: 0.375rem !important;
+                font-size: 0.75rem !important;
+            }
+        }
+    </style>
 
     <!-- User Info Modal -->
     <div id="user-info-modal" class="fixed inset-0 z-50 hidden overflow-y-auto">
@@ -236,51 +341,13 @@
     @push('scripts')
     <script>
         // Call modal functionality
-        let callType = 'audio';
+        // Removed as we're now initiating calls directly
 
-        function showCallModal(type) {
-            callType = type;
-            const modal = document.getElementById('call-modal');
-            const title = document.getElementById('call-modal-title');
-            const icon = document.getElementById('call-modal-icon');
-
-            if (type === 'video') {
-                title.textContent = '{{ __('Start Video Call') }}';
-                icon.className = 'h-6 w-6 text-blue-600 bx bxs-video';
-            } else {
-                title.textContent = '{{ __('Start Audio Call') }}';
-                icon.className = 'h-6 w-6 text-blue-600 bx bxs-phone';
-            }
-
-            modal.classList.remove('hidden');
-        }
-
-        function hideCallModal() {
-            document.getElementById('call-modal').classList.add('hidden');
-        }
-
-        function startCall() {
-            // In a real application, this would initiate a call
-            const recipientName = document.getElementById('call-recipient-name').textContent;
-
-            if (callType === 'video') {
-                // Simulate video call initiation
-                alert('{{ __('Starting video call with') }} ' + recipientName + '... {{ __('(This is a demo - in a real app, this would connect to a video calling service)') }}');
-            } else {
-                // Simulate audio call initiation
-                alert('{{ __('Calling') }} ' + recipientName + '... {{ __('(This is a demo - in a real app, this would connect to a calling service)') }}');
-            }
-
-            hideCallModal();
-        }
-
-        // Enhanced call functionality
+        // Enhanced call functionality - Direct call initiation
         function initiateAudioCall() {
-            const recipientName = document.getElementById('call-recipient-name').textContent;
-            // Simulate initiating an audio call
-            console.log('Initiating audio call with ' + recipientName);
+            const recipientName = "{{ $recipient->name }}";
 
-            // Show a notification that the call is being initiated
+            // Show immediate visual feedback
             const notification = document.createElement('div');
             notification.className = 'fixed top-4 right-4 bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg z-50 animate-fade-in-out';
             notification.innerHTML = `
@@ -291,27 +358,39 @@
             `;
             document.body.appendChild(notification);
 
-            // Remove notification after 3 seconds
+            // In a real application, this would connect to a WebRTC or similar service
+            // For demo purposes, we'll simulate a call connection
             setTimeout(() => {
                 if (notification.parentNode) {
-                    notification.classList.add('opacity-0');
+                    notification.innerHTML = `
+                        <div class="flex items-center">
+                            <span class="bx bxs-phone mr-2"></span>
+                            <span>{{ __('Connected with') }} ${recipientName}</span>
+                        </div>
+                    `;
+
+                    // Change background to indicate active call
+                    notification.className = 'fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg z-50 animate-fade-in-out';
+
+                    // Remove notification after 3 seconds
                     setTimeout(() => {
                         if (notification.parentNode) {
-                            notification.parentNode.removeChild(notification);
+                            notification.classList.add('opacity-0');
+                            setTimeout(() => {
+                                if (notification.parentNode) {
+                                    notification.parentNode.removeChild(notification);
+                                }
+                            }, 300);
                         }
-                    }, 300);
+                    }, 3000);
                 }
-            }, 3000);
-
-            hideCallModal();
+            }, 2000);
         }
 
         function initiateVideoCall() {
-            const recipientName = document.getElementById('call-recipient-name').textContent;
-            // Simulate initiating a video call
-            console.log('Initiating video call with ' + recipientName);
+            const recipientName = "{{ $recipient->name }}";
 
-            // Show a notification that the call is being initiated
+            // Show immediate visual feedback
             const notification = document.createElement('div');
             notification.className = 'fixed top-4 right-4 bg-purple-500 text-white px-4 py-2 rounded-lg shadow-lg z-50 animate-fade-in-out';
             notification.innerHTML = `
@@ -322,19 +401,45 @@
             `;
             document.body.appendChild(notification);
 
-            // Remove notification after 3 seconds
+            // In a real application, this would connect to a WebRTC or similar service
+            // For demo purposes, we'll simulate a video call connection
             setTimeout(() => {
                 if (notification.parentNode) {
-                    notification.classList.add('opacity-0');
+                    notification.innerHTML = `
+                        <div class="flex items-center">
+                            <span class="bx bxs-video mr-2"></span>
+                            <span>{{ __('Video call connected with') }} ${recipientName}</span>
+                        </div>
+                    `;
+
+                    // Change background to indicate active video call
+                    notification.className = 'fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg z-50 animate-fade-in-out';
+
+                    // Remove notification after 3 seconds
                     setTimeout(() => {
                         if (notification.parentNode) {
-                            notification.parentNode.removeChild(notification);
+                            notification.classList.add('opacity-0');
+                            setTimeout(() => {
+                                if (notification.parentNode) {
+                                    notification.parentNode.removeChild(notification);
+                                }
+                            }, 300);
                         }
-                    }, 300);
+                    }, 3000);
                 }
-            }, 3000);
+            }, 2000);
+        }
 
-            hideCallModal();
+        function startCall() {
+            // This function is kept for backward compatibility
+            // In a real application, this would initiate a call
+            const recipientName = "{{ $recipient->name }}";
+
+            if (callType === 'video') {
+                initiateVideoCall();
+            } else {
+                initiateAudioCall();
+            }
         }
 
         // User info modal functionality
@@ -357,19 +462,15 @@
 
         // Close modals when clicking outside
         document.addEventListener('DOMContentLoaded', function() {
-            // Close call modal when clicking outside
-            document.getElementById('call-modal').addEventListener('click', function(e) {
-                if (e.target === this) {
-                    hideCallModal();
-                }
-            });
-
             // Close user info modal when clicking outside
-            document.getElementById('user-info-modal').addEventListener('click', function(e) {
-                if (e.target === this) {
-                    hideUserInfoModal();
-                }
-            });
+            const userInfoModal = document.getElementById('user-info-modal');
+            if (userInfoModal) {
+                userInfoModal.addEventListener('click', function(e) {
+                    if (e.target === this) {
+                        hideUserInfoModal();
+                    }
+                });
+            }
 
             // Existing message functionality
             const messageForm = document.getElementById('message-form');
@@ -377,17 +478,29 @@
             const messagesContainer = document.getElementById('messages-container');
             const typingIndicator = document.getElementById('typing-indicator');
 
+            if (!messageForm || !messageInput || !messagesContainer) {
+                return; // Exit if essential elements are missing
+            }
+
             // Auto-scroll to bottom of messages container
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
 
-            // Handle form submission
+            // Handle form submission with AJAX to prevent page reload
             messageForm.addEventListener('submit', function(e) {
                 e.preventDefault();
 
-                const formData = new FormData(messageForm);
-                const message = messageInput.value.trim();
+                const messageText = messageInput.value.trim();
+                if (!messageText) return;
 
-                if (!message) return;
+                // Get form data
+                const formData = new FormData(messageForm);
+
+                // Disable the submit button to prevent double submission
+                const submitButton = messageForm.querySelector('button[type="submit"]');
+                if (submitButton) {
+                    submitButton.disabled = true;
+                    submitButton.innerHTML = '<span class="bx bx-loader-alt animate-spin w-5 h-5"></span>';
+                }
 
                 // Send message via AJAX
                 fetch(messageForm.action, {
@@ -401,17 +514,46 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        // Clear input
+                        // Create and append the new message to the UI immediately
+                        const newMessageDiv = document.createElement('div');
+                        newMessageDiv.className = 'flex justify-end mb-4';
+                        newMessageDiv.setAttribute('data-message-id', data.message.id);
+
+                        newMessageDiv.innerHTML = `
+                            <div class="max-w-xs lg:max-w-md">
+                                <div class="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-2xl rounded-tr-none px-4 py-2 shadow-sm">
+                                    <p class="text-sm text-white">${messageText}</p>
+                                    <div class="flex justify-end mt-1">
+                                        <span class="text-xs text-blue-100">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+                                        <span class="ml-1 text-xs text-blue-100 message-status sent">✓</span>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+
+                        messagesContainer.appendChild(newMessageDiv);
+
+                        // Clear input and focus
                         messageInput.value = '';
                         messageInput.focus();
 
-                        // In a real app, you would add the message to the UI here
-                        // For now, we'll just reload to show the new message
-                        location.reload();
+                        // Scroll to bottom
+                        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                    } else {
+                        // Handle error
+                        alert('{{ __('Failed to send message. Please try again.') }}');
                     }
                 })
                 .catch(error => {
                     console.error('Error:', error);
+                    alert('{{ __('Failed to send message. Please try again.') }}');
+                })
+                .finally(() => {
+                    // Re-enable the submit button
+                    if (submitButton) {
+                        submitButton.disabled = false;
+                        submitButton.innerHTML = '<x-bxs-send class="w-5 h-5" />';
+                    }
                 });
             });
 
@@ -444,7 +586,7 @@
                             </div>
                             <div class="max-w-xs lg:max-w-md">
                                 <div class="bg-white dark:bg-gray-700 rounded-2xl rounded-tl-none px-4 py-2 shadow-sm">
-                                    <p class="text-sm text-gray-800 dark:text-gray-200">${e.body}</p>
+                                    <p class="text-sm text-gray-800 dark:text-gray-200">${e.body || e.message}</p>
                                     <div class="flex justify-end mt-1">
                                         <span class="text-xs text-gray-500 dark:text-gray-400">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
                                     </div>
@@ -464,10 +606,12 @@
                     })
                     .listen('UserTyping', (e) => {
                         // Show/hide typing indicator
-                        if (e.is_typing) {
-                            typingIndicator.classList.remove('hidden');
-                        } else {
-                            typingIndicator.classList.add('hidden');
+                        if (typingIndicator) {
+                            if (e.is_typing) {
+                                typingIndicator.classList.remove('hidden');
+                            } else {
+                                typingIndicator.classList.add('hidden');
+                            }
                         }
                     });
             }
@@ -486,6 +630,24 @@
 
         .animate-fade-in-out {
             animation: fade-in-out 3s ease-in-out forwards;
+            will-change: transform, opacity;
+        }
+
+        /* Optimize scrolling performance */
+        #messages-container {
+            -webkit-overflow-scrolling: touch;
+            will-change: scroll-position;
+        }
+
+        /* Optimize message rendering */
+        .message-bubble {
+            will-change: transform;
+            transform: translateZ(0);
+        }
+
+        /* Optimize typing indicator animation */
+        .animate-bounce {
+            will-change: transform;
         }
     </style>
     @endpush

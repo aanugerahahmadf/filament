@@ -12,15 +12,13 @@ class BuildingInfolist
         return $schema
             ->components([
                 TextEntry::make('name'),
-                TextEntry::make('address')
-                    ->placeholder('-'),
                 TextEntry::make('latitude')
                     ->numeric()
                     ->placeholder('-'),
                 TextEntry::make('longitude')
                     ->numeric()
                     ->placeholder('-'),
-                TextEntry::make('marker_icon_path')
+                TextEntry::make('marker_icon')
                     ->placeholder('-'),
                 TextEntry::make('created_at')
                     ->dateTime()

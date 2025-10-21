@@ -13,6 +13,7 @@ use App\Models\Notification;
 use App\Models\Recording;
 use App\Models\Room;
 use App\Observers\AuditObserver;
+use App\Observers\NotificationObserver;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -36,7 +37,7 @@ class AppServiceProvider extends ServiceProvider
         Cctv::observe(AuditObserver::class);
         Contact::observe(AuditObserver::class);
         Message::observe(AuditObserver::class);
-        Notification::observe(AuditObserver::class);
+        Notification::observe(NotificationObserver::class);
         Maintenance::observe(AuditObserver::class);
         Recording::observe(AuditObserver::class);
         Alert::observe(AuditObserver::class);

@@ -14,9 +14,14 @@ class Room extends Model
     protected $fillable = [
         'building_id',
         'name',
+        'marker_icon',
         'latitude',
         'longitude',
-        'marker_icon_path',
+    ];
+
+    protected $casts = [
+        'latitude' => 'decimal:8',
+        'longitude' => 'decimal:8',
     ];
 
     public function building(): BelongsTo

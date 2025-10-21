@@ -224,6 +224,15 @@
             .nav-center { position:absolute; left:50%; transform:translateX(-50%); display:none; gap:28px; color:#fff; font-size:14px; opacity:.95; }
             .nav-center a { color:inherit; text-decoration:none; }
             @media (min-width: 960px) { .nav-center { display:flex; } }
+            
+            /* Mobile Header Responsive */
+            @media (max-width: 768px) {
+                .nav { padding: 12px 0; }
+                .nav-center { display: none !important; }
+            }
+            @media (max-width: 480px) {
+                .nav { padding: 8px 0; }
+            }
 
             /* Auth buttons */
             .nav-auth {
@@ -266,6 +275,21 @@
             @media (min-width: 960px) { .headline { font-size:64px; } }
             .sub { margin-top:12px; font-size:14px; opacity:.85; }
             .cta { margin-top:24px; display:flex; justify-content:center; gap:12px; }
+            
+            /* Mobile Hero Responsive */
+            @media (max-width: 768px) {
+                .hero { height: 70vh; min-height: 400px; }
+                .headline { font-size: 32px; letter-spacing: .1em; }
+                .sub { font-size: 12px; }
+                .cta { flex-direction: column; gap: 8px; align-items: center; }
+                .cta .btn { width: 100%; max-width: 200px; }
+            }
+            @media (max-width: 480px) {
+                .hero { height: 60vh; min-height: 350px; }
+                .headline { font-size: 24px; letter-spacing: .05em; }
+                .sub { font-size: 11px; }
+                .kicker { font-size: 10px; }
+            }
 
             /* Cards */
             .section { padding:56px 0; }
@@ -275,18 +299,55 @@
             .card:hover { box-shadow:0 0 0 1px var(--ring), 0 8px 26px rgba(0,0,0,.08); transform: translateY(-2px); }
             .card h4 { margin:8px 0 6px; font-weight:600; }
             .muted { color: var(--muted); font-size:14px; }
+            
+            /* Mobile Cards Responsive */
+            @media (max-width: 768px) {
+                .section { padding: 32px 0; }
+                .grid { gap: 16px; }
+                .grid-3 { grid-template-columns: 1fr !important; }
+                .card { padding: 16px; border-radius: 12px; }
+                .card h4 { font-size: 16px; }
+                .muted { font-size: 12px; }
+            }
+            @media (max-width: 480px) {
+                .section { padding: 24px 0; }
+                .grid { gap: 12px; }
+                .card { padding: 12px; border-radius: 8px; }
+            }
 
             /* Stats */
             .stats { display:grid; gap:20px; grid-template-columns: repeat(2, minmax(0,1fr)); }
             @media (min-width: 960px) { .stats { grid-template-columns: repeat(4, minmax(0,1fr)); } }
             .stat { background: var(--card); border-radius:14px; padding:22px; box-shadow:0 0 0 1px var(--ring); text-align:center; }
             .stat .num { font-size:28px; font-weight:700; }
+            
+            /* Mobile Stats Responsive */
+            @media (max-width: 768px) {
+                .stats { grid-template-columns: repeat(2, minmax(0,1fr)); gap: 16px; }
+                .stat { padding: 16px; border-radius: 12px; }
+                .stat .num { font-size: 24px; }
+            }
+            @media (max-width: 480px) {
+                .stats { grid-template-columns: 1fr; gap: 12px; }
+                .stat { padding: 12px; border-radius: 8px; }
+                .stat .num { font-size: 20px; }
+            }
 
             /* About */
             .about { display:grid; gap:24px; }
             @media (min-width: 960px) { .about { grid-template-columns: 1.1fr .9fr; align-items:center; } }
             .img-box { border-radius:16px; overflow:hidden; box-shadow:0 0 0 1px var(--ring); }
             .img-box img { width:100%; height:100%; object-fit:cover; }
+            
+            /* Mobile About Responsive */
+            @media (max-width: 768px) {
+                .about { grid-template-columns: 1fr; gap: 16px; }
+                .img-box { border-radius: 12px; }
+            }
+            @media (max-width: 480px) {
+                .about { gap: 12px; }
+                .img-box { border-radius: 8px; }
+            }
 
             /* Footer CTA */
             .cta-band { background: var(--card); box-shadow: 0 0 0 1px var(--ring); border-radius:16px; padding:24px; display:flex; gap:16px; align-items:center; justify-content:space-between; flex-wrap:wrap; }

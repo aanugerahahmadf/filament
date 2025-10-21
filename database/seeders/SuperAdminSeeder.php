@@ -19,7 +19,7 @@ class SuperAdminSeeder extends Seeder
         ], [
             'name' => 'Super Admin',
             'username' => 'admin',
-            'password' => bcrypt('password'),
+            'password' => bcrypt('@Admin123'),
         ]);
 
         // Assign Super Admin role
@@ -28,6 +28,6 @@ class SuperAdminSeeder extends Seeder
             $user->assignRole($superAdminRole);
         }
 
-        $this->command->info('Super admin user created with email: admin@pertamina.com and password: password');
+        $this->command->info('Super admin user created with email: admin@pertamina.com and password: @Admin123');
     }
 }

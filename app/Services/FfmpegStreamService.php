@@ -13,6 +13,7 @@ class FfmpegStreamService
     {
         Log::channel('daily')->info('Starting stream for CCTV '.$cctv->id, [
             'ip_rtsp' => $cctv->ip_rtsp,
+            'connection_type' => $cctv->connection_type,
             'status' => $cctv->status,
             'last_seen_at' => $cctv->last_seen_at,
         ]);
@@ -28,10 +29,13 @@ class FfmpegStreamService
 
         $ffmpeg = config('services.ffmpeg.binary', 'ffmpeg');
 
+        // Adjust transport method based on connection type
+        $transportMethod = $cctv->connection_type === 'wireless' ? 'udp' : 'tcp';
+
         // HLS low-latency tuned settings
         $args = [
             $ffmpeg,
-            '-rtsp_transport', 'tcp',
+            '-rtsp_transport', $transportMethod,
             '-stimeout', '5000000', // 5 seconds timeout
             '-i', $cctv->ip_rtsp,
             '-c:v', 'copy',
@@ -43,6 +47,16 @@ class FfmpegStreamService
             '-hls_segment_filename', $segmentPath,
             $playlistPath,
         ];
+
+        // For wireless connections, we might want to reduce quality to handle potential bandwidth issues
+        if ($cctv->connection_type === 'wireless') {
+            $args = array_merge($args, [
+                '-vf', 'scale=1280:720', // Reduce resolution for wireless
+                '-b:v', '1000k', // Reduce bitrate for wireless
+                '-maxrate', '1000k',
+                '-bufsize', '2000k',
+            ]);
+        }
 
         Log::channel('daily')->info('FFmpeg command for CCTV '.$cctv->id, [
             'command' => implode(' ', $args),
@@ -72,6 +86,7 @@ class FfmpegStreamService
                 'exit_code' => $exitCode,
                 'error_output' => $errorOutput,
                 'ip_rtsp' => $cctv->ip_rtsp,
+                'connection_type' => $cctv->connection_type,
             ]);
 
             // Update CCTV status to offline if connection fails
@@ -135,11 +150,14 @@ class FfmpegStreamService
 
         $ffmpeg = config('services.ffmpeg.binary', 'ffmpeg');
 
+        // Adjust transport method based on connection type
+        $transportMethod = $cctv->connection_type === 'wireless' ? 'udp' : 'tcp';
+
         // Grab a single frame quickly
         $args = [
             $ffmpeg,
             '-y',
-            '-rtsp_transport', 'tcp',
+            '-rtsp_transport', $transportMethod,
             '-i', $cctv->ip_rtsp,
             '-frames:v', '1',
             '-q:v', '2',
@@ -176,20 +194,43 @@ class FfmpegStreamService
 
         $ffmpeg = config('services.ffmpeg.binary', 'ffmpeg');
 
-        // Record limited duration; re-encode for compatibility
-        $args = [
-            $ffmpeg,
-            '-y',
-            '-rtsp_transport', 'tcp',
-            '-i', $cctv->ip_rtsp,
-            '-t', (string) $seconds,
-            '-c:v', 'libx264',
-            '-preset', 'veryfast',
-            '-crf', '23',
-            '-c:a', 'aac',
-            '-movflags', '+faststart',
-            $outputPath,
-        ];
+        // Adjust transport method based on connection type
+        $transportMethod = $cctv->connection_type === 'wireless' ? 'udp' : 'tcp';
+
+        // For wireless connections, we might want to reduce quality to handle potential bandwidth issues
+        if ($cctv->connection_type === 'wireless') {
+            // Record limited duration; re-encode for compatibility with reduced quality
+            $args = [
+                $ffmpeg,
+                '-y',
+                '-rtsp_transport', $transportMethod,
+                '-i', $cctv->ip_rtsp,
+                '-t', (string) $seconds,
+                '-vf', 'scale=1280:720', // Reduce resolution for wireless
+                '-b:v', '1000k', // Reduce bitrate for wireless
+                '-c:v', 'libx264',
+                '-preset', 'veryfast',
+                '-crf', '23',
+                '-c:a', 'aac',
+                '-movflags', '+faststart',
+                $outputPath,
+            ];
+        } else {
+            // For wired connections, use higher quality
+            $args = [
+                $ffmpeg,
+                '-y',
+                '-rtsp_transport', $transportMethod,
+                '-i', $cctv->ip_rtsp,
+                '-t', (string) $seconds,
+                '-c:v', 'libx264',
+                '-preset', 'veryfast',
+                '-crf', '23',
+                '-c:a', 'aac',
+                '-movflags', '+faststart',
+                $outputPath,
+            ];
+        }
 
         $process = new Process($args);
         // Allow long enough time (seconds + overhead)

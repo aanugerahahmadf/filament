@@ -1,4 +1,4 @@
-<flux:sidebar sticky stashable class="border-e border-zinc-300 dark:border-zinc-600 bg-gradient-to-b from-zinc-50 to-zinc-100 dark:from-zinc-900 dark:to-zinc-800 lg:w-64 lg:h-screen overflow-y-auto shadow-lg">
+<flux:sidebar sticky collapsible="true" class="border-e border-zinc-300 dark:border-zinc-600 bg-gradient-to-b from-zinc-50 to-zinc-100 dark:from-zinc-900 dark:to-zinc-800 lg:w-64 lg:h-screen overflow-y-auto shadow-lg">
     <flux:sidebar.toggle class="lg:hidden" icon="x-mark" />
 
     <div class="flex justify-center py-4">
@@ -13,10 +13,10 @@
                 <x-bxs-dashboard class="inline-block w-5 h-5 shrink-0 me-2" /> {{ __('Dashboard') }}
             </flux:navlist.item>
             <flux:navlist.item :href="route('maps')" :current="request()->routeIs('maps')" wire:navigate class="border border-zinc-300 dark:border-zinc-500 rounded-xl mb-2 font-bold hover:border-zinc-400 dark:hover:border-zinc-400 transition-all duration-200 hover:shadow-md">
-                <x-bxs-map class="inline-block w-5 h-5 shrink-0 me-2" /> {{ __('Maps') }}
+                <x-bxs-map-pin class="inline-block w-5 h-5 shrink-0 me-2" /> {{ __('Maps') }}
             </flux:navlist.item>
             <flux:navlist.item :href="route('locations')" :current="request()->routeIs('locations')" wire:navigate class="border border-zinc-300 dark:border-zinc-500 rounded-xl mb-2 font-bold hover:border-zinc-400 dark:hover:border-zinc-400 transition-all duration-200 hover:shadow-md">
-                <x-bxs-map class="inline-block w-5 h-5 shrink-0 me-2" /> {{ __('Location') }}
+                <x-eos-playlist-play class="inline-block w-5 h-5 shrink-0 me-2" /> {{ __('Playlist') }}
             </flux:navlist.item>
             <flux:navlist.item :href="route('contact')" :current="request()->routeIs('contact')" wire:navigate class="border border-zinc-300 dark:border-zinc-500 rounded-xl mb-2 font-bold hover:border-zinc-400 dark:hover:border-zinc-400 transition-all duration-200 hover:shadow-md">
                 <x-bxs-envelope class="inline-block w-5 h-5 shrink-0 me-2" /> {{ __('Contact') }}

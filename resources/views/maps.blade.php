@@ -15,6 +15,20 @@
             position: relative;
             z-index: 1; /* Ensure map stays behind sidebar */
         }
+        
+        /* Mobile Container Responsive */
+        @media (max-width: 768px) {
+            .maps-container {
+                padding: 0.5rem;
+                gap: 0.5rem;
+            }
+        }
+        @media (max-width: 480px) {
+            .maps-container {
+                padding: 0.25rem;
+                gap: 0.25rem;
+            }
+        }
 
         /* Header: samakan skala/spacing seperti halaman lain */
         .maps-header {
@@ -31,6 +45,22 @@
             position: relative;
         }
         .maps-title { font-size: 20px; font-weight: 700; }
+        
+        /* Mobile Header Responsive */
+        @media (max-width: 768px) {
+            .maps-header {
+                padding: 10px 12px;
+                border-radius: 8px;
+            }
+            .maps-title { font-size: 16px; }
+        }
+        @media (max-width: 480px) {
+            .maps-header {
+                padding: 8px 10px;
+                border-radius: 6px;
+            }
+            .maps-title { font-size: 14px; }
+        }
 
         .maps-controls {
             display: flex;
@@ -46,6 +76,30 @@
         }
         .controls-left { flex: 1; display: flex; justify-content: flex-start; }
         .controls-right { display: flex; align-items: center; gap: 10px; margin-left: auto; }
+        
+        /* Mobile Controls Responsive */
+        @media (max-width: 768px) {
+            .maps-controls {
+                flex-direction: column;
+                gap: 8px;
+                padding: 8px 10px;
+                border-radius: 8px;
+            }
+            .controls-left, .controls-right {
+                width: 100%;
+                justify-content: center;
+            }
+            .controls-right {
+                margin-left: 0;
+                flex-wrap: wrap;
+            }
+        }
+        @media (max-width: 480px) {
+            .maps-controls {
+                padding: 6px 8px;
+                border-radius: 6px;
+            }
+        }
 
         .search-box { position: relative; width: min(420px, 100%); }
         .search-input {
@@ -64,12 +118,62 @@
         .search-item { padding: 10px 12px; cursor: pointer; border-bottom: 1px solid #f3f4f6; color: #333; }
         .search-item:last-child { border-bottom: 0; }
         .search-item:hover { background: #f8fafc; }
+        
+        /* Mobile Search Responsive */
+        @media (max-width: 768px) {
+            .search-box { width: 100%; }
+            .search-input {
+                padding: 8px 12px;
+                border-radius: 18px;
+                font-size: 14px;
+            }
+            .search-results {
+                max-height: 200px;
+                border-radius: 8px;
+            }
+            .search-item {
+                padding: 8px 10px;
+                font-size: 14px;
+            }
+        }
+        @media (max-width: 480px) {
+            .search-input {
+                padding: 6px 10px;
+                border-radius: 16px;
+                font-size: 13px;
+            }
+            .search-results {
+                max-height: 150px;
+            }
+            .search-item {
+                padding: 6px 8px;
+                font-size: 13px;
+            }
+        }
 
         .layer-btn {
             padding: 8px 14px; border-radius: 10px; border: 2px solid transparent; background: #fff; cursor: pointer; font-weight: 600; transition: .2s; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 10px rgba(0,0,0,.08);
             color: #333;
         }
         .layer-btn.active { background: linear-gradient(145deg, #2a5a9c, #3a7ad9); color: #fff; border-color: #3a7ad9; }
+        
+        /* Mobile Layer Button Responsive */
+        @media (max-width: 768px) {
+            .layer-btn {
+                padding: 6px 10px;
+                border-radius: 8px;
+                font-size: 13px;
+                gap: 4px;
+            }
+        }
+        @media (max-width: 480px) {
+            .layer-btn {
+                padding: 4px 8px;
+                border-radius: 6px;
+                font-size: 12px;
+                gap: 3px;
+            }
+        }
 
         .status-pill { width: 38px; height: 38px; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 6px 14px rgba(0,0,0,.18); display: inline-flex; align-items: center; justify-content: center; color: #fff; font-size: 18px; cursor: pointer; transition: transform .15s; }
         .status-pill:hover { transform: translateY(-2px); }
@@ -77,6 +181,24 @@
         .pill-offline { background: #ef4444; }
         .pill-maint { background: #f59e0b; }
         .pill-inactive { opacity: .45; filter: grayscale(30%); }
+        
+        /* Mobile Status Pill Responsive */
+        @media (max-width: 768px) {
+            .status-pill {
+                width: 32px;
+                height: 32px;
+                font-size: 16px;
+                border-width: 2px;
+            }
+        }
+        @media (max-width: 480px) {
+            .status-pill {
+                width: 28px;
+                height: 28px;
+                font-size: 14px;
+                border-width: 2px;
+            }
+        }
 
         .map-shell {
             position: relative;
@@ -103,6 +225,26 @@
             background: #ddd;
             display: block !important;
             position: relative !important;
+        }
+        
+        /* Mobile Map Responsive */
+        @media (max-width: 768px) {
+            .map-shell {
+                border-radius: 10px;
+            }
+            #map {
+                height: 60vh;
+                min-height: 400px;
+            }
+        }
+        @media (max-width: 480px) {
+            .map-shell {
+                border-radius: 8px;
+            }
+            #map {
+                height: 50vh;
+                min-height: 300px;
+            }
         }
         
         /* Force immediate visibility for Leaflet elements */

@@ -12,6 +12,71 @@
             <div id="cctvs" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6"></div>
         </div>
     </div>
+    
+    <!-- Mobile CCTV List Responsive -->
+    <style>
+        @media (max-width: 768px) {
+            .cctv-container {
+                padding: 1rem !important;
+            }
+            .cctv-header {
+                flex-direction: column !important;
+                gap: 1rem !important;
+                align-items: stretch !important;
+            }
+            .cctv-header h1 {
+                font-size: 1.875rem !important;
+                text-align: center !important;
+            }
+            .cctv-header .btn {
+                width: 100% !important;
+                text-align: center !important;
+            }
+            .cctv-grid {
+                grid-template-columns: 1fr !important;
+                gap: 1rem !important;
+            }
+            .cctv-card {
+                padding: 1rem !important;
+                border-radius: 0.75rem !important;
+            }
+            .cctv-card .font-semibold {
+                font-size: 1rem !important;
+            }
+            .cctv-card .text-sm {
+                font-size: 0.75rem !important;
+            }
+            .cctv-card .btn {
+                padding: 0.75rem !important;
+                font-size: 0.75rem !important;
+            }
+        }
+        @media (max-width: 480px) {
+            .cctv-container {
+                padding: 0.75rem !important;
+            }
+            .cctv-header h1 {
+                font-size: 1.5rem !important;
+            }
+            .cctv-grid {
+                gap: 0.75rem !important;
+            }
+            .cctv-card {
+                padding: 0.75rem !important;
+                border-radius: 0.5rem !important;
+            }
+            .cctv-card .font-semibold {
+                font-size: 0.875rem !important;
+            }
+            .cctv-card .text-sm {
+                font-size: 0.625rem !important;
+            }
+            .cctv-card .btn {
+                padding: 0.5rem !important;
+                font-size: 0.625rem !important;
+            }
+        }
+    </style>
 
     <script>
         let DATA = { buildings: [] };

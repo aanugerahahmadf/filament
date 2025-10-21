@@ -26,8 +26,9 @@ class CctvStatusChart extends ChartWidget
                 [
                     'label' => 'CCTV Status',
                     'data' => [$online, $offline, $maintenance],
-                    'backgroundColor' => ['#10B981', '#EF4444', '#F59E0B'],
-                    'borderColor' => ['#10B981', '#EF4444', '#F59E0B'],
+                    'fill' => false,
+                    'borderColor' => '#3B82F6',
+                    'tension' => 0.1,
                 ],
             ],
         ];
@@ -35,6 +36,6 @@ class CctvStatusChart extends ChartWidget
 
     protected function getType(): string
     {
-        return 'doughnut';
+        return 'line';
     }
 }

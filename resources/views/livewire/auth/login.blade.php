@@ -214,7 +214,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
         <form method="POST" wire:submit="updatePassword" class="flex flex-col gap-6">
             <!-- New Password -->
             <flux:input
-                wire:model="password"
+                wire:model.live="password"
                 :label="__('New Password (min. 8 characters with uppercase, lowercase, number, and special character)')"
                 type="password"
                 required
@@ -224,7 +224,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
 
             <!-- Confirm Password -->
             <flux:input
-                wire:model="password_confirmation"
+                wire:model.live="password_confirmation"
                 :label="__('Confirm New Password')"
                 type="password"
                 required
@@ -259,7 +259,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
         <form method="POST" wire:submit="login" class="flex flex-col gap-6">
             <!-- Email Address or Username -->
             <flux:input
-                wire:model="email"
+                wire:model.live="email"
                 :label="__('Email or Username')"
                 type="text"
                 required
@@ -268,7 +268,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
 
             <!-- Password -->
             <flux:input
-                wire:model="password"
+                wire:model.live="password"
                 :label="__('Password')"
                 type="password"
                 required
@@ -278,7 +278,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
 
             <!-- Remember Me -->
             <div class="flex items-center justify-between">
-                <flux:checkbox wire:model="remember" :label="__('Remember me')" />
+                <flux:checkbox wire:model.live="remember" :label="__('Remember me')" />
 
                 <flux:link :href="route('password.request')" wire:navigate>
                     {{ __('Forgot your password?') }}

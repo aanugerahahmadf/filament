@@ -105,7 +105,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
     <form method="POST" wire:submit="register" class="flex flex-col gap-6">
         <!-- Name -->
         <flux:input
-            wire:model="name"
+            wire:model.live="name"
             :label="__('Full Name')"
             type="text"
             required
@@ -115,7 +115,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
 
         <!-- Username -->
         <flux:input
-            wire:model="username"
+            wire:model.live="username"
             :label="__('Username')"
             type="text"
             required
@@ -124,7 +124,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
 
         <!-- Email Address -->
         <flux:input
-            wire:model="email"
+            wire:model.live="email"
             :label="__('Email address')"
             type="email"
             required
@@ -133,7 +133,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
 
         <!-- Password -->
         <flux:input
-            wire:model="password"
+            wire:model.live="password"
             :label="__('Password (min. 8 characters with uppercase, lowercase, number, and special character)')"
             type="password"
             required
@@ -143,7 +143,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
 
         <!-- Confirm Password -->
         <flux:input
-            wire:model="password_confirmation"
+            wire:model.live="password_confirmation"
             :label="__('Confirm password')"
             type="password"
             required
@@ -153,7 +153,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
 
         <!-- Place of Birth -->
         <flux:input
-            wire:model="place_of_birth"
+            wire:model.live="place_of_birth"
             :label="__('Tempat Lahir')"
             type="text"
             autocomplete="place_of_birth"
@@ -161,7 +161,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
 
         <!-- City -->
         <flux:input
-            wire:model="city"
+            wire:model.live="city"
             :label="__('Kota')"
             type="text"
             autocomplete="city"
@@ -171,7 +171,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
         <div>
             <flux:label for="date_of_birth">{{ __('Tanggal Lahir') }}</flux:label>
             <input
-                wire:model="date_of_birth"
+                wire:model.live="date_of_birth"
                 id="date_of_birth"
                 type="date"
                 class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-zinc-100 dark:bg-zinc-800 focus:ring-2 focus:ring-blue-500 focus:ring-offset-0 focus:ring-offset-white dark:focus:ring-offset-zinc-900 focus:outline-none py-3 px-4 text-zinc-900 dark:text-white placeholder-zinc-500 dark:placeholder-zinc-400 transition duration-200"
@@ -180,26 +180,11 @@ new #[Layout('components.layouts.auth')] class extends Component {
 
         <!-- Phone Number -->
         <flux:input
-            wire:model="phone_number"
+            wire:model.live="phone_number"
             :label="__('No. Handphone / WhatsApp')"
             type="text"
             autocomplete="phone_number"
         />
-
-        <!-- Preferred Verification Method -->
-        @if($phone_number)
-            <div class="flex gap-2 mt-2">
-                <flux:button wire:click="setVerificationMethod('whatsapp')" :variant="$preferredVerificationMethod === 'whatsapp' ? 'primary' : 'ghost'" size="sm" class="flex-1">
-                    {{ __('WhatsApp') }}
-                </flux:button>
-                <flux:button wire:click="setVerificationMethod('email')" :variant="$preferredVerificationMethod === 'email' ? 'primary' : 'ghost'" size="sm" class="flex-1">
-                    {{ __('Email') }}
-                </flux:button>
-            </div>
-        @else
-            <!-- Hidden input to ensure email is selected when no phone number is provided -->
-            <input type="hidden" name="preferredVerificationMethod" value="email" />
-        @endif
 
         <div class="flex items-center justify-end">
             <flux:button type="submit" variant="primary" class="w-full" data-test="register-user-button">

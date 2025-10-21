@@ -37,6 +37,8 @@ Route::prefix('health')->group(function () {
 Route::prefix('notifications')->middleware(['auth'])->group(function () {
     Route::get('/', [NotificationApiController::class, 'index'])->name('api.notifications.index');
     Route::post('/{id}/read', [NotificationApiController::class, 'markAsRead'])->name('api.notifications.mark-as-read');
+    Route::delete('/{id}', [NotificationApiController::class, 'destroy'])->name('api.notifications.destroy');
+    Route::post('/{id}/unread', [NotificationApiController::class, 'markAsUnread'])->name('api.notifications.mark-as-unread');
 });
 
 // CCTV API routes

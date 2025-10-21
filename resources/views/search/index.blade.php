@@ -141,4 +141,139 @@
             </div>
         @endif
     </div>
+    
+    <!-- Mobile Search Responsive -->
+    <style>
+        @media (max-width: 768px) {
+            .search-container {
+                max-width: 100% !important;
+                padding: 1rem !important;
+            }
+            .search-header {
+                margin-bottom: 1.5rem !important;
+            }
+            .search-header h1 {
+                font-size: 1.5rem !important;
+            }
+            .search-form {
+                padding: 1rem !important;
+                margin-bottom: 1.5rem !important;
+            }
+            .search-form .flex {
+                flex-direction: column !important;
+                gap: 0.75rem !important;
+            }
+            .search-form input {
+                padding: 0.75rem !important;
+                font-size: 0.875rem !important;
+            }
+            .search-form button {
+                padding: 0.75rem !important;
+                font-size: 0.875rem !important;
+                justify-content: center !important;
+            }
+            .search-form button svg {
+                width: 1rem !important;
+                height: 1rem !important;
+            }
+            .search-results {
+                margin-bottom: 1.5rem !important;
+            }
+            .search-results h2 {
+                font-size: 1rem !important;
+                margin-bottom: 0.75rem !important;
+            }
+            .search-results li {
+                padding: 0.75rem !important;
+            }
+            .search-results .flex-shrink-0 svg {
+                width: 1rem !important;
+                height: 1rem !important;
+            }
+            .search-results h3 {
+                font-size: 0.875rem !important;
+            }
+            .search-results p {
+                font-size: 0.75rem !important;
+            }
+            .search-results .text-xs {
+                font-size: 0.625rem !important;
+            }
+            .search-no-results {
+                padding: 1.5rem !important;
+            }
+            .search-no-results svg {
+                width: 3rem !important;
+                height: 3rem !important;
+            }
+            .search-no-results h3 {
+                font-size: 1rem !important;
+            }
+            .search-no-results p {
+                font-size: 0.875rem !important;
+            }
+        }
+        @media (max-width: 480px) {
+            .search-container {
+                padding: 0.75rem !important;
+            }
+            .search-header {
+                margin-bottom: 1rem !important;
+            }
+            .search-header h1 {
+                font-size: 1.25rem !important;
+            }
+            .search-form {
+                padding: 0.75rem !important;
+                margin-bottom: 1rem !important;
+            }
+            .search-form .flex {
+                gap: 0.5rem !important;
+            }
+            .search-form input {
+                padding: 0.5rem !important;
+                font-size: 0.75rem !important;
+            }
+            .search-form button {
+                padding: 0.5rem !important;
+                font-size: 0.75rem !important;
+            }
+            .search-results {
+                margin-bottom: 1rem !important;
+            }
+            .search-results h2 {
+                font-size: 0.875rem !important;
+                margin-bottom: 0.5rem !important;
+            }
+            .search-results li {
+                padding: 0.5rem !important;
+            }
+            .search-results .flex-shrink-0 svg {
+                width: 0.875rem !important;
+                height: 0.875rem !important;
+            }
+            .search-results h3 {
+                font-size: 0.75rem !important;
+            }
+            .search-results p {
+                font-size: 0.625rem !important;
+            }
+            .search-results .text-xs {
+                font-size: 0.5rem !important;
+            }
+            .search-no-results {
+                padding: 1rem !important;
+            }
+            .search-no-results svg {
+                width: 2.5rem !important;
+                height: 2.5rem !important;
+            }
+            .search-no-results h3 {
+                font-size: 0.875rem !important;
+            }
+            .search-no-results p {
+                font-size: 0.75rem !important;
+            }
+        }
+    </style>
 </x-layouts.app>

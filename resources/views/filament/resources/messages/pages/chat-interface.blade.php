@@ -108,10 +108,10 @@
                 <!-- Message Input -->
                 @if($selectedUser)
                     <div class="border-t border-gray-200 dark:border-gray-700 p-4">
-                        <form wire:submit.prevent="sendMessage" class="flex gap-2">
+                        <form wire:submit="sendMessage" class="flex gap-2">
                             <input
                                 type="text"
-                                wire:model="data.message"
+                                wire:model.live="data.message"
                                 placeholder="Type a message..."
                                 class="flex-1 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white"
                                 autocomplete="off"

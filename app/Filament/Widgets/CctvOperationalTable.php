@@ -75,7 +75,11 @@ class CctvOperationalTable extends BaseWidget
                         }
                     })
                     ->icon('heroicon-o-play')
-                    ->size('sm'),
+                    ->button() // Make it a button
+                    ->size('xl') // Larger size
+                    ->extraAttributes([
+                        'class' => 'shadow-lg', // Add shadow
+                    ]),
 
                 Action::make('stop')
                     ->label('Stop Stream')
@@ -86,14 +90,22 @@ class CctvOperationalTable extends BaseWidget
                         $service->stopStream($record);
                     })
                     ->icon('heroicon-o-stop')
-                    ->size('sm'),
+                    ->button() // Make it a button
+                    ->size('xl') // Larger size
+                    ->extraAttributes([
+                        'class' => 'shadow-lg', // Add shadow
+                    ]),
 
                 Action::make('open')
                     ->label('Open HLS')
                     ->color('info')
                     ->url(fn (Cctv $record) => CctvResource::getUrl('live-stream', ['record' => $record]), true)
                     ->icon('heroicon-o-video-camera')
-                    ->size('sm'),
+                    ->button() // Make it a button
+                    ->size('xl') // Larger size
+                    ->extraAttributes([
+                        'class' => 'shadow-lg', // Add shadow
+                    ]),
             ])
             ->defaultSort('updated_at', 'desc')
             ->paginated([10, 25, 50, 100]);

@@ -2,7 +2,6 @@
 
 namespace App\Filament\Widgets;
 
-use App\Models\Cctv;
 use Filament\Widgets\ChartWidget;
 
 class StreamingPerformanceChart extends ChartWidget
@@ -11,7 +10,9 @@ class StreamingPerformanceChart extends ChartWidget
 
     protected ?string $pollingInterval = '10s';
 
-    protected int|string|array $columnSpan = 'full';
+    protected int|string|array $columnSpan = 1;
+
+    protected ?string $maxHeight = '300px';
 
     protected function getData(): array
     {
@@ -43,17 +44,18 @@ class StreamingPerformanceChart extends ChartWidget
                     'data' => $latencyData,
                     'borderColor' => '#F59E0B',
                     'backgroundColor' => 'rgba(245, 158, 11, 0.1)',
-                    'fill' => true,
-                    'tension' => 0.4,
-                    'yAxisID' => 'y',
+                    'fill' => false,
+                    'tension' => 0.3,
+                    'borderWidth' => 2,
                 ],
                 [
                     'label' => 'Bandwidth (Kbps)',
                     'data' => $bandwidthData,
                     'borderColor' => '#10B981',
                     'backgroundColor' => 'rgba(16, 185, 129, 0.1)',
-                    'fill' => true,
-                    'tension' => 0.4,
+                    'fill' => false,
+                    'tension' => 0.3,
+                    'borderWidth' => 2,
                     'yAxisID' => 'y1',
                 ],
                 [
@@ -61,8 +63,9 @@ class StreamingPerformanceChart extends ChartWidget
                     'data' => $uptimeData,
                     'borderColor' => '#3B82F6',
                     'backgroundColor' => 'rgba(59, 130, 246, 0.1)',
-                    'fill' => true,
-                    'tension' => 0.4,
+                    'fill' => false,
+                    'tension' => 0.3,
+                    'borderWidth' => 2,
                     'yAxisID' => 'y2',
                 ],
             ],
@@ -77,7 +80,41 @@ class StreamingPerformanceChart extends ChartWidget
     protected function getOptions(): array
     {
         return [
+            'responsive' => true,
+            'maintainAspectRatio' => false,
+            'plugins' => [
+                'legend' => [
+                    'display' => true,
+                    'position' => 'top',
+                    'labels' => [
+                        'font' => [
+                            'size' => 11,
+                        ],
+                        'padding' => 15,
+                        'usePointStyle' => true,
+                    ],
+                ],
+            ],
             'scales' => [
+                'x' => [
+                    'title' => [
+                        'display' => true,
+                        'text' => 'Date',
+                        'font' => [
+                            'size' => 12,
+                            'weight' => 'bold',
+                        ],
+                    ],
+                    'ticks' => [
+                        'font' => [
+                            'size' => 10,
+                        ],
+                    ],
+                    'grid' => [
+                        'display' => true,
+                        'color' => 'rgba(0, 0, 0, 0.05)',
+                    ],
+                ],
                 'y' => [
                     'type' => 'linear',
                     'display' => true,
@@ -85,6 +122,18 @@ class StreamingPerformanceChart extends ChartWidget
                     'title' => [
                         'display' => true,
                         'text' => 'Latency (ms)',
+                        'font' => [
+                            'size' => 11,
+                            'weight' => 'bold',
+                        ],
+                    ],
+                    'ticks' => [
+                        'font' => [
+                            'size' => 10,
+                        ],
+                    ],
+                    'grid' => [
+                        'color' => 'rgba(245, 158, 11, 0.1)',
                     ],
                 ],
                 'y1' => [
@@ -94,6 +143,15 @@ class StreamingPerformanceChart extends ChartWidget
                     'title' => [
                         'display' => true,
                         'text' => 'Bandwidth (Kbps)',
+                        'font' => [
+                            'size' => 11,
+                            'weight' => 'bold',
+                        ],
+                    ],
+                    'ticks' => [
+                        'font' => [
+                            'size' => 10,
+                        ],
                     ],
                     'grid' => [
                         'drawOnChartArea' => false,
@@ -106,11 +164,24 @@ class StreamingPerformanceChart extends ChartWidget
                     'title' => [
                         'display' => true,
                         'text' => 'Uptime (%)',
+                        'font' => [
+                            'size' => 11,
+                            'weight' => 'bold',
+                        ],
+                    ],
+                    'ticks' => [
+                        'font' => [
+                            'size' => 10,
+                        ],
                     ],
                     'grid' => [
                         'drawOnChartArea' => false,
                     ],
                 ],
+            ],
+            'interaction' => [
+                'mode' => 'index',
+                'intersect' => false,
             ],
         ];
     }

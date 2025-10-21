@@ -11,7 +11,9 @@ class UserActivityChart extends ChartWidget
 
     protected ?string $pollingInterval = '15s';
 
-    protected int|string|array $columnSpan = 'full';
+    protected int|string|array $columnSpan = 1;
+
+    protected ?string $maxHeight = '300px';
 
     protected function getData(): array
     {
@@ -47,6 +49,7 @@ class UserActivityChart extends ChartWidget
                     'backgroundColor' => 'rgba(59, 130, 246, 0.1)',
                     'fill' => true,
                     'tension' => 0.4,
+                    'borderWidth' => 2,
                 ],
                 [
                     'label' => 'New Users',
@@ -55,6 +58,7 @@ class UserActivityChart extends ChartWidget
                     'backgroundColor' => 'rgba(139, 92, 246, 0.1)',
                     'fill' => true,
                     'tension' => 0.4,
+                    'borderWidth' => 2,
                 ],
             ],
         ];
@@ -63,5 +67,48 @@ class UserActivityChart extends ChartWidget
     protected function getType(): string
     {
         return 'line';
+    }
+
+    protected function getOptions(): array
+    {
+        return [
+            'plugins' => [
+                'legend' => [
+                    'labels' => [
+                        'font' => [
+                            'size' => 10,
+                        ],
+                        'padding' => 10,
+                    ],
+                ],
+            ],
+            'scales' => [
+                'x' => [
+                    'ticks' => [
+                        'font' => [
+                            'size' => 9,
+                        ],
+                    ],
+                    'grid' => [
+                        'display' => false,
+                    ],
+                ],
+                'y' => [
+                    'ticks' => [
+                        'font' => [
+                            'size' => 9,
+                        ],
+                    ],
+                    'grid' => [
+                        'color' => 'rgba(0, 0, 0, 0.05)',
+                    ],
+                ],
+            ],
+            'interaction' => [
+                'mode' => 'index',
+                'intersect' => false,
+            ],
+            'maintainAspectRatio' => false,
+        ];
     }
 }

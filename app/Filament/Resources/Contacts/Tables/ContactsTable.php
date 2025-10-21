@@ -19,50 +19,31 @@ class ContactsTable
     {
         return $table
             ->columns([
-                TextColumn::make('name')
-                    ->searchable(),
                 TextColumn::make('email')
                     ->label('Email address')
                     ->searchable(),
                 TextColumn::make('whatsapp')
                     ->searchable(),
-                TextColumn::make('address')
-                    ->searchable(),
                 TextColumn::make('instagram')
                     ->searchable(),
-                TextColumn::make('facebook')
+                TextColumn::make('phone_number')
+                    ->label('Phone Number')
                     ->searchable(),
-                TextColumn::make('linkedin')
-                    ->searchable(),
-                TextColumn::make('position')
-                    ->searchable(),
-                TextColumn::make('department')
-                    ->searchable(),
-                TextColumn::make('phone')
-                    ->searchable(),
-                TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //
             ])
             ->recordActions([
                 ViewAction::make()
-                    ->iconButton()
+                    ->button()
                     ->color('info')
                     ->size('lg'),
                 EditAction::make()
-                    ->iconButton()
+                    ->button()
                     ->color('warning')
                     ->size('lg'),
                 DeleteAction::make()
-                    ->iconButton()
+                    ->button()
                     ->color('danger')
                     ->size('lg'),
             ])

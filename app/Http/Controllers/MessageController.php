@@ -8,6 +8,7 @@ use App\Events\MessageSent;
 use App\Events\UserTyping;
 use App\Models\Message;
 use App\Models\User;
+use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -15,6 +16,13 @@ use Illuminate\Support\Facades\Validator;
 
 class MessageController extends Controller
 {
+    protected NotificationService $notificationService;
+
+    public function __construct(NotificationService $notificationService)
+    {
+        $this->notificationService = $notificationService;
+    }
+
     /**
      * Display the messages list page.
      */
@@ -49,6 +57,13 @@ class MessageController extends Controller
             'priority' => 'normal',
             'delivered_at' => now(),
         ]);
+
+        // Create notification for the recipient
+        $recipient = User::find($request->to_user_id);
+        $sender = Auth::user();
+        if ($recipient && $sender) {
+            $this->notificationService->sendMessageNotification($recipient, $sender, $request->body);
+        }
 
         // Broadcast events
         broadcast(new MessageSent($message))->toOthers();

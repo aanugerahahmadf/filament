@@ -36,6 +36,37 @@
                     </div>
                 </div>
             </div>
+            
+            <!-- Mobile Header Responsive -->
+            <style>
+                @media (max-width: 768px) {
+                    .dashboard-header {
+                        padding: 1.5rem !important;
+                        margin-bottom: 1.5rem !important;
+                    }
+                    .dashboard-header h1 {
+                        font-size: 1.875rem !important;
+                        margin-bottom: 0.75rem !important;
+                    }
+                    .dashboard-header .flex-wrap {
+                        flex-direction: column;
+                        gap: 0.5rem !important;
+                    }
+                    .dashboard-header .flex-wrap > div {
+                        width: 100%;
+                        justify-content: center;
+                    }
+                }
+                @media (max-width: 480px) {
+                    .dashboard-header {
+                        padding: 1rem !important;
+                        margin-bottom: 1rem !important;
+                    }
+                    .dashboard-header h1 {
+                        font-size: 1.5rem !important;
+                    }
+                }
+            </style>
 
             <!-- Stats Grid -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -57,6 +88,39 @@
                         <div class="bg-blue-600 h-2 rounded-full transition-all duration-500" style="width: {{ min(100, (\App\Models\Building::count() / 18) * 100) }}%"></div>
                     </div>
                 </div>
+                
+                <!-- Mobile Stats Responsive -->
+                <style>
+                    @media (max-width: 768px) {
+                        .stats-grid {
+                            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+                            gap: 1rem !important;
+                        }
+                        .stats-card {
+                            padding: 1rem !important;
+                            border-radius: 1rem !important;
+                        }
+                        .stats-card .text-3xl {
+                            font-size: 1.875rem !important;
+                        }
+                        .stats-card .text-xs {
+                            font-size: 0.625rem !important;
+                        }
+                    }
+                    @media (max-width: 480px) {
+                        .stats-grid {
+                            grid-template-columns: 1fr !important;
+                            gap: 0.75rem !important;
+                        }
+                        .stats-card {
+                            padding: 0.75rem !important;
+                            border-radius: 0.75rem !important;
+                        }
+                        .stats-card .text-3xl {
+                            font-size: 1.5rem !important;
+                        }
+                    }
+                </style>
 
                 <!-- Total Rooms Card -->
                 <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 card-3d fade-in hover:shadow-2xl transition-all duration-300 border border-gray-200 dark:border-gray-700 shadow-lg">

@@ -10,12 +10,10 @@ use App\Filament\Resources\Rooms\Schemas\RoomForm;
 use App\Filament\Resources\Rooms\Schemas\RoomInfolist;
 use App\Filament\Resources\Rooms\Tables\RoomsTable;
 use App\Models\Room;
-use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables\Table;
 use UnitEnum;
-use Illuminate\Contracts\Support\Htmlable;
 
 class RoomResource extends Resource
 {
@@ -23,7 +21,7 @@ class RoomResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'name';
 
-    protected static string|UnitEnum|null $navigationGroup = 'Location And Maps';
+    protected static string|UnitEnum|null $navigationGroup = 'Playlist And Maps';
 
     protected static ?string $navigationLabel = 'Room';
 
@@ -79,6 +77,4 @@ class RoomResource extends Resource
             'edit' => EditRoom::route('/{record}/edit'),
         ];
     }
-
-
 }
