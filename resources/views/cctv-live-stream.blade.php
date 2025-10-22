@@ -1,6 +1,6 @@
 <x-layouts.app :title="__('Live Stream - ' . $cctv->name)">
-    <div class="w-full">
-        <div class="max-w-screen-xl mx-auto px-6 py-6">
+    <div class="page-wrapper">
+        <div class="max-w-screen-xl mx-auto px-6 py-6 page-content-area">
             <div class="flex items-center justify-between gap-4 mb-6">
                 <h1 class="text-3xl md:text-4xl font-extrabold text-zinc-800 dark:text-white">
                     Live Stream - {{ $cctv->name }}
@@ -44,7 +44,7 @@
             </div>
         </div>
     </div>
-    
+
     <!-- Mobile Live Stream Responsive -->
     <style>
         @media (max-width: 768px) {
@@ -87,6 +87,10 @@
             .live-stream-container {
                 padding: 0.75rem !important;
                 min-height: 50vh !important;
+            }
+            .live-stream-header {
+                padding: 1rem !important;
+                margin-bottom: 1rem !important;
             }
             .live-stream-header h1 {
                 font-size: 1.5rem !important;

@@ -3,12 +3,12 @@
     <div class="w-full">
         <div class="max-w-screen-xl mx-auto px-6 py-6">
             <div class="flex items-center justify-between gap-4">
-            <h1 class="text-3xl md:text-4xl font-extrabold">Location</h1>
+            <h1 class="text-3xl md:text-4xl font-extrabold text-zinc-800 dark:text-white system:text-zinc-900">Location</h1>
                 <div class="flex items-center gap-2 relative">
                     <div class="relative">
-                        <input id="q" class="px-3 py-2 rounded-lg bg-white/5 border-2 border-gray-300 dark:border-white/10 pr-10 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Cari gedung..." />
-                        <i class="bx bx-search absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-white/70"></i>
-                        <div id="q-suggest" class="hidden absolute right-0 mt-2 w-72 bg-black/70 border border-white/10 rounded-xl backdrop-blur-md shadow-2xl overflow-hidden z-10"></div>
+                        <input id="q" class="px-3 py-2 rounded-lg bg-white/5 border-2 border-gray-300 dark:border-white/10 system:border-zinc-400 pr-10 text-gray-900 dark:text-white system:text-zinc-900 placeholder-gray-500 dark:placeholder-white/50 system:placeholder-zinc-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Cari gedung..." />
+                        <i class="bx bx-search absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-white/70 system:text-zinc-700"></i>
+                        <div id="q-suggest" class="hidden absolute right-0 mt-2 w-72 bg-black/70 border border-white/10 system:border-zinc-300 rounded-xl backdrop-blur-md shadow-2xl overflow-hidden z-10"></div>
                     </div>
                     <div id="f-online" class="px-4 py-2 rounded-full text-sm font-medium bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white shadow-lg hover:shadow-green-500/25 transform hover:scale-105 transition-all duration-300 cursor-pointer border border-green-400/50">
                         <i class="bx bxs-video mr-1"></i>Online
@@ -24,7 +24,7 @@
             <div id="buildings" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6"></div>
         </div>
     </div>
-    
+
     <!-- Mobile Location Responsive -->
     <style>
         @media (max-width: 768px) {
@@ -103,16 +103,21 @@
                 }
             } catch (e) {
                 console.error('Failed to load location-data', e);
+                document.getElementById('buildings').innerHTML = '<div class="text-zinc-600 dark:text-zinc-300 system:text-zinc-700">Gagal memuat data lokasi.</div>';
             }
         }
 
         function renderBuildings(items){
             const wrap = document.getElementById('buildings');
             wrap.innerHTML = '';
+            if (!items.length) {
+                wrap.innerHTML = '<div class="text-zinc-600 dark:text-zinc-300 system:text-zinc-700 col-span-full text-center py-8">Tidak ada data gedung.</div>';
+                return;
+            }
             items.forEach(b => {
                 const card = el(`<div class="rounded-xl p-4 bg-white/5 border border-white/10 card-3d fade-in">
-                    <div class="font-semibold">${b.name}</div>
-                    <div class="text-white/60 text-sm mt-1">Rooms: ${b.rooms_count||0} | CCTVs: ${b.cctvs_count||0}</div>
+                    <div class="font-semibold text-zinc-800 dark:text-white system:text-zinc-900">${b.name}</div>
+                    <div class="text-white/60 text-sm mt-1 text-zinc-600 dark:text-zinc-300 system:text-zinc-700">Rooms: ${b.rooms_count||0} | CCTVs: ${b.cctvs_count||0}</div>
                     <div class="mt-3 flex gap-2">
                         <a href="/rooms?building=${b.id}" class="block px-4 py-3 rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white text-sm font-semibold tracking-wide text-center shadow-lg hover:shadow-blue-500/25 transition-all duration-300 border border-blue-400/50 w-full">Rooms</a>
                         <a href="/maps" class="px-4 py-2 rounded-lg bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white text-sm font-medium shadow-lg hover:shadow-green-500/25 transform hover:scale-105 transition-all duration-300 cursor-pointer border border-green-400/50">
@@ -131,10 +136,14 @@
             if (!building || !container) return;
             container.classList.remove('hidden');
             const rooms = building.rooms || [];
+            if (!rooms.length) {
+                container.innerHTML = '<div class="text-zinc-600 dark:text-zinc-300 system:text-zinc-700 py-2">Tidak ada room.</div>';
+                return;
+            }
             container.innerHTML = rooms.map(r => `
                 <div class="mt-2 rounded-lg p-3 bg-black/30 border border-white/10 card-3d fade-in">
                     <div class="flex items-center justify-between">
-                        <div class="font-medium">${r.name}</div>
+                        <div class="font-medium text-zinc-800 dark:text-white system:text-zinc-900">${r.name}</div>
                         <button class="px-3 py-1 rounded-lg bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white text-xs font-medium shadow-lg hover:shadow-purple-500/25 transform hover:scale-105 transition-all duration-300 cursor-pointer border border-purple-400/50" data-open-cctvs="${buildingId}:${r.id}">
                             <i class="bx bxs-video mr-1"></i>CCTV
                         </button>
@@ -151,11 +160,11 @@
             if (!room || !box) return;
             box.classList.remove('hidden');
             const cctvs = room.cctvs || [];
-            if (!cctvs.length){ box.innerHTML = `<div class='text-white/60 text-sm'>Tidak ada CCTV</div>`; return; }
+            if (!cctvs.length){ box.innerHTML = `<div class='text-white/60 text-sm text-zinc-600 dark:text-zinc-300 system:text-zinc-700'>Tidak ada CCTV</div>`; return; }
             const active = getActiveStatuses();
             box.innerHTML = cctvs.filter(c => active.has(c.status)).map(c => `
                 <div class="mt-2 flex items-center justify-between rounded border border-white/10 bg-white/5 p-2 card-3d fade-in">
-                    <div class="text-sm">${c.name||'CCTV'}</div>
+                    <div class="text-sm text-zinc-800 dark:text-white system:text-zinc-900">${c.name||'CCTV'}</div>
                     <div class="flex items-center gap-2">
                         <button class="px-3 py-1 rounded-lg bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white text-xs font-medium shadow-lg hover:shadow-red-500/25 transform hover:scale-105 transition-all duration-300 cursor-pointer border border-red-400/50" data-live="${c.id}">
                             <i class="bx bxs-play mr-1"></i>Live
@@ -252,7 +261,7 @@
             const top = filtered.slice(0,8);
             if (!top.length){ box.classList.add('hidden'); box.innerHTML=''; return; }
             box.innerHTML = top.map(b => `
-                <div class="flex items-center gap-2 px-3 py-2 hover:bg-white/10 cursor-pointer" data-sel-building="${b.id}">
+                <div class="flex items-center gap-2 px-3 py-2 hover:bg-white/10 cursor-pointer text-zinc-800 dark:text-white system:text-zinc-900" data-sel-building="${b.id}">
                     <i class="bx bxs-building-house text-blue-400"></i>
                     <span class="text-sm">${b.name}</span>
                 </div>

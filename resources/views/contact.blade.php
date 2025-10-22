@@ -100,7 +100,7 @@
         <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 p-8 text-white card-3d fade-in mb-8 shadow-xl">
             <div class="absolute inset-0 bg-black/20"></div>
             <div class="relative z-10 text-center">
-                <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight">Contact</h1>
+                <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight text-white dark:text-white system:text-white">Contact</h1>
                 <p class="mt-2 text-blue-100">Get in touch with us through various channels</p>
             </div>
         </div>
@@ -116,7 +116,7 @@
                 <p class="text-red-100 text-sm mb-3">aanugerahahmad27@gmail.com</p>
                 <div class="text-xs text-white/80 opacity-0 group-hover:opacity-100 transition-opacity">Click to send email</div>
             </a>
-            
+
             <!-- Mobile Contact Cards Responsive -->
             <style>
                 @media (max-width: 768px) {

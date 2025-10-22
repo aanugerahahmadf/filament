@@ -35,15 +35,6 @@
                             </div>
                         </div>
                         <div class="flex items-center space-x-2">
-                            <button type="button" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200" onclick="initiateAudioCall()">
-                                <x-bxs-phone class="w-5 h-5 text-gray-600 dark:text-gray-300" />
-                            </button>
-                            <button type="button" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200" onclick="initiateVideoCall()">
-                                <x-bxs-video class="w-5 h-5 text-gray-600 dark:text-gray-300" />
-                            </button>
-                            <button type="button" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200" onclick="showUserInfo()">
-                                <x-bxs-info-circle class="w-5 h-5 text-gray-600 dark:text-gray-300" />
-                            </button>
                         </div>
                     </div>
                 </div>
@@ -130,9 +121,10 @@
                                 <button type="button" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200" onclick="showAttachmentOptions()">
                                     <x-bxs-plus-circle class="w-5 h-5 text-gray-600 dark:text-gray-300" />
                                 </button>
-                                <button type="button" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200" onclick="showImagePicker()">
+                                <button type="button" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200" onclick="triggerImageUpload()">
                                     <x-bxs-image class="w-5 h-5 text-gray-600 dark:text-gray-300" />
                                 </button>
+                                <input type="file" id="image-upload" accept="image/*" class="hidden" onchange="handleImageSelection(event)">
                             </div>
                             <div class="flex-1">
                                 <input type="text"
@@ -456,8 +448,100 @@
             alert('{{ __('Attachment options would appear here') }} {{ __('(This is a demo - in a real app, this would show file attachment options)') }}');
         }
 
-        function showImagePicker() {
-            alert('{{ __('Image picker would appear here') }} {{ __('(This is a demo - in a real app, this would open the image gallery)') }}');
+        // Image picker functionality
+        function triggerImageUpload() {
+            document.getElementById('image-upload').click();
+        }
+
+        function handleImageSelection(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            // Check if file is an image
+            if (!file.type.startsWith('image/')) {
+                alert('{{ __('Please select an image file') }}');
+                return;
+            }
+
+            // Check file size (max 5MB)
+            if (file.size > 5 * 1024 * 1024) {
+                alert('{{ __('Image size should be less than 5MB') }}');
+                return;
+            }
+
+            // Create preview and send functionality
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                // Show preview modal
+                showImagePreview(e.target.result, file);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function showImagePreview(imageSrc, file) {
+            // Create modal for image preview
+            const modal = document.createElement('div');
+            modal.id = 'image-preview-modal';
+            modal.className = 'fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75';
+            modal.innerHTML = `
+                <div class="bg-white dark:bg-gray-800 rounded-lg max-w-2xl w-full max-h-[90vh] overflow-hidden">
+                    <div class="p-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">{{ __('Send Image') }}</h3>
+                        <button onclick="closeImagePreview()" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                            <x-bxs-x-circle class="w-6 h-6" />
+                        </button>
+                    </div>
+                    <div class="p-4 flex justify-center">
+                        <img src="${imageSrc}" alt="Preview" class="max-h-[60vh] object-contain">
+                    </div>
+                    <div class="p-4 border-t border-gray-200 dark:border-gray-700 flex justify-end space-x-2">
+                        <button onclick="closeImagePreview()" class="px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                            {{ __('Cancel') }}
+                        </button>
+                        <button onclick="sendImage('${file.name}')" class="px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white rounded-lg transition-all duration-200 shadow-md">
+                            {{ __('Send') }}
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        function closeImagePreview() {
+            const modal = document.getElementById('image-preview-modal');
+            if (modal) {
+                modal.remove();
+            }
+            // Clear the file input
+            document.getElementById('image-upload').value = '';
+        }
+
+        function sendImage(filename) {
+            // In a real application, this would upload the image and send it
+            // For demo purposes, we'll just show a success message
+            closeImagePreview();
+
+            const notification = document.createElement('div');
+            notification.className = 'fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg z-50 animate-fade-in-out';
+            notification.innerHTML = `
+                <div class="flex items-center">
+                    <span class="bx bxs-check-circle mr-2"></span>
+                    <span>{{ __('Image sent successfully') }}</span>
+                </div>
+            `;
+            document.body.appendChild(notification);
+
+            // Remove notification after 3 seconds
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.classList.add('opacity-0');
+                    setTimeout(() => {
+                        if (notification.parentNode) {
+                            notification.parentNode.removeChild(notification);
+                        }
+                    }, 300);
+                }
+            }, 3000);
         }
 
         // Close modals when clicking outside

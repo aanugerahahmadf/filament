@@ -2,17 +2,17 @@
     <div class="w-full">
         <div class="max-w-screen-xl mx-auto px-6 py-6">
             <div class="flex items-center justify-between gap-4">
-                <h1 class="text-3xl md:text-4xl font-extrabold text-zinc-800 dark:text-white">CCTV</h1>
+                <h1 class="text-3xl md:text-4xl font-extrabold text-zinc-800 dark:text-white system:text-zinc-900">CCTV</h1>
                 <div class="flex items-center gap-2">
                     <a id="back-rooms" href="#" class="btn btn-primary glow">Kembali ke Rooms</a>
                 </div>
             </div>
 
-            <div id="info" class="text-zinc-600 dark:text-zinc-300 mt-2"></div>
+            <div id="info" class="text-zinc-600 dark:text-zinc-300 system:text-zinc-700 mt-2"></div>
             <div id="cctvs" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6"></div>
         </div>
     </div>
-    
+
     <!-- Mobile CCTV List Responsive -->
     <style>
         @media (max-width: 768px) {
@@ -90,13 +90,13 @@
             roomId = parseInt(params.get('room')) || null;
             const back = document.getElementById('back-rooms');
             if (back && buildingId) back.href = '/rooms?building=' + buildingId;
-            if (!buildingId || !roomId){ document.getElementById('info').textContent = 'Building/Room tidak ditentukan.'; return; }
+            if (!buildingId || !roomId){ document.getElementById('info').innerHTML = '<span class="text-zinc-600 dark:text-zinc-300 system:text-zinc-700">Building/Room tidak ditentukan.</span>'; return; }
             const res = await fetch('/location-data', { headers: { 'Accept': 'application/json' } });
             DATA = await res.json();
             const building = (DATA.buildings||[]).find(b => b.id === buildingId);
             const room = building?.rooms?.find(r => r.id === roomId);
-            if (!building || !room){ document.getElementById('info').textContent = 'Data tidak ditemukan.'; return; }
-            document.getElementById('info').innerHTML = `Building: <span class="font-semibold">${building.name}</span> · Room: <span class="font-semibold">${room.name}</span>`;
+            if (!building || !room){ document.getElementById('info').innerHTML = '<span class="text-zinc-600 dark:text-zinc-300 system:text-zinc-700">Data tidak ditemukan.</span>'; return; }
+            document.getElementById('info').innerHTML = 'Building: <span class="font-semibold text-zinc-800 dark:text-white system:text-zinc-900">' + building.name + '</span> · Room: <span class="font-semibold text-zinc-800 dark:text-white system:text-zinc-900">' + room.name + '</span>';
             renderCctvs(room);
         }
 
@@ -105,15 +105,15 @@
             wrap.innerHTML = '';
             (room.cctvs||[]).forEach(c => {
                 const card = el(`<div class="rounded-xl p-4 bg-white/5 border border-white/10 card-3d">
-                    <div class="font-semibold text-zinc-800 dark:text-white">${c.name||'CCTV'}</div>
-                    <div class="text-zinc-600 dark:text-zinc-300 text-sm mt-1">Status: ${c.status||'-'}</div>
+                    <div class="font-semibold text-zinc-800 dark:text-white system:text-zinc-900">${c.name||'CCTV'}</div>
+                    <div class="text-zinc-600 dark:text-zinc-300 system:text-zinc-700 text-sm mt-1">Status: ${c.status||'-'}</div>
                     <div class="mt-3 grid grid-cols-1 gap-2">
                         <button class="w-full px-4 py-3 rounded-lg bg-gradient-to-r from-red-500 to-red-600 text-white text-sm font-semibold tracking-wide border border-red-400/50" data-live="${c.id}">Live Stream</button>
                     </div>
                 </div>`);
                 wrap.appendChild(card);
             });
-            if (!wrap.children.length){ wrap.innerHTML = '<div class="text-zinc-600 dark:text-zinc-300">Belum ada CCTV.</div>'; }
+            if (!wrap.children.length){ wrap.innerHTML = '<div class="text-zinc-600 dark:text-zinc-300 system:text-zinc-700">Belum ada CCTV.</div>'; }
         }
 
         document.addEventListener('click', async (e)=>{

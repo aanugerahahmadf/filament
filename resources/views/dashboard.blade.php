@@ -1,7 +1,7 @@
 <x-layouts.app :title="__('Dashboard')">
     <!-- Dashboard Container -->
-    <div class="min-h-screen">
-        <div class="max-w-screen-xl mx-auto px-4 py-6">
+    <div class="page-wrapper">
+        <div class="max-w-screen-xl mx-auto px-4 py-6 page-content-area">
 
             <!-- Enhanced Header -->
             <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 p-8 text-white card-3d fade-in mb-8 shadow-xl">
@@ -14,11 +14,11 @@
                                 <div class="flex flex-wrap items-center gap-3 mt-2">
                                     <div class="flex items-center gap-2 px-4 py-2 rounded-full bg-white/20 backdrop-blur-sm border border-white/30">
                                         <x-bxs-user class="w-5 h-5" />
-                                        <span class="font-medium">{{ auth()->user()->name }}</span>
+                                        <span class="font-medium text-white">{{ auth()->user()->name }}</span>
                                     </div>
                                     <div class="flex items-center gap-2 px-4 py-2 rounded-full bg-white/20 backdrop-blur-sm border border-white/30">
                                         <x-bxs-shield class="w-5 h-5" />
-                                        <span class="font-medium">{{ auth()->user()->getRoleNames()->first() ?? 'User' }}</span>
+                                        <span class="font-medium text-white">{{ auth()->user()->getRoleNames()->first() ?? 'User' }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -293,7 +293,7 @@
                 // Hide any previous error messages
                 document.getElementById('system-chart-error')?.classList.add('hidden');
                 document.getElementById('cctv-chart-error')?.classList.add('hidden');
-                
+
                 // Destroy existing charts if they exist
                 if (window.systemPerformanceChart) {
                     window.systemPerformanceChart.destroy();
@@ -424,7 +424,7 @@
             if (!chartContainer || chartContainer.offsetParent === null) {
                 return; // Chart is not visible, skip update
             }
-            
+
             fetch('/api/analytics/system-performance')
                 .then(response => response.json())
                 .then(data => {
@@ -448,24 +448,24 @@
             setTimeout(function() {
                 initializeCharts();
             }, 100);
-            
+
             // Retry chart initialization if it fails
             setTimeout(function() {
                 const systemChartError = document.getElementById('system-chart-error');
                 const cctvChartError = document.getElementById('cctv-chart-error');
-                
+
                 if (systemChartError && !systemChartError.classList.contains('hidden')) {
                     initializeCharts();
                 }
-                
+
                 if (cctvChartError && !cctvChartError.classList.contains('hidden')) {
                     initializeCharts();
                 }
             }, 2000);
-            
+
             // Update system performance chart every 30 seconds
             setInterval(updateSystemPerformanceChart, 30000);
-            
+
             // Listen for live metrics updates from Echo (wired in app.js)
             window.addEventListener('dashboard-metrics', (ev) => {
                 const data = ev.detail?.metrics || ev.detail;
@@ -482,7 +482,7 @@
                 } catch (_) {}
             });
         });
-        
+
         // Redraw charts when window is resized
         window.addEventListener('resize', function() {
             if (window.resizeTimeout) {

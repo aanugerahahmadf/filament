@@ -213,32 +213,32 @@
 
         /* Loading skeleton styles */
         .skeleton {
-            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-            background-size: 200% 100%;
+            background: #f0f0f0;
             animation: loading 1.5s infinite;
             border-radius: 0.5rem;
         }
 
         .dark .skeleton {
-            background: linear-gradient(90deg, #2d3748 25%, #4a5568 50%, #2d3748 75%);
-            background-size: 200% 100%;
+            background: #2d3748;
+            animation: loading 1.5s infinite;
         }
 
         @media (prefers-color-scheme: dark) {
             .system-mode .skeleton {
-                background: linear-gradient(90deg, #2d3748 25%, #4a5568 50%, #2d3748 75%);
-                background-size: 200% 100%;
+                background: #2d3748;
+                animation: loading 1.5s infinite;
             }
         }
 
         @keyframes loading {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
         }
 
         /* Button styles for all modes */
         .action-button {
-            background: linear-gradient(to right, #10b981, #059669);
+            background: #10b981;
             color: white !important;
             border: 1px solid rgba(16, 185, 129, 0.7) !important;
             border-radius: 0.5rem;
@@ -247,33 +247,33 @@
         }
 
         .dark .action-button {
-            background: linear-gradient(to right, #059669, #047857);
+            background: #059669;
             border: 1px solid rgba(16, 185, 129, 0.5) !important;
             box-shadow: 0 4px 6px rgba(16, 185, 129, 0.1);
         }
 
         @media (prefers-color-scheme: dark) {
             .system-mode .action-button {
-                background: linear-gradient(to right, #059669, #047857);
+                background: #059669;
                 border: 1px solid rgba(16, 185, 129, 0.5) !important;
                 box-shadow: 0 4px 6px rgba(16, 185, 129, 0.1);
             }
         }
 
         .action-button:hover {
-            background: linear-gradient(to right, #059669, #047857);
+            background: #059669;
             box-shadow: 0 6px 8px rgba(16, 185, 129, 0.3);
             transform: scale(1.05);
         }
 
         .dark .action-button:hover {
-            background: linear-gradient(to right, #047857, #065f46);
+            background: #047857;
             box-shadow: 0 6px 8px rgba(16, 185, 129, 0.2);
         }
 
         @media (prefers-color-scheme: dark) {
             .system-mode .action-button:hover {
-                background: linear-gradient(to right, #047857, #065f46);
+                background: #047857;
                 box-shadow: 0 6px 8px rgba(16, 185, 129, 0.2);
             }
         }
@@ -354,14 +354,14 @@
     @endpush
 
     <!-- Remove the min-h-screen and background classes that conflict with main layout -->
-    <div class="w-full">
-        <div class="max-w-screen-xl mx-auto px-6 py-6">
+    <div class="page-wrapper">
+        <div class="max-w-screen-xl mx-auto px-6 py-6 page-content-area">
             <!-- Enhanced Header -->
-            <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-500 p-8 text-white card-3d fade-in mb-8">
+            <div class="relative overflow-hidden rounded-2xl bg-blue-600 p-8 text-white card-3d fade-in mb-8">
                 <div class="absolute inset-0 bg-black/20"></div>
                 <div class="relative z-10 text-center">
                     <div class="flex items-center justify-center mb-4">
-                        <div class="flex items-center justify-center w-16 h-16 bg-white/20 rounded-2xl mr-4">
+                        <div class="flex items-center justify-center w-16 h-16 bg-white/20 rounded-2xl mr-8">
                             <i class="bx bxs-bell text-3xl text-white floating"></i>
                         </div>
                         <div class="text-left">
