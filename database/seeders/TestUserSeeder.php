@@ -18,7 +18,7 @@ class TestUserSeeder extends Seeder
             [
                 'name' => 'User Interface',
                 'username' => 'userinterface',
-                'password' => Hash::make('@Admin123'),
+                'password' => Hash::make('password'),
             ]
         );
     }
