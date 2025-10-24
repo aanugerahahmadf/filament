@@ -2,8 +2,9 @@
 
 namespace App\Filament\Resources\Cctvs\Tables;
 
-use App\Exports\CctvExport;
+use App\Filament\Exports\CctvExporter;
 use Filament\Actions\Action;
+use Filament\Actions\ExportAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
@@ -11,7 +12,6 @@ use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Maatwebsite\Excel\Facades\Excel;
 
 class CctvsTable
 {
@@ -24,6 +24,9 @@ class CctvsTable
                     ->searchable(),
                 TextColumn::make('room.name')
                     ->searchable(),
+                TextColumn::make('name')
+                    ->searchable()
+                    ->sortable(),
                 TextColumn::make('stream_username')
                     ->searchable(),
                 TextColumn::make('ip_rtsp')
@@ -89,14 +92,6 @@ class CctvsTable
                     ->url(fn ($record) => \App\Filament\Resources\Cctvs\CctvResource::getUrl('live-stream', ['record' => $record])),
             ])
             ->toolbarActions([
-                Action::make('export')
-                    ->label('Export to Excel')
-                    ->icon('heroicon-o-arrow-down-tray')
-                    ->action(function () {
-                        $cctvs = \App\Models\Cctv::with(['building', 'room'])->get();
-
-                        return Excel::download(new CctvExport($cctvs), 'cctvs-'.now()->format('Y-m-d-H-i-s').'.xlsx');
-                    }),
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),

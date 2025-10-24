@@ -13,12 +13,17 @@ class NoAvatarUserSeeder extends Seeder
      */
     public function run(): void
     {
-        // Create a test user without an avatar
-        User::factory()->create([
-            'name' => 'No Avatar User',
-            'email' => 'noavatar@example.com',
-            'password' => Hash::make('password'),
-            'avatar' => null
-        ]);
+        // Check if user already exists before creating
+        $user = User::where('email', 'noavatar@example.com')->first();
+
+        if (!$user) {
+            // Create a test user without an avatar
+            User::factory()->create([
+                'name' => 'No Avatar User',
+                'email' => 'noavatar@example.com',
+                'password' => Hash::make('password'),
+                'avatar' => null
+            ]);
+        }
     }
 }

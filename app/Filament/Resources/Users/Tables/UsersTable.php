@@ -2,9 +2,10 @@
 
 namespace App\Filament\Resources\Users\Tables;
 
-use App\Exports\UserExport;
+use App\Filament\Exports\UserExporter;
 use App\Models\User;
 use Filament\Actions\Action as HeaderAction;
+use Filament\Actions\ExportAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
@@ -13,7 +14,6 @@ use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Maatwebsite\Excel\Facades\Excel;
 
 class UsersTable
 {
@@ -88,14 +88,6 @@ class UsersTable
                     ->size('lg'),
             ])
             ->toolbarActions([
-                HeaderAction::make('export')
-                    ->label('Export to Excel')
-                    ->icon('heroicon-o-arrow-down-tray')
-                    ->action(function () {
-                        $users = \App\Models\User::all();
-
-                        return Excel::download(new UserExport($users), 'users-'.now()->format('Y-m-d-H-i-s').'.xlsx');
-                    }),
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),

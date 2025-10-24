@@ -2,8 +2,8 @@
 
 namespace App\Filament\Resources\Rooms\Tables;
 
-use App\Exports\RoomExport;
-use Filament\Actions\Action;
+use App\Filament\Exports\RoomExporter;
+use Filament\Actions\ExportAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
@@ -11,7 +11,6 @@ use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Maatwebsite\Excel\Facades\Excel;
 
 class RoomsTable
 {
@@ -59,14 +58,6 @@ class RoomsTable
                     ->size('lg'),
             ])
             ->toolbarActions([
-                Action::make('export')
-                    ->label('Export to Excel')
-                    ->icon('heroicon-o-arrow-down-tray')
-                    ->action(function () {
-                        $rooms = \App\Models\Room::with('building')->get();
-
-                        return Excel::download(new RoomExport($rooms), 'rooms-'.now()->format('Y-m-d-H-i-s').'.xlsx');
-                    }),
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),

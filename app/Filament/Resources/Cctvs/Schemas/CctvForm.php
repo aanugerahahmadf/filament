@@ -17,7 +17,10 @@ class CctvForm
                     ->relationship('building', 'name')
                     ->required(),
                 Select::make('room_id')
-                    ->relationship('room', 'name'),
+                    ->relationship('room', 'name')
+                    ->required(),
+                TextInput::make('name')
+                    ->required(),
                 TextInput::make('stream_username')
                     ->default('admin'),
                 TextInput::make('stream_password')

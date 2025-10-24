@@ -21,6 +21,7 @@ class Cctv extends Model
     public const CONNECTION_WIRELESS = 'wireless';
 
     protected $fillable = [
+        'name',
         'building_id',
         'room_id',
         'ip_rtsp',

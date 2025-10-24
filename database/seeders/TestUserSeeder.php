@@ -16,9 +16,9 @@ class TestUserSeeder extends Seeder
         User::updateOrCreate(
             ['email' => 'admin@pertamina.com'],
             [
-                'name' => 'Admin User',
+                'name' => 'User Interface',
+                'username' => 'userinterface',
                 'password' => Hash::make('@Admin123'),
-                'is_admin' => true,
             ]
         );
     }

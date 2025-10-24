@@ -1,7 +1,7 @@
 @pure
 
 @props([
-    'name' => $attributes->whereStartsWith('wire:model.live')->first(),
+    'name' => $attributes->whereStartsWith('wire:model')->first(),
     'placeholder' => null,
     'invalid' => null,
     'size' => null,

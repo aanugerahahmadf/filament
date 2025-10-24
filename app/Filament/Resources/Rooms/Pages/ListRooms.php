@@ -4,7 +4,9 @@ namespace App\Filament\Resources\Rooms\Pages;
 
 use App\Filament\Resources\Rooms\RoomResource;
 use App\Filament\Resources\Rooms\Widgets\RoomStatusChart;
+use App\Filament\Exports\RoomExporter;
 use Filament\Actions\CreateAction;
+use Filament\Actions\ExportAction;
 use Filament\Resources\Pages\ListRecords;
 
 class ListRooms extends ListRecords
@@ -15,6 +17,9 @@ class ListRooms extends ListRecords
     {
         return [
             CreateAction::make(),
+            ExportAction::make()
+                ->exporter(RoomExporter::class)
+                ->columnMapping(false),
         ];
     }
 

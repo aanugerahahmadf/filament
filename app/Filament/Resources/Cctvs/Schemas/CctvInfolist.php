@@ -16,6 +16,9 @@ class CctvInfolist
                 TextEntry::make('room.name')
                     ->label('Room')
                     ->placeholder('-'),
+                TextEntry::make('name')
+                    ->label('Name')
+                    ->placeholder('-'),
                 TextEntry::make('stream_username')
                     ->placeholder('-'),
                 TextEntry::make('ip_rtsp'),

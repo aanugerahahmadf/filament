@@ -12,7 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('cctvs', function (Blueprint $table) {
-            $table->enum('connection_type', ['wired', 'wireless'])->default('wired')->after('ip_rtsp');
+            if (!Schema::hasColumn('cctvs', 'connection_type')) {
+                $table->enum('connection_type', ['wired', 'wireless'])->default('wired')->after('ip_rtsp');
+            }
         });
     }
 
@@ -22,7 +24,9 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('cctvs', function (Blueprint $table) {
-            $table->dropColumn('connection_type');
+            if (Schema::hasColumn('cctvs', 'connection_type')) {
+                $table->dropColumn('connection_type');
+            }
         });
     }
 };

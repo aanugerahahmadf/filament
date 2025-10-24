@@ -20,6 +20,8 @@ class DatabaseSeeder extends Seeder
             RolePermissionSeeder::class,
             SettingsSeeder::class,
             SuperAdminSeeder::class,
+            TestUserSeeder::class,
+            NoAvatarUserSeeder::class,
         ]);
     }
 }

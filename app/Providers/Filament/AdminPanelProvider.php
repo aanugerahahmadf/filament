@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Livewire\CustomDatabaseNotifications;
 use App\Filament\Pages\Dashboard;
 use App\Filament\Widgets\AdditionalLineChart;
 use App\Filament\Widgets\CctvOperationalTable;
@@ -30,6 +31,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Joaopaulolndev\FilamentEditProfile\FilamentEditProfilePlugin;
 use Joaopaulolndev\FilamentEditProfile\Pages\EditProfilePage;
+use Livewire\Livewire;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -85,7 +87,7 @@ class AdminPanelProvider extends PanelProvider
                     ->icon('bxs-user-account'),
 
             ])
-            ->databaseNotifications()
+            ->databaseNotifications(CustomDatabaseNotifications::class)
             ->databaseNotificationsPolling('5s')
             ->sidebarCollapsibleOnDesktop()
             ->collapsedSidebarWidth('9rem')
@@ -126,5 +128,11 @@ class AdminPanelProvider extends PanelProvider
                         return Auth::check();
                     }),
             ]);
+    }
+
+    public function boot()
+    {
+        // Register our custom database notifications component with the correct alias
+        Livewire::component('filament-livewire-database-notifications', CustomDatabaseNotifications::class);
     }
 }

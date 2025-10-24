@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Events\MapDataChanged;
+use App\Filament\Livewire\CustomDatabaseNotifications;
 use App\Models\Alert;
 use App\Models\Building;
 use App\Models\Cctv;
@@ -15,6 +16,7 @@ use App\Models\Room;
 use App\Observers\AuditObserver;
 use App\Observers\NotificationObserver;
 use Illuminate\Support\ServiceProvider;
+use Livewire\Livewire;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -54,5 +56,8 @@ class AppServiceProvider extends ServiceProvider
         Cctv::created(fn ($m) => MapDataChanged::dispatch('cctv', 'created', ['id' => $m->id, 'room_id' => $m->room_id, 'building_id' => $m->building_id]));
         Cctv::updated(fn ($m) => MapDataChanged::dispatch('cctv', 'updated', ['id' => $m->id, 'room_id' => $m->room_id, 'building_id' => $m->building_id]));
         Cctv::deleted(fn ($m) => MapDataChanged::dispatch('cctv', 'deleted', ['id' => $m->id, 'room_id' => $m->room_id, 'building_id' => $m->building_id]));
+
+        // Register our custom database notifications component
+        Livewire::component('database-notifications', CustomDatabaseNotifications::class);
     }
 }

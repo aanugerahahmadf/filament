@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('cctvs', function (Blueprint $table) {
-            $table->dropColumn(['resolution', 'fps']);
+        Schema::table('{{ table }}', function (Blueprint $table) {
+            //
         });
     }
 
@@ -21,9 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('cctvs', function (Blueprint $table) {
-            $table->string('resolution')->nullable();
-            $table->integer('fps')->default(30);
+        Schema::table('{{ table }}', function (Blueprint $table) {
+            //
         });
     }
 };

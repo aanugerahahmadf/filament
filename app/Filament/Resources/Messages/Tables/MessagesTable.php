@@ -2,7 +2,9 @@
 
 namespace App\Filament\Resources\Messages\Tables;
 
+use App\Filament\Exports\MessageExporter;
 use Filament\Actions\Action;
+use Filament\Actions\ExportAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
@@ -113,7 +115,7 @@ class MessagesTable
                     ->button()
                     ->url(fn ($record) => route('messages.conversation', $record->id)),
             ])
-            ->bulkActions([
+            ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),

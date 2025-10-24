@@ -28,7 +28,7 @@ $classes = Flux::classes()
         'bare' => 'bg-transparent',
     });
 
-// Support adding the .self modifier to the wire:model.live directive...
+// Support adding the .self modifier to the wire:model directive...
 if (($wireModel = $attributes->wire('model')) && $wireModel->directive && ! $wireModel->hasModifier('self')) {
     unset($attributes[$wireModel->directive]);
 

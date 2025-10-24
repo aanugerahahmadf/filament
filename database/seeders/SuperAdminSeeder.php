@@ -18,7 +18,8 @@ class SuperAdminSeeder extends Seeder
             'email' => 'admin@pertamina.com',
         ], [
             'name' => 'Super Admin',
-            'username' => 'admin',
+
+            'username' => 'superadmin',
             'password' => bcrypt('@Admin123'),
         ]);
 

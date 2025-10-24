@@ -11,14 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('notifications', function (Blueprint $table) {
-            $table->string('notifiable_type')->nullable()->after('type');
-            $table->unsignedBigInteger('notifiable_id')->nullable()->after('notifiable_type');
-            $table->timestamp('archived_at')->nullable()->after('read_at');
-
-            // Add index for better performance
-            $table->index(['notifiable_type', 'notifiable_id']);
-        });
+        // These fields are already included in the initial migration
+        // This migration is kept for compatibility but does nothing
     }
 
     /**
@@ -26,9 +20,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('notifications', function (Blueprint $table) {
-            $table->dropIndex(['notifiable_type', 'notifiable_id']);
-            $table->dropColumn(['notifiable_type', 'notifiable_id', 'archived_at']);
-        });
+        // These fields are already included in the initial migration
+        // This migration is kept for compatibility but does nothing
     }
 };

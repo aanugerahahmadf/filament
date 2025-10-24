@@ -4,7 +4,7 @@
 @php $maskDynamic ??= $attributes->pluck('mask:dynamic'); @endphp
 
 @props([
-    'name' => $attributes->whereStartsWith('wire:model.live')->first(),
+    'name' => $attributes->whereStartsWith('wire:model')->first(),
     'iconVariant' => 'mini',
     'variant' => 'outline',
     'iconTrailing' => null,
@@ -30,8 +30,8 @@
 // If `:loading="false"` then never show loading.
 // If `:loading="true"` then always show loading.
 // If `:loading="foo"` then show loading when `foo` request is happening.
-// If `wire:model.live` then never show loading.
-// If `wire:model.live` then show loading when the `wire:model.live` value request is happening.
+// If `wire:model` then never show loading.
+// If `wire:model.live` then show loading when the `wire:model` value request is happening.
 $wireModel = $attributes->wire('model');
 $wireTarget = null;
 

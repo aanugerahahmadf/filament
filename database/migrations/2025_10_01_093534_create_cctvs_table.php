@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('building_id')->constrained()->cascadeOnDelete();
             $table->foreignId('room_id')->nullable()->constrained()->nullOnDelete();
+            $table->string('name');
             $table->string('stream_username')->nullable();
             $table->string('stream_password')->nullable();
             $table->string('ip_rtsp');

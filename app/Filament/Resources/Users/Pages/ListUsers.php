@@ -4,7 +4,9 @@ namespace App\Filament\Resources\Users\Pages;
 
 use App\Filament\Resources\Users\UserResource;
 use App\Filament\Resources\Users\Widgets\UserStatsChart;
+use App\Filament\Exports\UserExporter;
 use Filament\Actions\CreateAction;
+use Filament\Actions\ExportAction;
 use Filament\Resources\Pages\ListRecords;
 
 class ListUsers extends ListRecords
@@ -15,6 +17,9 @@ class ListUsers extends ListRecords
     {
         return [
             CreateAction::make(),
+            ExportAction::make()
+                ->exporter(UserExporter::class)
+                ->columnMapping(false),
         ];
     }
 

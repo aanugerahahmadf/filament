@@ -12,13 +12,27 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('cctvs', function (Blueprint $table) {
-            $table->string('model')->nullable()->after('room_id');
-            $table->string('serial_number')->nullable()->after('model');
-            $table->string('firmware_version')->nullable()->after('serial_number');
-            $table->integer('port')->default(554)->after('ip_rtsp');
-            $table->string('resolution')->nullable()->after('port');
-            $table->integer('fps')->default(30)->after('resolution');
-            $table->string('recording_schedule')->nullable()->after('recording');
+            if (!Schema::hasColumn('cctvs', 'model')) {
+                $table->string('model')->nullable()->after('room_id');
+            }
+            if (!Schema::hasColumn('cctvs', 'serial_number')) {
+                $table->string('serial_number')->nullable()->after('model');
+            }
+            if (!Schema::hasColumn('cctvs', 'firmware_version')) {
+                $table->string('firmware_version')->nullable()->after('serial_number');
+            }
+            if (!Schema::hasColumn('cctvs', 'port')) {
+                $table->integer('port')->default(554)->after('ip_rtsp');
+            }
+            if (!Schema::hasColumn('cctvs', 'resolution')) {
+                $table->string('resolution')->nullable()->after('port');
+            }
+            if (!Schema::hasColumn('cctvs', 'fps')) {
+                $table->integer('fps')->default(30)->after('resolution');
+            }
+            if (!Schema::hasColumn('cctvs', 'recording_schedule')) {
+                $table->string('recording_schedule')->nullable()->after('recording');
+            }
         });
     }
 
@@ -28,7 +42,13 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('cctvs', function (Blueprint $table) {
-            $table->dropColumn(['model', 'serial_number', 'firmware_version', 'port', 'resolution', 'fps', 'recording_schedule']);
+            $columns = ['model', 'serial_number', 'firmware_version', 'port', 'resolution', 'fps', 'recording_schedule'];
+            $existingColumns = array_filter($columns, function ($column) {
+                return Schema::hasColumn('cctvs', $column);
+            });
+            if (!empty($existingColumns)) {
+                $table->dropColumn($existingColumns);
+            }
         });
     }
 };
