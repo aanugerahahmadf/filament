@@ -14,10 +14,10 @@ class TestUserSeeder extends Seeder
     public function run(): void
     {
         User::updateOrCreate(
-            ['email' => 'admin@pertamina.com'],
+            ['email' => 'test@pertamina.com'], // Changed email to avoid conflict
             [
-                'name' => 'User Interface',
-                'username' => 'userinterface',
+                'name' => 'Test User',
+                'username' => 'testuser',
                 'password' => Hash::make('@Pasword123'),
             ]
         );

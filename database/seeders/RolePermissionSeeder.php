@@ -146,5 +146,9 @@ class RolePermissionSeeder extends Seeder
         ];
 
         $viewerRole->givePermissionTo($viewerPermissions);
+
+        // Ensure Super Admin role exists and has all permissions
+        $superAdminRole = Role::firstOrCreate(['name' => 'Super Admin', 'guard_name' => 'web']);
+        $superAdminRole->givePermissionTo(Permission::all());
     }
 }

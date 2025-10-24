@@ -38,10 +38,16 @@
             ])
         "
     >
-        @if ($trigger = $component->getTrigger())
-            <x-slot name="trigger">
-                {{ $trigger->with(['unreadNotificationsCount' => $unreadNotificationsCount]) }}
-            </x-slot>
+        @if ($trigger = $this->getTrigger())
+            @if (is_object($trigger) && method_exists($trigger, 'with'))
+                <x-slot name="trigger">
+                    {{ $trigger->with(['unreadNotificationsCount' => $unreadNotificationsCount]) }}
+                </x-slot>
+            @else
+                <x-slot name="trigger">
+                    {{ $trigger }}
+                </x-slot>
+            @endif
         @endif
 
         @if ($hasNotifications)
@@ -64,12 +70,12 @@
                     </h2>
 
                     <div class="fi-ac">
-                        @if ($unreadNotificationsCount && $component->markAllNotificationsAsReadAction?->isVisible())
-                            {{ $component->markAllNotificationsAsReadAction }}
+                        @if ($unreadNotificationsCount && $this->markAllNotificationsAsReadAction?->isVisible())
+                            {{ $this->markAllNotificationsAsReadAction }}
                         @endif
 
-                        @if ($component->clearNotificationsAction?->isVisible())
-                            {{ $component->clearNotificationsAction }}
+                        @if ($this->clearNotificationsAction?->isVisible())
+                            {{ $this->clearNotificationsAction }}
                         @endif
                     </div>
                 </div>
@@ -83,13 +89,13 @@
                 >
                     {{-- Use our custom getNotification method --}}
                     @php
-                        $filamentNotification = $component->getNotification($notification);
+                        $filamentNotification = $this->getNotification($notification);
                     @endphp
                     {{ $filamentNotification->inline() }}
                 </div>
             @endforeach
 
-            @if ($broadcastChannel = $component->getBroadcastChannel())
+            @if ($broadcastChannel = $this->getBroadcastChannel())
                 @script
                     <script>
                         window.addEventListener('EchoLoaded', () => {

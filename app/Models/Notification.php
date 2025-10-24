@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Str;
 
 class Notification extends Model
@@ -22,6 +23,8 @@ class Notification extends Model
         'data',
         'read_at',
         'archived_at',
+        'notifiable_type',
+        'notifiable_id',
     ];
 
     protected $casts = [
@@ -38,12 +41,31 @@ class Notification extends Model
             if (empty($model->{$model->getKeyName()})) {
                 $model->{$model->getKeyName()} = (string) Str::uuid();
             }
+
+            // If notifiable fields are set but user_id is not, populate user_id
+            if (empty($model->user_id) && !empty($model->notifiable_id) && $model->notifiable_type === User::class) {
+                $model->user_id = $model->notifiable_id;
+            }
+
+            // If user_id is set but notifiable fields are not, populate notifiable fields
+            if (!empty($model->user_id) && (empty($model->notifiable_type) || empty($model->notifiable_id))) {
+                $model->notifiable_type = User::class;
+                $model->notifiable_id = $model->user_id;
+            }
         });
     }
 
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Get the notifiable entity that the notification belongs to.
+     */
+    public function notifiable(): MorphTo
+    {
+        return $this->morphTo();
     }
 
     /**

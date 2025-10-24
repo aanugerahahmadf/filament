@@ -16,9 +16,9 @@ class SuperAdminSeeder extends Seeder
         // Create super admin user
         $user = User::firstOrCreate([
             'email' => 'admin@pertamina.com',
-        ], [
+        ],
+        [
             'name' => 'Super Admin',
-
             'username' => 'superadmin',
             'password' => bcrypt('@Admin123'),
         ]);

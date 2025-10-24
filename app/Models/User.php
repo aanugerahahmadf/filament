@@ -48,6 +48,8 @@ class User extends Authenticatable
         'avatar_url',
         'custom_fields',
         'has_strong_password',
+        'status',
+        'last_seen_at',
     ];
 
     /**
@@ -79,6 +81,7 @@ class User extends Authenticatable
             'has_strong_password' => 'boolean',
             'phone_verified' => 'boolean',
             'phone_verified_at' => 'datetime',
+            'last_seen_at' => 'datetime',
         ];
     }
 
