@@ -34,7 +34,7 @@ Route::prefix('health')->group(function () {
 });
 
 // Notification API routes
-Route::prefix('notifications')->middleware(['auth'])->group(function () {
+Route::prefix('notifications')->middleware(['auth:sanctum'])->group(function () {
     Route::get('/', [NotificationApiController::class, 'index'])->name('api.notifications.index');
     Route::post('/{id}/read', [NotificationApiController::class, 'markAsRead'])->name('api.notifications.mark-as-read');
     Route::delete('/{id}', [NotificationApiController::class, 'destroy'])->name('api.notifications.destroy');
@@ -49,6 +49,7 @@ Route::prefix('cctvs')->group(function () {
     Route::post('/{cctv}/start-stream', [CctvApiController::class, 'startStream'])->name('api.cctvs.start-stream');
     Route::post('/{cctv}/stop-stream', [CctvApiController::class, 'stopStream'])->name('api.cctvs.stop-stream');
     Route::get('/statistics', [CctvApiController::class, 'statistics'])->name('api.cctvs.statistics');
+    Route::get('/detailed-statistics', [CctvApiController::class, 'detailedStatistics'])->name('api.cctvs.detailed-statistics');
     Route::get('/map-data', [CctvApiController::class, 'mapData'])->name('api.cctvs.map-data');
 });
 
@@ -81,7 +82,7 @@ Route::prefix('alerts')->group(function () {
 });
 
 // Advanced Analytics API (Starter Kit style)
-Route::prefix('analytics')->name('api.analytics.')->middleware(['auth'])->group(function () {
+Route::prefix('analytics')->name('api.analytics.')->middleware(['auth:sanctum'])->group(function () {
     Route::get('/dashboard', [AnalyticsController::class, 'dashboardAnalytics'])->name('dashboard');
     Route::get('/cctv', [AnalyticsController::class, 'cctvAnalytics'])->name('cctv');
     Route::get('/system-health', [AnalyticsController::class, 'systemHealth'])->name('system-health');
@@ -90,66 +91,86 @@ Route::prefix('analytics')->name('api.analytics.')->middleware(['auth'])->group(
 });
 
 // Cache utilities
-Route::prefix('cache')->name('api.cache.')->middleware(['auth'])->group(function () {
+Route::prefix('cache')->name('api.cache.')->middleware(['auth:sanctum'])->group(function () {
     Route::get('/refresh', function () {
-        app(\App\Services\AdvancedCachingService::class)->cacheSystemStatus();
-
-        return response()->json(['success' => true, 'message' => 'Cache refreshed']);
+        try {
+            app(\App\Services\AdvancedCachingService::class)->cacheSystemStatus();
+            return response()->json(['success' => true, 'message' => 'Cache refreshed']);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => 'Error refreshing cache: ' . $e->getMessage()], 500);
+        }
     })->name('refresh');
 });
 
 // Streaming APIs
-Route::prefix('stream')->name('api.stream.')->middleware(['auth'])->group(function () {
+Route::prefix('stream')->name('api.stream.')->middleware(['auth:sanctum'])->group(function () {
     Route::post('/initialize', function (Request $request) {
-        $ffmpegService = new \App\Services\AdvancedFfmpegService;
-
-        return response()->json($ffmpegService->initializeAdvancedStream($request->all()));
+        try {
+            $ffmpegService = new \App\Services\AdvancedFfmpegService;
+            return response()->json($ffmpegService->initializeAdvancedStream($request->all()));
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => 'Error initializing stream: ' . $e->getMessage()], 500);
+        }
     })->name('initialize');
 
     Route::delete('/{streamId}/stop', [StreamController::class, 'stopAdvancedStream'])->name('stop');
 
     Route::get('/{streamId}/metrics', function ($streamId) {
-        $ffmpegService = new \App\Services\AdvancedFfmpegService;
-
-        return response()->json($ffmpegService->getStreamMetrics($streamId));
+        try {
+            $ffmpegService = new \App\Services\AdvancedFfmpegService;
+            return response()->json($ffmpegService->getStreamMetrics($streamId));
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => 'Error fetching stream metrics: ' . $e->getMessage()], 500);
+        }
     })->name('metrics');
 
     Route::post('/{streamId}/adjust-quality', function ($streamId, Request $request) {
-        $ffmpegService = new \App\Services\AdvancedFfmpegService;
-
-        return response()->json($ffmpegService->adjustStreamQuality($streamId, $request->all()));
+        try {
+            $ffmpegService = new \App\Services\AdvancedFfmpegService;
+            return response()->json($ffmpegService->adjustStreamQuality($streamId, $request->all()));
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => 'Error adjusting stream quality: ' . $e->getMessage()], 500);
+        }
     })->name('adjust-quality');
 });
 
 // Real-time broadcast APIs
-Route::prefix('broadcast')->name('api.broadcast.')->middleware(['auth'])->group(function () {
+Route::prefix('broadcast')->name('api.broadcast.')->middleware(['auth:sanctum'])->group(function () {
     Route::post('/cctv-update', function (Request $request) {
-        $broadcastService = new \App\Services\RealtimeBroadcastService;
-        $cctv = \App\Models\Cctv::with(['building', 'room'])->find($request->cctv_id);
-        if ($cctv) {
-            $broadcastService->broadcastCctvUpdate($cctv);
-
-            return response()->json(['success' => true]);
+        try {
+            $broadcastService = new \App\Services\RealtimeBroadcastService;
+            $cctv = \App\Models\Cctv::with(['building', 'room'])->find($request->cctv_id);
+            if ($cctv) {
+                $broadcastService->broadcastCctvUpdate($cctv);
+                return response()->json(['success' => true]);
+            }
+            return response()->json(['success' => false, 'error' => 'CCTV not found'], 404);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => 'Error broadcasting CCTV update: ' . $e->getMessage()], 500);
         }
-
-        return response()->json(['success' => false, 'error' => 'CCTV not found']);
     })->name('cctv-update');
 
     Route::post('/system-metrics', function () {
-        $broadcastService = new \App\Services\RealtimeBroadcastService;
-        $broadcastService->broadcastSystemMetrics();
-
-        return response()->json(['success' => true]);
+        try {
+            $broadcastService = new \App\Services\RealtimeBroadcastService;
+            $broadcastService->broadcastSystemMetrics();
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => 'Error broadcasting system metrics: ' . $e->getMessage()], 500);
+        }
     })->name('system-metrics');
 
     Route::post('/emergency-alert', function (Request $request) {
-        $broadcastService = new \App\Services\RealtimeBroadcastService;
-        $broadcastService->broadcastEmergencyAlert(
-            $request->type,
-            $request->message,
-            $request->context ?? []
-        );
-
-        return response()->json(['success' => true]);
+        try {
+            $broadcastService = new \App\Services\RealtimeBroadcastService;
+            $broadcastService->broadcastEmergencyAlert(
+                $request->type,
+                $request->message,
+                $request->context ?? []
+            );
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => 'Error broadcasting emergency alert: ' . $e->getMessage()], 500);
+        }
     })->name('emergency-alert');
 });

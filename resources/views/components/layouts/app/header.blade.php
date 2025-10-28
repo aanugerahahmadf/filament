@@ -1,7 +1,10 @@
 <flux:header container class="border-b border-zinc-300 dark:border-zinc-600 bg-gradient-to-r from-zinc-50 to-zinc-100 dark:from-zinc-900 dark:to-zinc-800 h-16 shadow-sm" style="z-index: 1000; position: relative;">
     <button type="button" id="sidebar-toggle-btn" class="inline-flex items-center justify-center p-2 rounded-lg bg-zinc-200 dark:bg-zinc-700 hover:bg-zinc-300 dark:hover:bg-zinc-600 transition-colors shrink-0">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg id="sidebar-open-icon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+        <svg id="sidebar-close-icon" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
         </svg>
     </button>
 
@@ -18,7 +21,7 @@
             <flux:navbar.item class="!h-10 [&>div>svg]:size-5 bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-600 rounded-lg px-3 py-2 hover:bg-zinc-50 dark:hover:bg-zinc-700 transition-all duration-200 hover:shadow-sm relative shrink-0" :href="route('notifications')" :label="__('Notifications')">
                 <x-bxs-bell class="inline-block w-5 h-5" />
                 @php
-                    $unreadCount = auth()->user()->notifications()->whereNull('read_at')->count();
+                    $unreadCount = auth()->check() ? auth()->user()->notifications()->whereNull('read_at')->count() : 0;
                 @endphp
                 @if($unreadCount > 0)
                     <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
@@ -32,9 +35,9 @@
             <flux:navbar.item class="!h-10 [&>div>svg]:size-5 bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-600 rounded-lg px-3 py-2 hover:bg-zinc-50 dark:hover:bg-zinc-700 transition-all duration-200 hover:shadow-sm relative shrink-0" :href="route('messages')" :label="__('Messages')">
                 <x-bxs-message class="inline-block w-5 h-5" />
                 @php
-                    $unreadMessages = \App\Models\Message::where('to_user_id', auth()->id())
+                    $unreadMessages = auth()->check() ? \App\Models\Message::where('to_user_id', auth()->id())
                         ->whereNull('read_at')
-                        ->count();
+                        ->count() : 0;
                 @endphp
                 @if($unreadMessages > 0)
                     <span class="absolute -top-1 -right-1 bg-green-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
@@ -59,7 +62,7 @@
     <flux:dropdown position="top" align="end">
         <flux:profile
             class="cursor-pointer border-2 border-zinc-300 dark:border-zinc-600 rounded-lg p-1 transition-all duration-200 hover:border-zinc-400 dark:hover:border-zinc-400 hover:shadow-sm"
-            :initials="auth()->user()->initials()"
+            :initials="auth()->check() ? auth()->user()->initials() : 'U'"
         />
 
         <flux:menu>
@@ -70,13 +73,13 @@
                             <span
                                 class="flex h-full w-full items-center justify-center rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white"
                             >
-                                {{ auth()->user()->initials() }}
+                                {{ auth()->check() ? auth()->user()->initials() : 'U' }}
                             </span>
                         </span>
 
                         <div class="grid flex-1 text-start leading-tight">
-                            <span class="font-semibold text-gray-900 dark:text-white truncate text-visible">{{ auth()->user()->name }}</span>
-                            <span class="text-xs text-gray-500 dark:text-gray-400 truncate text-visible">{{ auth()->user()->email }}</span>
+                            <span class="font-semibold text-gray-900 dark:text-white truncate text-visible">{{ auth()->check() ? auth()->user()->name : 'User' }}</span>
+                            <span class="text-xs text-gray-500 dark:text-gray-400 truncate text-visible">{{ auth()->check() ? auth()->user()->email : 'user@example.com' }}</span>
                         </div>
                     </div>
                 </div>
@@ -103,7 +106,7 @@
 </flux:header>
 
 <!-- Mobile Menu -->
-<flux:sidebar stashable class="lg:hidden border-e border-zinc-300 dark:border-zinc-600 bg-gradient-to-b from-zinc-50 to-zinc-100 dark:from-zinc-900 dark:to-zinc-800 h-screen overflow-y-hidden">
+<flux:sidebar id="mobile-sidebar" stashable class="lg:hidden border-e border-zinc-300 dark:border-zinc-600 bg-gradient-to-b from-zinc-50 to-zinc-100 dark:from-zinc-900 dark:to-zinc-800 h-screen overflow-y-hidden">
     <flux:sidebar.toggle class="lg:hidden" icon="x-mark" />
 
     <div class="flex justify-center py-4">

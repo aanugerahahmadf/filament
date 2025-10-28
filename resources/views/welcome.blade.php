@@ -689,10 +689,6 @@
                             </div>
                             <div class="feature-item" style="display:flex; align-items:center; gap:12px;">
                                 <div style="width:8px; height:8px; background:var(--accent); border-radius:50%;"></div>
-                                <span class="muted">Export Data Excel (.xlsx)</span>
-                            </div>
-                            <div class="feature-item" style="display:flex; align-items:center; gap:12px;">
-                                <div style="width:8px; height:8px; background:var(--accent); border-radius:50%;"></div>
                                 <span class="muted">Notifikasi Real-time</span>
                     </div>
                             <div class="feature-item" style="display:flex; align-items:center; gap:12px;">

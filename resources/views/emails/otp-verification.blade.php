@@ -89,6 +89,7 @@
 <body>
     <div class="container">
         <div class="header">
+            <img src="{{ $message->embed(public_path('images/logo-pertamina.png')) }}" alt="Pertamina Logo" class="logo">
             <h1 class="company-name">PT KILANG PERTAMINA INTERNASIONAL</h1>
             <h2 class="unit-name">REFINERY UNIT VI BALONGAN</h2>
         </div>

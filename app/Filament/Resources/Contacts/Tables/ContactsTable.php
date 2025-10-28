@@ -28,6 +28,9 @@ class ContactsTable
                 TextColumn::make('phone_number')
                     ->label('Phone Number')
                     ->searchable(),
+                TextColumn::make('address')
+                    ->label('Address')
+                    ->searchable(),
             ])
             ->filters([
                 //

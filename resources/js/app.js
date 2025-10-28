@@ -139,7 +139,7 @@ function ensureUiUnreadBadge() {
         badge.href = '/notifications';
         badge.style.position = 'fixed';
         badge.style.right = '20px';
-        badge.style.top = '20px';
+        badge.style.top = '65px'; // Better spacing - 50px gap from mute button
         badge.style.zIndex = '9999';
         badge.style.background = 'linear-gradient(135deg,#22C55E,#16A34A)';
         badge.style.color = '#fff';
@@ -147,12 +147,48 @@ function ensureUiUnreadBadge() {
         badge.style.borderRadius = '9999px';
         badge.style.padding = '8px 12px';
         badge.style.boxShadow = '0 10px 25px rgba(0,0,0,0.35)';
-        badge.style.display = 'flex';
         badge.style.alignItems = 'center';
         badge.style.gap = '8px';
         badge.style.fontWeight = '700';
         badge.style.backdropFilter = 'blur(6px)';
+        badge.style.cursor = 'pointer';
+        badge.style.transition = 'all 0.2s ease';
         badge.innerHTML = `<i class="bx bxs-bell" style="font-size:16px"></i><span id="ui-unread-count">0</span>`;
+        
+        // Initially hide badge (only show when there are notifications)
+        badge.style.display = 'none';
+        
+        // Hide on mobile (< 768px) 
+        const handleBadgeResize = () => {
+            const badgeElement = document.getElementById('ui-unread-badge');
+            if (!badgeElement) return;
+            
+            if (window.innerWidth < 768) {
+                badgeElement.style.display = 'none';
+            } else {
+                // Only show if there are notifications (badge will manage its own visibility)
+                const count = badgeElement.querySelector('#ui-unread-count')?.textContent;
+                if (count && parseInt(count) > 0) {
+                    badgeElement.style.display = 'flex';
+                }
+            }
+        };
+        
+        // Check on load and on resize
+        handleBadgeResize();
+        window.addEventListener('resize', handleBadgeResize);
+        
+        // Add hover effect
+        badge.addEventListener('mouseenter', () => {
+            badge.style.transform = 'scale(1.05)';
+            badge.style.boxShadow = '0 12px 30px rgba(34, 197, 94, 0.4)';
+        });
+        
+        badge.addEventListener('mouseleave', () => {
+            badge.style.transform = 'scale(1)';
+            badge.style.boxShadow = '0 10px 25px rgba(0,0,0,0.35)';
+        });
+        
         document.body.appendChild(badge);
     }
     return badge;
@@ -163,6 +199,23 @@ function incrementUiUnreadBadge() {
     const span = badge.querySelector('#ui-unread-count');
     const current = parseInt(span?.textContent || '0', 10) || 0;
     span.textContent = String(current + 1);
+    // Show badge when there are notifications
+    if (badge) {
+        badge.style.display = 'flex';
+    }
+}
+
+function updateUiUnreadBadge(count) {
+    const badge = document.getElementById('ui-unread-badge');
+    if (badge && badge.querySelector('#ui-unread-count')) {
+        badge.querySelector('#ui-unread-count').textContent = String(count);
+        // Hide badge if count is 0
+        if (count === 0) {
+            badge.style.display = 'none';
+        } else {
+            badge.style.display = 'flex';
+        }
+    }
 }
 
 // Subtle beep without external assets (Web Audio API)
@@ -203,19 +256,45 @@ function ensureMuteButton() {
         btn.type = 'button';
         btn.style.position = 'fixed';
         btn.style.right = '20px';
-        btn.style.top = '60px';
-        btn.style.zIndex = '9999';
+        btn.style.top = '20px';
+        btn.style.zIndex = '10000';
         btn.style.background = 'linear-gradient(135deg,#6B7280,#374151)';
         btn.style.color = '#fff';
         btn.style.border = '1px solid rgba(255,255,255,0.25)';
         btn.style.borderRadius = '9999px';
         btn.style.padding = '8px 12px';
         btn.style.boxShadow = '0 10px 25px rgba(0,0,0,0.35)';
-        btn.style.display = 'flex';
         btn.style.alignItems = 'center';
         btn.style.gap = '8px';
         btn.style.fontWeight = '700';
         btn.style.backdropFilter = 'blur(6px)';
+        btn.style.cursor = 'pointer';
+        btn.style.transition = 'all 0.2s ease';
+        
+        // Hide on mobile (< 768px)
+        const handleResize = () => {
+            if (window.innerWidth < 768) {
+                btn.style.display = 'none';
+            } else {
+                btn.style.display = 'flex';
+            }
+        };
+        
+        // Check on load and on resize
+        handleResize();
+        window.addEventListener('resize', handleResize);
+        
+        // Add hover effect
+        btn.addEventListener('mouseenter', () => {
+            btn.style.transform = 'scale(1.05)';
+            btn.style.boxShadow = '0 12px 30px rgba(107, 114, 128, 0.4)';
+        });
+        
+        btn.addEventListener('mouseleave', () => {
+            btn.style.transform = 'scale(1)';
+            btn.style.boxShadow = '0 10px 25px rgba(0,0,0,0.35)';
+        });
+        
         document.body.appendChild(btn);
         btn.addEventListener('click', () => {
             const muted = !getMuteState();
@@ -371,3 +450,11 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+/**
+ * Echo exposes an expressive API for subscribing to channels and listening
+ * for events that are broadcast by Laravel. Echo and event broadcasting
+ * allow your team to quickly build robust real-time web applications.
+ */
+
+import './echo';

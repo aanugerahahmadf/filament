@@ -21,6 +21,9 @@ class ContactInfolist
                 TextEntry::make('phone_number')
                     ->label('Phone Number')
                     ->placeholder('-'),
+                TextEntry::make('address')
+                    ->label('Address')
+                    ->placeholder('-'),
             ]);
     }
 }

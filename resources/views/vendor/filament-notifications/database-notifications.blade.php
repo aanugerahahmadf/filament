@@ -3,14 +3,11 @@
     use Filament\Support\View\Components\BadgeComponent;
     use Illuminate\View\ComponentAttributeBag;
 
-    // Ensure we're using the correct component instance
-    $component = $this;
-
-    $notifications = $component->getNotifications();
-    $unreadNotificationsCount = $component->getUnreadNotificationsCount();
+    $notifications = $this->getNotifications();
+    $unreadNotificationsCount = $this->getUnreadNotificationsCount();
     $hasNotifications = $notifications->count();
     $isPaginated = $notifications instanceof \Illuminate\Contracts\Pagination\Paginator && $notifications->hasPages();
-    $pollingInterval = $component->getPollingInterval();
+    $pollingInterval = $this->getPollingInterval();
 @endphp
 
 <div class="fi-no-database">
@@ -39,15 +36,9 @@
         "
     >
         @if ($trigger = $this->getTrigger())
-            @if (is_object($trigger) && method_exists($trigger, 'with'))
-                <x-slot name="trigger">
-                    {{ $trigger->with(['unreadNotificationsCount' => $unreadNotificationsCount]) }}
-                </x-slot>
-            @else
-                <x-slot name="trigger">
-                    {{ $trigger }}
-                </x-slot>
-            @endif
+            <x-slot name="trigger">
+                {{ $trigger->with(['unreadNotificationsCount' => $unreadNotificationsCount]) }}
+            </x-slot>
         @endif
 
         @if ($hasNotifications)
@@ -87,11 +78,7 @@
                         'fi-no-notification-unread-ctn' => $notification->unread(),
                     ])
                 >
-                    {{-- Use our custom getNotification method --}}
-                    @php
-                        $filamentNotification = $this->getNotification($notification);
-                    @endphp
-                    {{ $filamentNotification->inline() }}
+                    {{ $this->getNotification($notification)->inline() }}
                 </div>
             @endforeach
 

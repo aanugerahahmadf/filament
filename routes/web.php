@@ -117,3 +117,112 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/stream/{cctv}/snapshot', [StreamController::class, 'snapshot'])->name('stream.snapshot');
     Route::post('/stream/{cctv}/record', [StreamController::class, 'record'])->name('stream.record');
 });
+
+// Pusher Test Routes
+Route::get('/pusher-test', function () {
+    return view('pusher-test');
+})->name('pusher.test');
+
+Route::get('/pusher-send-test', function () {
+    // Get Pusher configuration
+    $pusherAppId = env('PUSHER_APP_ID', '2069100');
+    $pusherAppKey = env('PUSHER_APP_KEY', '238e99fba712c4216292');
+    $pusherAppSecret = env('PUSHER_APP_SECRET', 'a88169403b750fe6359d');
+    $pusherAppCluster = env('PUSHER_APP_CLUSTER', 'ap1');
+
+    // Initialize Pusher
+    $pusher = new Pusher\Pusher(
+        $pusherAppKey,
+        $pusherAppSecret,
+        $pusherAppId,
+        [
+            'cluster' => $pusherAppCluster,
+            'useTLS' => false,
+            'encrypted' => false,
+            'curl_options' => [
+                CURLOPT_SSL_VERIFYPEER => false,
+                CURLOPT_SSL_VERIFYHOST => false,
+            ]
+        ]
+    );
+
+    // Prepare data
+    $data = [
+        'message' => 'Hello world from ATCS web interface',
+        'timestamp' => now()->toDateTimeString(),
+        'source' => 'ATCS Web Interface'
+    ];
+
+    try {
+        // Trigger the event
+        $result = $pusher->trigger('my-channel', 'my-event', $data);
+
+        if ($result) {
+            return response()->json(['status' => 'success', 'message' => 'Event sent successfully!']);
+        } else {
+            return response()->json(['status' => 'error', 'message' => 'Failed to send event.']);
+        }
+    } catch (\Exception $e) {
+        return response()->json(['status' => 'error', 'message' => 'Error: ' . $e->getMessage()]);
+    }
+})->name('pusher.send.test');
+
+Route::get('/pusher-send-cctv-test', function () {
+    // Get Pusher configuration
+    $pusherAppId = env('PUSHER_APP_ID', '2069100');
+    $pusherAppKey = env('PUSHER_APP_KEY', '238e99fba712c4216292');
+    $pusherAppSecret = env('PUSHER_APP_SECRET', 'a88169403b750fe6359d');
+    $pusherAppCluster = env('PUSHER_APP_CLUSTER', 'ap1');
+
+    // CCTV data
+    $cctvNames = ['Main Entrance', 'Control Room', 'Tank Area', 'Loading Dock', 'Perimeter'];
+    $locations = ['Building A', 'Building B', 'Storage Area', 'Administration', 'Perimeter'];
+
+    $cctvId = rand(1, 100);
+    $cctvName = $cctvNames[array_rand($cctvNames)];
+    $location = $locations[array_rand($locations)];
+    $status = ['online', 'offline', 'recording', 'error'][array_rand(['online', 'offline', 'recording', 'error'])];
+
+    // Initialize Pusher
+    $pusher = new Pusher\Pusher(
+        $pusherAppKey,
+        $pusherAppSecret,
+        $pusherAppId,
+        [
+            'cluster' => $pusherAppCluster,
+            'useTLS' => false,
+            'encrypted' => false,
+            'curl_options' => [
+                CURLOPT_SSL_VERIFYPEER => false,
+                CURLOPT_SSL_VERIFYHOST => false,
+            ]
+        ]
+    );
+
+    // Prepare data
+    $data = [
+        'cctv_id' => $cctvId,
+        'cctv_name' => $cctvName,
+        'status' => $status,
+        'location' => $location,
+        'timestamp' => now()->toDateTimeString(),
+        'source' => 'ATCS Web Interface'
+    ];
+
+    try {
+        // Trigger the event
+        $result = $pusher->trigger('cctv-status', 'cctv.status.changed', $data);
+
+        if ($result) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'CCTV event sent successfully!',
+                'data' => $data
+            ]);
+        } else {
+            return response()->json(['status' => 'error', 'message' => 'Failed to send CCTV event.']);
+        }
+    } catch (\Exception $e) {
+        return response()->json(['status' => 'error', 'message' => 'Error: ' . $e->getMessage()]);
+    }
+})->name('pusher.send.cctv.test');

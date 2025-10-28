@@ -52,7 +52,7 @@ class AdminPanelProvider extends PanelProvider
                 'danger' => Color::Rose,
                 'gray' => Color::Gray,
                 'info' => Color::Blue,
-                'primary' => Color::Indigo,
+                'primary' => Color::Red,
                 'success' => Color::Emerald,
                 'warning' => Color::Orange,
             ])
@@ -70,7 +70,6 @@ class AdminPanelProvider extends PanelProvider
                 CctvStatusTrendChart::class,
                 UserActivityChart::class,
                 StreamingPerformanceChart::class,
-                // AdditionalLineChart::class, // Removed as it's auto-discovered
             ])
             ->navigationGroups([
                 NavigationGroup::make()

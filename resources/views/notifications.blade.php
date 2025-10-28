@@ -7,28 +7,70 @@
             perspective: 1000px;
             position: relative;
             overflow: hidden;
-            border: 1px solid rgba(0, 0, 0, 0.1);
-            background: rgba(255, 255, 255, 0.95);
+            border: 2px solid rgba(0, 0, 0, 0.15) !important;
+            background: rgba(255, 255, 255, 0.98) !important;
             backdrop-filter: blur(10px);
             border-radius: 1rem;
             margin-bottom: 1rem;
-            /* Ensure content is visible */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            /* Ensure ALL content is visible in light mode */
+            color: #111827 !important;
+        }
+        
+        .notification-card h1,
+        .notification-card h2,
+        .notification-card h3,
+        .notification-card h4,
+        .notification-card h5,
+        .notification-card h6,
+        .notification-card p,
+        .notification-card span,
+        .notification-card div,
+        .notification-card label {
             color: #111827 !important;
         }
 
         .dark .notification-card {
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            background: rgba(30, 30, 30, 0.95);
+            border: 2px solid rgba(255, 255, 255, 0.2) !important;
+            background: rgba(30, 30, 30, 0.98) !important;
             backdrop-filter: blur(10px);
+            color: #f9fafb !important;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+        }
+        
+        .dark .notification-card h1,
+        .dark .notification-card h2,
+        .dark .notification-card h3,
+        .dark .notification-card h4,
+        .dark .notification-card h5,
+        .dark .notification-card h6,
+        .dark .notification-card p,
+        .dark .notification-card span,
+        .dark .notification-card div,
+        .dark .notification-card label {
             color: #f9fafb !important;
         }
 
         /* System mode support */
         @media (prefers-color-scheme: dark) {
             .system-mode .notification-card {
-                border: 1px solid rgba(255, 255, 255, 0.1);
-                background: rgba(30, 30, 30, 0.95);
+                border: 2px solid rgba(255, 255, 255, 0.2) !important;
+                background: rgba(30, 30, 30, 0.98) !important;
                 backdrop-filter: blur(10px);
+                color: #f9fafb !important;
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+            }
+            
+            .system-mode .notification-card h1,
+            .system-mode .notification-card h2,
+            .system-mode .notification-card h3,
+            .system-mode .notification-card h4,
+            .system-mode .notification-card h5,
+            .system-mode .notification-card h6,
+            .system-mode .notification-card p,
+            .system-mode .notification-card span,
+            .system-mode .notification-card div,
+            .system-mode .notification-card label {
                 color: #f9fafb !important;
             }
         }
@@ -108,76 +150,107 @@
             50% { transform: scale(1.1); opacity: 0.7; }
         }
 
-        /* Ensure text is visible in all modes - more specific selectors */
-        .notification-card .text-visible,
-        .notification-card .text-primary,
-        .notification-card .text-secondary,
-        .notification-card .text-tertiary,
-        .notification-card .text-error,
-        .notification-card .text-success {
-            color: #111827 !important; /* gray-900 for light mode - high contrast */
+        /* Ensure all text in notification card is visible in light mode */
+        .notification-card,
+        .notification-card * {
+            color: #111827 !important; /* dark gray for light mode */
+        }
+        
+        /* Exception for buttons - they should maintain their colors */
+        .notification-card button,
+        .notification-card .action-button {
+            color: white !important;
+        }
+        
+        /* Exception for icons - they get inline color styles */
+        .notification-card i.bx,
+        .notification-card .notification-icon {
+            color: inherit !important;
         }
 
-        .dark .notification-card .text-visible,
-        .dark .notification-card .text-primary,
-        .dark .notification-card .text-secondary,
-        .dark .notification-card .text-tertiary,
-        .dark .notification-card .text-error,
-        .dark .notification-card .text-success {
-            color: #f9fafb !important; /* gray-50 for dark mode - high contrast */
+        /* Dark mode text visibility */
+        .dark .notification-card,
+        .dark .notification-card * {
+            color: #f9fafb !important; /* light gray for dark mode */
+        }
+        
+        .dark .notification-card button,
+        .dark .notification-card .action-button {
+            color: white !important;
+        }
+        
+        .dark .notification-card i.bx,
+        .dark .notification-card .notification-icon {
+            color: inherit !important;
         }
 
+        /* System mode dark text visibility */
         @media (prefers-color-scheme: dark) {
-            .system-mode .notification-card .text-visible,
-            .system-mode .notification-card .text-primary,
-            .system-mode .notification-card .text-secondary,
-            .system-mode .notification-card .text-tertiary,
-            .system-mode .notification-card .text-error,
-            .system-mode .notification-card .text-success {
-                color: #f9fafb !important; /* gray-50 for system dark mode */
+            .system-mode .notification-card,
+            .system-mode .notification-card * {
+                color: #f9fafb !important;
+            }
+            
+            .system-mode .notification-card button,
+            .system-mode .notification-card .action-button {
+                color: white !important;
+            }
+            
+            .system-mode .notification-card i.bx,
+            .system-mode .notification-card .notification-icon {
+                color: inherit !important;
             }
         }
 
         /* Text colors for different modes - with higher contrast */
-        .text-primary {
+        .text-primary,
+        .text-primary * {
             color: #111827 !important; /* gray-900 for light mode - high contrast */
         }
 
-        .dark .text-primary {
+        .dark .text-primary,
+        .dark .text-primary * {
             color: #f9fafb !important; /* gray-50 for dark mode - high contrast */
         }
 
         @media (prefers-color-scheme: dark) {
-            .system-mode .text-primary {
+            .system-mode .text-primary,
+            .system-mode .text-primary * {
                 color: #f9fafb !important; /* gray-50 for system dark mode */
             }
         }
 
-        .text-secondary {
+        .text-secondary,
+        .text-secondary * {
             color: #111827 !important; /* gray-900 for light mode - better contrast */
         }
 
-        .dark .text-secondary {
+        .dark .text-secondary,
+        .dark .text-secondary * {
             color: #f9fafb !important; /* gray-50 for dark mode - better contrast */
         }
 
         @media (prefers-color-scheme: dark) {
-            .system-mode .text-secondary {
+            .system-mode .text-secondary,
+            .system-mode .text-secondary * {
                 color: #f9fafb !important; /* gray-50 for system dark mode */
             }
         }
 
-        .text-tertiary {
+        .text-tertiary,
+        .text-tertiary * {
             color: #111827 !important; /* gray-900 for light mode - better contrast */
         }
 
-        .dark .text-tertiary {
-            color: #f3f4f6 !important; /* gray-100 for dark mode - better contrast */
+        .dark .text-tertiary,
+        .dark .text-tertiary * {
+            color: #f9fafb !important; /* gray-100 for dark mode - better contrast */
         }
 
         @media (prefers-color-scheme: dark) {
-            .system-mode .text-tertiary {
-                color: #f3f4f6 !important; /* gray-100 for system dark mode */
+            .system-mode .text-tertiary,
+            .system-mode .text-tertiary * {
+                color: #f9fafb !important; /* gray-100 for system dark mode */
             }
         }
 
@@ -238,12 +311,14 @@
 
         /* Button styles for all modes */
         .action-button {
-            background: #10b981;
+            background: #10b981 !important;
             color: white !important;
-            border: 1px solid rgba(16, 185, 129, 0.7) !important;
+            border: 2px solid rgba(16, 185, 129, 0.7) !important;
             border-radius: 0.5rem;
             font-weight: 600;
             box-shadow: 0 4px 6px rgba(16, 185, 129, 0.2);
+            padding: 0.5rem 1rem !important;
+            transition: all 0.2s ease-in-out !important;
         }
 
         .dark .action-button {
@@ -342,13 +417,52 @@
             overflow-y: auto;
         }
 
-        /* Ensure modal content is visible */
-        #notification-modal .text-visible {
-            color: #111827 !important;
+        /* Ensure modal content is visible in all modes */
+        #notification-modal .notification-card,
+        #notification-modal .notification-card * {
+            color: #111827 !important; /* dark for light mode */
+        }
+        
+        #notification-modal .notification-card button,
+        #notification-modal .notification-card .action-button {
+            color: white !important;
+        }
+        
+        #notification-modal .notification-card i.bx,
+        #notification-modal .notification-card .notification-icon {
+            color: inherit !important;
         }
 
-        .dark #notification-modal .text-visible {
-            color: #f9fafb !important;
+        .dark #notification-modal .notification-card,
+        .dark #notification-modal .notification-card * {
+            color: #f9fafb !important; /* light for dark mode */
+        }
+        
+        .dark #notification-modal .notification-card button,
+        .dark #notification-modal .notification-card .action-button {
+            color: white !important;
+        }
+        
+        .dark #notification-modal .notification-card i.bx,
+        .dark #notification-modal .notification-card .notification-icon {
+            color: inherit !important;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .system-mode #notification-modal .notification-card,
+            .system-mode #notification-modal .notification-card * {
+                color: #f9fafb !important;
+            }
+            
+            .system-mode #notification-modal .notification-card button,
+            .system-mode #notification-modal .notification-card .action-button {
+                color: white !important;
+            }
+            
+            .system-mode #notification-modal .notification-card i.bx,
+            .system-mode #notification-modal .notification-card .notification-icon {
+                color: inherit !important;
+            }
         }
     </style>
     @endpush
@@ -440,8 +554,15 @@
                     </div>
                 </div>
 
-                <div id="list" class="grid gap-4">
-                    <!-- Loading placeholders will be dynamically inserted by JavaScript -->
+                <div id="list" class="space-y-4">
+                    <!-- Notifications will be loaded here by JavaScript -->
+                    <div class="notification-card card-3d rounded-2xl p-6 fade-in text-center">
+                        <div class="flex items-center justify-center w-16 h-16 bg-blue-500/20 rounded-2xl mx-auto mb-4">
+                            <i class="bx bxs-bell text-3xl text-blue-600 dark:text-blue-400"></i>
+                        </div>
+                        <h3 class="text-lg font-semibold text-primary mb-2 text-visible">Loading Notifications...</h3>
+                        <p class="text-secondary text-sm text-visible">Please wait while we fetch your notifications.</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -491,9 +612,19 @@
         </div>
     </div>
 
-    @push('scripts')
     <script>
+        // Set AppUserId immediately
         window.AppUserId = {{ auth()->id() ?? 'null' }};
+        console.log('AppUserId from Blade:', window.AppUserId);
+        
+        // Force load notifications immediately
+        console.log('=== FORCE LOADING NOTIFICATIONS ===');
+        
+        // Load notifications immediately
+        setTimeout(function() {
+            console.log('Loading notifications after 1 second...');
+            load();
+        }, 1000);
 
         // Function to format date
         function formatDateTime(dateString) {
@@ -507,21 +638,51 @@
 
         // Function to get icon and color based on notification type
         function getNotificationStyle(type) {
-            if (!type) return { icon: 'bxs-bell', color: 'blue', bgColor: 'blue-500/20' };
+            if (!type) return { 
+                icon: 'bxs-bell', 
+                colorClass: 'text-blue-600 dark:text-blue-400',
+                bgColorClass: 'bg-blue-100 dark:bg-blue-900/30',
+                borderClass: 'border-blue-200 dark:border-blue-800'
+            };
 
             const typeLower = type.toLowerCase();
 
             if (typeLower.includes('error') || typeLower.includes('offline')) {
-                return { icon: 'bxs-error-circle', color: 'red', bgColor: 'red-500/20' };
+                return { 
+                    icon: 'bxs-error-circle', 
+                    colorClass: 'text-red-600 dark:text-red-400',
+                    bgColorClass: 'bg-red-100 dark:bg-red-900/30',
+                    borderClass: 'border-red-200 dark:border-red-800'
+                };
             } else if (typeLower.includes('success') || typeLower.includes('online')) {
-                return { icon: 'bxs-check-circle', color: 'green', bgColor: 'green-500/20' };
+                return { 
+                    icon: 'bxs-check-circle', 
+                    colorClass: 'text-green-600 dark:text-green-400',
+                    bgColorClass: 'bg-green-100 dark:bg-green-900/30',
+                    borderClass: 'border-green-200 dark:border-green-800'
+                };
             } else if (typeLower.includes('warning') || typeLower.includes('maintenance')) {
-                return { icon: 'bxs-error', color: 'yellow', bgColor: 'yellow-500/20' };
+                return { 
+                    icon: 'bxs-error', 
+                    colorClass: 'text-yellow-600 dark:text-yellow-400',
+                    bgColorClass: 'bg-yellow-100 dark:bg-yellow-900/30',
+                    borderClass: 'border-yellow-200 dark:border-yellow-800'
+                };
             } else if (typeLower.includes('info') || typeLower.includes('message')) {
-                return { icon: 'bxs-info-circle', color: 'blue', bgColor: 'blue-500/20' };
+                return { 
+                    icon: 'bxs-info-circle', 
+                    colorClass: 'text-blue-600 dark:text-blue-400',
+                    bgColorClass: 'bg-blue-100 dark:bg-blue-900/30',
+                    borderClass: 'border-blue-200 dark:border-blue-800'
+                };
             }
 
-            return { icon: 'bxs-bell', color: 'blue', bgColor: 'blue-500/20' };
+            return { 
+                icon: 'bxs-bell', 
+                colorClass: 'text-blue-600 dark:text-blue-400',
+                bgColorClass: 'bg-blue-100 dark:bg-blue-900/30',
+                borderClass: 'border-blue-200 dark:border-blue-800'
+            };
         }
 
         // Function to extract message from notification data
@@ -569,7 +730,9 @@
 
         async function load(){
             try {
+                console.log('=== LOADING NOTIFICATIONS ===');
                 console.log('Fetching notifications from /api/notifications/');
+                console.log('AppUserId:', window.AppUserId);
 
                 // Ensure we have a valid user
                 if (!window.AppUserId || window.AppUserId === 'null') {
@@ -584,40 +747,36 @@
                     throw new Error('Notification container not found');
                 }
 
+                console.log('Container found, showing loading state');
                 wrap.innerHTML = `
-                    <div class="notification-card card-3d rounded-2xl p-6 fade-in">
-                        <div class="flex items-center gap-4">
-                            <div class="flex items-center justify-center w-12 h-12 skeleton"></div>
-                            <div class="flex-1">
-                                <div class="h-4 skeleton mb-2"></div>
-                                <div class="h-3 skeleton w-3/4"></div>
-                            </div>
+                    <div class="notification-card card-3d rounded-2xl p-6 fade-in text-center">
+                        <div class="flex items-center justify-center w-16 h-16 bg-blue-500/20 rounded-2xl mx-auto mb-4">
+                            <i class="bx bxs-bell text-3xl text-blue-600 dark:text-blue-400 animate-pulse"></i>
                         </div>
-                    </div>
-                    <div class="notification-card card-3d rounded-2xl p-6 fade-in">
-                        <div class="flex items-center gap-4">
-                            <div class="flex items-center justify-center w-12 h-12 skeleton"></div>
-                            <div class="flex-1">
-                                <div class="h-4 skeleton mb-2"></div>
-                                <div class="h-3 skeleton w-1/2"></div>
-                            </div>
-                        </div>
+                        <h3 class="text-lg font-semibold text-primary mb-2 text-visible">Loading Notifications...</h3>
+                        <p class="text-secondary text-sm text-visible">Please wait while we fetch your notifications.</p>
                     </div>
                 `;
 
                 // Fix the API endpoint to match the defined route
+                const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+                console.log('CSRF Token:', csrfToken);
+                
+                console.log('Making fetch request to /api/notifications/');
                 const res = await fetch('/api/notifications/', {
                     method: 'GET',
                     headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '',
+                        'X-CSRF-TOKEN': csrfToken,
                         'Accept': 'application/json',
                         'Content-Type': 'application/json',
                         'X-Requested-With': 'XMLHttpRequest'
                     },
                     credentials: 'same-origin'
                 });
+                console.log('Fetch request completed');
 
                 console.log('Response status:', res.status);
+                console.log('Response headers:', res.headers);
 
                 if (!res.ok) {
                     const errorText = await res.text();
@@ -626,7 +785,10 @@
                 }
 
                 const data = await res.json();
+                console.log('=== API RESPONSE ===');
                 console.log('Received data:', data);
+                console.log('Success:', data.success);
+                console.log('Items count:', data.items ? data.items.length : 'No items');
 
                 if (!data.success) {
                     throw new Error(data.message || 'API returned failure');
@@ -634,7 +796,7 @@
 
                 console.log('Items received:', data.items);
                 if (!data.items || data.items.length === 0) {
-                    console.log('No items to display');
+                    console.log('=== NO ITEMS TO DISPLAY ===');
                     wrap.innerHTML = `
                         <div class="notification-card card-3d rounded-2xl p-6 fade-in text-center">
                             <div class="flex items-center justify-center w-16 h-16 bg-gray-500/20 rounded-2xl mx-auto mb-4">
@@ -649,13 +811,16 @@
 
                 // Clear the container
                 wrap.innerHTML = '';
+                console.log('=== RENDERING NOTIFICATIONS ===');
+                console.log('Total items to render:', data.items.length);
 
                 data.items.forEach((n, index) => {
-                    console.log('Processing notification item:', n);
+                    console.log(`Processing notification ${index + 1}:`, n);
                     const delay = index * 0.1;
                     const d = document.createElement('div');
-                    d.className = 'notification-card card-3d rounded-2xl p-6 fade-in';
+                    d.className = 'notification-card card-3d rounded-2xl p-6 fade-in border-2';
                     d.style.animationDelay = `${delay}s`;
+                    d.style.marginBottom = '1rem';
 
                     // Get notification style based on type
                     const style = getNotificationStyle(n.type);
@@ -669,10 +834,32 @@
                     const formattedDate = n.created_at ? formatDateTime(n.created_at) : 'Unknown time';
                     console.log('Formatted date:', formattedDate);
 
+                    // Determine color values for inline styles
+                    let bgColor, borderColor, iconColor;
+                    const typeLower = (n.type || '').toLowerCase();
+                    
+                    if (typeLower.includes('error') || typeLower.includes('offline')) {
+                        bgColor = 'rgb(254 242 242)'; // red-50
+                        borderColor = 'rgb(254 202 202)'; // red-300
+                        iconColor = 'rgb(220 38 38)'; // red-600
+                    } else if (typeLower.includes('success') || typeLower.includes('online')) {
+                        bgColor = 'rgb(240 253 244)'; // green-50
+                        borderColor = 'rgb(187 247 208)'; // green-300
+                        iconColor = 'rgb(22 163 74)'; // green-600
+                    } else if (typeLower.includes('warning') || typeLower.includes('maintenance')) {
+                        bgColor = 'rgb(254 252 232)'; // yellow-50
+                        borderColor = 'rgb(254 240 138)'; // yellow-300
+                        iconColor = 'rgb(202 138 4)'; // yellow-700
+                    } else {
+                        bgColor = 'rgb(239 246 255)'; // blue-50
+                        borderColor = 'rgb(191 219 254)'; // blue-300
+                        iconColor = 'rgb(37 99 235)'; // blue-600
+                    }
+
                     d.innerHTML = `
-                        <div class="flex items-start gap-4 cursor-pointer" onclick="showNotificationModal(${JSON.stringify(n).replace(/"/g, '&quot;')})">
-                            <div class="flex items-center justify-center w-12 h-12 bg-${style.bgColor} rounded-xl flex-shrink-0">
-                                <i class="bx ${style.icon} notification-icon text-2xl text-${style.color}-600 dark:text-${style.color}-400"></i>
+                        <div class="flex items-start gap-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 p-2 rounded-lg transition-colors" onclick="showNotificationModal(${JSON.stringify(n).replace(/"/g, '&quot;')})">
+                            <div class="flex items-center justify-center w-12 h-12 rounded-xl flex-shrink-0 border-2" style="background-color: ${bgColor}; border-color: ${borderColor};">
+                                <i class="bx ${style.icon} notification-icon text-2xl" style="color: ${iconColor};"></i>
                             </div>
                             <div class="flex-1 min-w-0">
                                 <div class="flex items-center gap-2 mb-1">
@@ -682,21 +869,26 @@
                                         '<span class="status-indicator status-unread pulse-dot" title="Unread"></span>'
                                     }
                                 </div>
-                                <div class="text-sm text-secondary mb-2 break-words text-visible">${message}</div>
+                                <div class="text-sm text-secondary mb-2 break-words text-visible font-medium">${message}</div>
                                 <div class="text-xs text-tertiary text-visible">${formattedDate}</div>
                             </div>
                             <div class="flex items-center gap-2">
                                 ${n.read_at ?
                                     '<span class="text-xs text-success font-medium text-visible">Read</span>' :
-                                    `<button class="p-2 action-button shadow-lg transform transition-all duration-300 cursor-pointer" onclick="markAsRead('${n.id}'); event.stopPropagation();" title="Mark as read">
-                                        <i class="bx bxs-check text-sm"></i>
+                                    `<button class="px-3 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors duration-200 action-button" onclick="markAsRead('${n.id}'); event.stopPropagation();" title="Mark as read">
+                                        <i class="bx bxs-check mr-1"></i> Mark as Read
                                     </button>`
                                 }
                             </div>
                         </div>
                     `;
+                    console.log(`Rendered notification ${index + 1}, appending to DOM`);
                     wrap.appendChild(d);
                 });
+                
+                console.log('=== RENDERING COMPLETE ===');
+                console.log('Total elements in container:', wrap.children.length);
+                console.log('Container innerHTML length:', wrap.innerHTML.length);
             } catch (error) {
                 console.error('Error loading notifications:', error);
                 const wrap = document.getElementById('list');
@@ -720,14 +912,32 @@
 
         // Load notifications on page load
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('=== DOM LOADED ===');
             console.log('DOM loaded, attempting to load notifications');
+            
             // Ensure AppUserId is set
             if (typeof window.AppUserId === 'undefined' || window.AppUserId === 'null') {
                 window.AppUserId = {{ auth()->id() ?? 'null' }};
             }
             console.log('AppUserId:', window.AppUserId);
+            
+            // Test if container exists
+            const container = document.getElementById('list');
+            if (container) {
+                console.log('✓ Container found:', container);
+                console.log('Container classes:', container.className);
+                console.log('Container style:', container.style.cssText);
+            } else {
+                console.error('✗ Container not found!');
+            }
 
-            load();
+            // Test load function
+            console.log('Calling load() function...');
+            try {
+                load();
+            } catch (error) {
+                console.error('Error calling load():', error);
+            }
 
             // Watch for color scheme changes
             if (window.matchMedia) {
@@ -735,6 +945,19 @@
                 colorSchemeQuery.addEventListener('change', load);
             }
         });
+        
+        // Also try to load immediately (in case DOMContentLoaded already fired)
+        console.log('=== IMMEDIATE LOAD ATTEMPT ===');
+        if (document.readyState === 'loading') {
+            console.log('Document still loading, waiting for DOMContentLoaded');
+        } else {
+            console.log('Document already loaded, calling load() immediately');
+            try {
+                load();
+            } catch (error) {
+                console.error('Error calling load() immediately:', error);
+            }
+        }
 
         // Auto-refresh every 30 seconds
         setInterval(load, 30000);
@@ -755,16 +978,44 @@
 
         // Function to show notification detail modal
         function showNotificationModal(notification) {
-            console.log('Showing notification modal for:', notification);
+            console.log('=== SHOWING NOTIFICATION MODAL ===');
+            console.log('Notification data:', notification);
             currentNotification = notification;
 
             // Set modal content
             const style = getNotificationStyle(notification.type);
             console.log('Notification style:', style);
 
+            // Determine color values for inline styles
+            let bgColor, borderColor, iconColor;
+            const typeLower = (notification.type || '').toLowerCase();
+            
+            if (typeLower.includes('error') || typeLower.includes('offline')) {
+                bgColor = 'rgb(254 242 242)'; // red-50
+                borderColor = 'rgb(254 202 202)'; // red-300
+                iconColor = 'rgb(220 38 38)'; // red-600
+            } else if (typeLower.includes('success') || typeLower.includes('online')) {
+                bgColor = 'rgb(240 253 244)'; // green-50
+                borderColor = 'rgb(187 247 208)'; // green-300
+                iconColor = 'rgb(22 163 74)'; // green-600
+            } else if (typeLower.includes('warning') || typeLower.includes('maintenance')) {
+                bgColor = 'rgb(254 252 232)'; // yellow-50
+                borderColor = 'rgb(254 240 138)'; // yellow-300
+                iconColor = 'rgb(202 138 4)'; // yellow-700
+            } else {
+                bgColor = 'rgb(239 246 255)'; // blue-50
+                borderColor = 'rgb(191 219 254)'; // blue-300
+                iconColor = 'rgb(37 99 235)'; // blue-600
+            }
+
             // Set icon and background
-            document.getElementById('modal-icon-container').className = `flex items-center justify-center w-12 h-12 bg-${style.bgColor} rounded-xl flex-shrink-0`;
-            document.getElementById('modal-icon').className = `bx ${style.icon} notification-icon text-2xl text-${style.color}-600 dark:text-${style.color}-400`;
+            const iconContainer = document.getElementById('modal-icon-container');
+            iconContainer.className = 'flex items-center justify-center w-12 h-12 rounded-xl flex-shrink-0 border-2';
+            iconContainer.style.backgroundColor = bgColor;
+            iconContainer.style.borderColor = borderColor;
+            
+            document.getElementById('modal-icon').className = `bx ${style.icon} notification-icon text-2xl`;
+            document.getElementById('modal-icon').style.color = iconColor;
 
             // Set type and status
             document.getElementById('modal-type').textContent = notification.type || 'Notification';
@@ -818,14 +1069,22 @@
 
         // Function to close notification detail modal
         function closeNotificationModal() {
-            console.log('Closing notification modal');
-            document.getElementById('notification-modal').classList.add('hidden');
+            console.log('=== CLOSING NOTIFICATION MODAL ===');
+            const modal = document.getElementById('notification-modal');
+            if (modal) {
+                modal.classList.add('hidden');
+                console.log('Modal hidden');
+            } else {
+                console.error('Modal element not found');
+            }
             currentNotification = null;
             console.log('Modal closed');
         }
 
         // Function to mark notification as read
         async function markAsRead(notificationId) {
+            console.log('=== MARKING AS READ ===');
+            console.log('Notification ID:', notificationId);
             try {
                 const response = await fetch(`/api/notifications/${notificationId}/read`, {
                     method: 'POST',
@@ -839,8 +1098,10 @@
                 });
 
                 const data = await response.json();
+                console.log('Mark as read response:', data);
 
                 if (data.success) {
+                    console.log('Successfully marked as read');
                     // Reload notifications
                     load();
                     // Close modal if it's for the current notification
@@ -849,9 +1110,11 @@
                     }
                 } else {
                     console.error('Failed to mark notification as read:', data.message);
+                    alert('Failed to mark notification as read: ' + data.message);
                 }
             } catch (error) {
                 console.error('Error marking notification as read:', error);
+                alert('Error marking notification as read: ' + error.message);
             }
         }
 
@@ -888,7 +1151,11 @@
 
         // Function to delete notification
         async function deleteNotification(notificationId) {
+            console.log('=== DELETING NOTIFICATION ===');
+            console.log('Notification ID:', notificationId);
+            
             if (!confirm('Are you sure you want to delete this notification?')) {
+                console.log('Delete cancelled by user');
                 return;
             }
 
@@ -905,8 +1172,10 @@
                 });
 
                 const data = await response.json();
+                console.log('Delete response:', data);
 
                 if (data.success) {
+                    console.log('Successfully deleted notification');
                     // Reload notifications
                     load();
                     // Close modal
@@ -930,5 +1199,4 @@
             }
         });
     </script>
-    @endpush
 </x-layouts.app>

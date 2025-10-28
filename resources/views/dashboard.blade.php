@@ -193,7 +193,7 @@
                             <x-bxs-location-plus class="text-xl w-6 h-6" />
                         </div>
                         <div>
-                            <div class="font-bold text-sm">Manage Locations</div>
+                            <div class="font-bold text-sm">Manage Playlist Locations</div>
                         </div>
                     </div>
                     <div class="flex items-center gap-3 p-4 bg-gradient-to-r from-purple-500 to-purple-600 rounded-2xl text-white card-3d fade-in hover:shadow-2xl transition-all duration-300 cursor-pointer group" onclick="window.location.href='{{ route('contact') }}'">

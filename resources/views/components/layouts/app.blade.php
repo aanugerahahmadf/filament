@@ -3,7 +3,7 @@
     <head>
         @include('partials.head')
         <style>
-            /* Force sidebar to be completely hidden when collapsed */
+            /* Sidebar visibility - hide when explicitly collapsed */
             [data-flux-sidebar-collapsed-desktop] {
                 display: none !important;
                 width: 0 !important;
@@ -34,7 +34,15 @@
                 flex: 1 !important;
             }
 
-            /* Prevent sidebar from scrolling - override Flux defaults */
+            /* Always show sidebar on desktop by default */
+            @media (min-width: 769px) {
+                [data-flux-sidebar]:not([data-flux-sidebar-collapsed-desktop]) {
+                    display: flex !important;
+                    width: 256px !important;
+                }
+            }
+
+            /* Sidebar no scroll - fixed height */
             [data-flux-sidebar] {
                 overflow-y: hidden !important;
                 position: relative !important;
@@ -47,22 +55,8 @@
                 max-height: calc(100vh - 200px) !important;
             }
 
-            /* Override Flux sidebar sticky overflow */
-            [data-flux-sidebar].max-h-dvh.overflow-y-auto {
-                overflow-y: hidden !important;
-            }
-
-            /* Additional override for any overflow-y-auto classes */
-            [data-flux-sidebar] .overflow-y-auto,
-            [data-flux-sidebar] .max-h-dvh.overflow-y-auto.overscroll-contain {
-                overflow-y: hidden !important;
-                overscroll-behavior: none !important;
-            }
-
-            /* Override Flux aside component */
-            [data-flux-aside] .max-h-\[100vh\].overflow-y-auto {
-                overflow-y: hidden !important;
-            }
+            /* Allow sidebar to scroll - removed conflicting overrides */
+            /* Note: Sidebar now uses overflow-y: auto to show all menu items */
 
             /* Ensure consistent height across all layout elements */
             html, body {
@@ -241,6 +235,14 @@
                 flex-shrink: 0 !important;
             }
 
+            /* Hide mobile sidebar on desktop - only show on mobile */
+            @media (min-width: 769px) {
+                /* Hide mobile sidebar on desktop */
+                #mobile-sidebar {
+                    display: none !important;
+                }
+            }
+
             /* Ensure sidebar responsive behavior */
             @media (max-width: 768px) {
                 [data-flux-sidebar] {
@@ -248,9 +250,11 @@
                     top: 0 !important;
                     left: 0 !important;
                     height: 100vh !important;
+                    width: 256px !important;
                     z-index: 50 !important;
                     transform: translateX(-100%) !important;
                     transition: transform 0.3s ease !important;
+                    overflow-y: auto !important;
                 }
 
                 [data-flux-sidebar].sidebar-open {
@@ -259,6 +263,19 @@
 
                 [data-flux-sidebar].sidebar-hidden {
                     transform: translateX(-100%) !important;
+                }
+
+                /* No scroll on mobile - fixed height */
+                [data-flux-sidebar] .flux-navlist {
+                    overflow-y: hidden !important;
+                    max-height: calc(100vh - 150px) !important;
+                }
+
+                [data-flux-sidebar] .flux-navlist-item {
+                    display: flex !important;
+                    align-items: center !important;
+                    white-space: nowrap !important;
+                    min-height: 44px !important;
                 }
 
                 /* Add backdrop for mobile */
@@ -283,12 +300,31 @@
                     position: relative !important;
                     transform: none !important;
                     transition: width 0.3s ease, padding 0.3s ease !important;
+                    overflow-y: hidden !important;
                 }
             }
         </style>
         <script>
             document.addEventListener('DOMContentLoaded', function() {
                 let sidebarVisible = true;
+
+                function updateToggleIcon() {
+                    const openIcon = document.getElementById('sidebar-open-icon');
+                    const closeIcon = document.getElementById('sidebar-close-icon');
+                    
+                    if (openIcon && closeIcon) {
+                        if (sidebarVisible) {
+                            openIcon.classList.add('hidden');
+                            closeIcon.classList.remove('hidden');
+                        } else {
+                            openIcon.classList.remove('hidden');
+                            closeIcon.classList.add('hidden');
+                        }
+                    }
+                }
+                
+                // Initialize icon state
+                updateToggleIcon();
 
                 function toggleSidebar() {
                     const sidebar = document.querySelector('[data-flux-sidebar]');
@@ -328,6 +364,9 @@
                                 console.log('✅ Desktop Sidebar VISIBLE');
                             }
                         }
+                        
+                        // Update icon based on sidebar state
+                        updateToggleIcon();
                     } else {
                         console.error('❌ Sidebar or main content not found!');
                     }
@@ -367,6 +406,9 @@
                             mainContent.style.cssText = 'width: auto !important; flex: 1 !important;';
                         }
                     }
+                    
+                    // Update icon state
+                    updateToggleIcon();
                 }
 
                 // Initial responsive check

@@ -13,14 +13,21 @@ class SuperAdminSeeder extends Seeder
      */
     public function run(): void
     {
-        // Create super admin user
-        $user = User::firstOrCreate([
+        // Create or update super admin user with all required fields
+        $user = User::updateOrCreate([
             'email' => 'admin@pertamina.com',
         ],
         [
             'name' => 'Super Admin',
             'username' => 'superadmin',
             'password' => bcrypt('@Admin123'),
+            'place_of_birth' => 'Balongan',
+            'city' => 'Indramayu',
+            'date_of_birth' => '1980-01-01',
+            'phone_number' => '+6281234567890',
+            'status' => 'online',
+            'email_verified_at' => now(),
+            'last_seen_at' => now(),
         ]);
 
         // Assign Super Admin role
@@ -29,6 +36,6 @@ class SuperAdminSeeder extends Seeder
             $user->assignRole($superAdminRole);
         }
 
-        $this->command->info('Super admin user created with email: admin@pertamina.com and password: @Admin123');
+        $this->command->info('Super admin user created/updated with email: admin@pertamina.com and password: @Admin123');
     }
 }

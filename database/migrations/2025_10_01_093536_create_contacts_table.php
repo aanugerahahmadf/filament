@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('whatsapp')->nullable();
             $table->string('instagram')->nullable();
             $table->string('phone_number')->nullable();
+            $table->text('address')->nullable();
             $table->timestamps();
         });
     }

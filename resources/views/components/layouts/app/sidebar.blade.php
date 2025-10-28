@@ -1,4 +1,4 @@
-<flux:sidebar collapsible="true" class="border-e border-zinc-300 dark:border-zinc-600 bg-gradient-to-b from-zinc-50 to-zinc-100 dark:from-zinc-900 dark:to-zinc-800 lg:w-64 h-screen overflow-y-hidden shadow-lg">
+<flux:sidebar collapsible="true" class="border-e border-zinc-300 dark:border-zinc-600 bg-gradient-to-b from-zinc-50 to-zinc-100 dark:from-zinc-900 dark:to-zinc-800 lg:w-64 h-screen overflow-hidden shadow-lg">
     <flux:sidebar.toggle class="lg:hidden" icon="x-mark" />
 
     <div class="flex justify-center py-4">
@@ -7,7 +7,7 @@
         </a>
     </div>
 
-    <flux:navlist variant="outline" class="flex-1 px-2 overflow-y-hidden">
+    <flux:navlist variant="outline" class="flex-1 px-2 overflow-hidden">
         <flux:navlist.group :heading="__('Platform')" class="grid">
             <flux:navlist.item :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate class="border border-zinc-300 dark:border-zinc-500 rounded-xl mb-2 font-bold hover:border-zinc-400 dark:hover:border-zinc-400 transition-all duration-200 hover:shadow-md">
                 <x-bxs-dashboard class="inline-block w-5 h-5 shrink-0 me-2" /> {{ __('Dashboard') }}

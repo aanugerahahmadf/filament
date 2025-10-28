@@ -3,6 +3,8 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use App\Models\Message;
+use App\Events\MessageDelivered;
 
 class TestRealtimeMessageStatus extends Command
 {
@@ -25,6 +27,16 @@ class TestRealtimeMessageStatus extends Command
      */
     public function handle()
     {
-        //
+        $message = Message::latest('id')->first();
+        if (! $message) {
+            $this->error('No messages found to mark delivered.');
+            return 1;
+        }
+
+        $message->markAsDelivered();
+        event(new MessageDelivered($message));
+
+        $this->info('Message marked delivered and broadcast. ID: ' . $message->id);
+        return 0;
     }
 }
