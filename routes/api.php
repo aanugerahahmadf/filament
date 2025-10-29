@@ -41,8 +41,8 @@ Route::prefix('notifications')->middleware(['auth:sanctum'])->group(function () 
     Route::post('/{id}/unread', [NotificationApiController::class, 'markAsUnread'])->name('api.notifications.mark-as-unread');
 });
 
-// CCTV API routes
-Route::prefix('cctvs')->group(function () {
+// CCTV API routes - Protected with auth:sanctum
+Route::prefix('cctvs')->middleware(['auth:sanctum'])->group(function () {
     Route::get('/', [CctvApiController::class, 'index'])->name('api.cctvs.index');
     Route::get('/{cctv}', [CctvApiController::class, 'show'])->name('api.cctvs.show');
     Route::get('/{cctv}/check-status', [CctvApiController::class, 'checkStatus'])->name('api.cctvs.check-status');
@@ -53,29 +53,29 @@ Route::prefix('cctvs')->group(function () {
     Route::get('/map-data', [CctvApiController::class, 'mapData'])->name('api.cctvs.map-data');
 });
 
-// Building API routes
-Route::prefix('buildings')->group(function () {
+// Building API routes - Protected with auth:sanctum
+Route::prefix('buildings')->middleware(['auth:sanctum'])->group(function () {
     Route::get('/', [BuildingApiController::class, 'index'])->name('api.buildings.index');
     Route::get('/{building}', [BuildingApiController::class, 'show'])->name('api.buildings.show');
     Route::get('/{building}/statistics', [BuildingApiController::class, 'statistics'])->name('api.buildings.statistics');
 });
 
-// Room API routes
-Route::prefix('rooms')->group(function () {
+// Room API routes - Protected with auth:sanctum
+Route::prefix('rooms')->middleware(['auth:sanctum'])->group(function () {
     Route::get('/', [RoomApiController::class, 'index'])->name('api.rooms.index');
     Route::get('/{room}', [RoomApiController::class, 'show'])->name('api.rooms.show');
     Route::get('/{room}/statistics', [RoomApiController::class, 'statistics'])->name('api.rooms.statistics');
 });
 
-// Maintenance API routes
-Route::prefix('maintenances')->group(function () {
+// Maintenance API routes - Protected with auth:sanctum
+Route::prefix('maintenances')->middleware(['auth:sanctum'])->group(function () {
     Route::get('/', [MaintenanceApiController::class, 'index'])->name('api.maintenances.index');
     Route::get('/{maintenance}', [MaintenanceApiController::class, 'show'])->name('api.maintenances.show');
     Route::get('/statistics', [MaintenanceApiController::class, 'statistics'])->name('api.maintenances.statistics');
 });
 
-// Alert API routes
-Route::prefix('alerts')->group(function () {
+// Alert API routes - Protected with auth:sanctum
+Route::prefix('alerts')->middleware(['auth:sanctum'])->group(function () {
     Route::get('/', [AlertApiController::class, 'index'])->name('api.alerts.index');
     Route::get('/{alert}', [AlertApiController::class, 'show'])->name('api.alerts.show');
     Route::get('/statistics', [AlertApiController::class, 'statistics'])->name('api.alerts.statistics');
