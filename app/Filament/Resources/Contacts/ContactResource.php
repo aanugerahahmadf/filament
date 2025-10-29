@@ -2,21 +2,20 @@
 
 namespace App\Filament\Resources\Contacts;
 
-
-use App\Filament\Resources\Contacts\Pages\CreateContact;
-use App\Filament\Resources\Contacts\Pages\EditContact;
-use App\Filament\Resources\Contacts\Pages\ListContacts;
-use App\Filament\Resources\Contacts\Pages\ViewContact;
-use App\Filament\Resources\Contacts\Schemas\ContactForm;
-use App\Filament\Resources\Contacts\Schemas\ContactInfolist;
-use App\Filament\Resources\Contacts\Tables\ContactsTable;
+use App\Filament\Resources\Contacts\Pages\ManageContacts;
 use App\Models\Contact;
 use BackedEnum;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\ViewAction;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
+use Filament\Forms\Components\TextInput;
 use Filament\Tables\Table;
 use UnitEnum;
-
 class ContactResource extends Resource
 {
     protected static ?string $model = Contact::class;
@@ -35,42 +34,74 @@ class ContactResource extends Resource
 
     public static function form(Schema $schema): Schema
     {
-        return ContactForm::configure($schema);
-    }
-
-    public static function infolist(Schema $schema): Schema
-    {
-        return ContactInfolist::configure($schema);
+        return $schema
+            ->components([
+                TextInput::make('email')
+                    ->label('Email address')
+                    ->email(),
+                TextInput::make('whatsapp'),
+                TextInput::make('instagram'),
+                TextInput::make('phone_number')
+                    ->label('Phone Number')
+                    ->tel(),
+            ]);
     }
 
     public static function table(Table $table): Table
     {
-        return ContactsTable::configure($table);
-    }
-
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
+        return $table
+            ->columns([
+                TextColumn::make('email')
+                    ->label('Email address')
+                    ->searchable(),
+                TextColumn::make('whatsapp')
+                    ->searchable(),
+                TextColumn::make('instagram')
+                    ->searchable(),
+                TextColumn::make('phone_number')
+                    ->label('Phone Number')
+                    ->searchable(),
+                TextColumn::make('address')
+                    ->label('Address')
+                    ->searchable(),
+            ])
+            ->filters([
+                //
+            ])
+            ->recordActions([
+                 ViewAction::make()
+                    ->button()
+                    ->color('info')
+                    ->size('lg'),
+                EditAction::make()
+                    ->button()
+                    ->color('warning')
+                    ->size('lg'),
+                DeleteAction::make()
+                    ->button()
+                    ->color('danger')
+                    ->size('lg'),
+            ])
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
+                ]),
+            ]);
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => ListContacts::route('/'),
-            'create' => CreateContact::route('/create'),
-            'view' => ViewContact::route('/{record}'),
-            'edit' => EditContact::route('/{record}/edit'),
+            'index' => ManageContacts::route('/'),
         ];
     }
 
-    public static function getNavigationBadge(): ?string
+        public static function getNavigationBadge(): ?string
     {
         return static::$model::count();
     }
 
-    public static function getNavigationBadgeColor(): ?string
+        public static function getNavigationBadgeColor(): ?string
     {
         return static::getModel()::count() > 10 ? 'warning' : 'primary';
     }

@@ -3,13 +3,12 @@
 namespace App\Filament\Resources\Contacts\Pages;
 
 use App\Filament\Resources\Contacts\ContactResource;
-use App\Filament\Resources\Contacts\Widgets\ContactStatsChart;
 use App\Filament\Exports\ContactExporter;
 use Filament\Actions\CreateAction;
 use Filament\Actions\ExportAction;
-use Filament\Resources\Pages\ListRecords;
+use Filament\Resources\Pages\ManageRecords;
 
-class ListContacts extends ListRecords
+class ManageContacts extends ManageRecords
 {
     protected static string $resource = ContactResource::class;
 
@@ -17,16 +16,14 @@ class ListContacts extends ListRecords
     {
         return [
             CreateAction::make(),
-            ExportAction::make()
+                ExportAction::make()
                 ->exporter(ContactExporter::class)
                 ->columnMapping(false),
         ];
     }
 
-    protected function getHeaderWidgets(): array
+    public function getPollingInterval(): ?string
     {
-        return [
-            ContactStatsChart::class,
-        ];
+        return '5s';
     }
 }

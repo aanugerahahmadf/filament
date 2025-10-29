@@ -3,13 +3,12 @@
 namespace App\Filament\Resources\Rooms\Pages;
 
 use App\Filament\Resources\Rooms\RoomResource;
-use App\Filament\Resources\Rooms\Widgets\RoomStatusChart;
 use App\Filament\Exports\RoomExporter;
 use Filament\Actions\CreateAction;
 use Filament\Actions\ExportAction;
-use Filament\Resources\Pages\ListRecords;
+use Filament\Resources\Pages\ManageRecords;
 
-class ListRooms extends ListRecords
+class ManageRooms extends ManageRecords
 {
     protected static string $resource = RoomResource::class;
 
@@ -23,10 +22,8 @@ class ListRooms extends ListRecords
         ];
     }
 
-    protected function getHeaderWidgets(): array
+        public function getPollingInterval(): ?string
     {
-        return [
-            RoomStatusChart::class,
-        ];
+        return '5s';
     }
 }

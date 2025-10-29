@@ -3,13 +3,12 @@
 namespace App\Filament\Resources\Messages\Pages;
 
 use App\Filament\Resources\Messages\MessageResource;
-use App\Filament\Resources\Messages\Widgets\MessageStatsChart;
 use App\Filament\Exports\MessageExporter;
 use Filament\Actions\CreateAction;
 use Filament\Actions\ExportAction;
-use Filament\Resources\Pages\ListRecords;
+use Filament\Resources\Pages\ManageRecords;
 
-class ListMessages extends ListRecords
+class ManageMessages extends ManageRecords
 {
     protected static string $resource = MessageResource::class;
 
@@ -17,7 +16,7 @@ class ListMessages extends ListRecords
     {
         return [
             CreateAction::make(),
-            ExportAction::make()
+               ExportAction::make()
                 ->exporter(MessageExporter::class)
                 ->columnMapping(false),
         ];
@@ -26,12 +25,5 @@ class ListMessages extends ListRecords
     public function getPollingInterval(): ?string
     {
         return '5s';
-    }
-
-    protected function getHeaderWidgets(): array
-    {
-        return [
-            MessageStatsChart::class,
-        ];
     }
 }

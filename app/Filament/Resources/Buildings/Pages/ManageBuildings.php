@@ -3,13 +3,12 @@
 namespace App\Filament\Resources\Buildings\Pages;
 
 use App\Filament\Resources\Buildings\BuildingResource;
-use App\Filament\Resources\Buildings\Widgets\BuildingStatsChart;
 use App\Filament\Exports\BuildingExporter;
 use Filament\Actions\CreateAction;
 use Filament\Actions\ExportAction;
-use Filament\Resources\Pages\ListRecords;
+use Filament\Resources\Pages\ManageRecords;
 
-class ListBuildings extends ListRecords
+class ManageBuildings extends ManageRecords
 {
     protected static string $resource = BuildingResource::class;
 
@@ -23,10 +22,8 @@ class ListBuildings extends ListRecords
         ];
     }
 
-    protected function getHeaderWidgets(): array
+     public function getPollingInterval(): ?string
     {
-        return [
-            BuildingStatsChart::class,
-        ];
+        return '5s';
     }
 }

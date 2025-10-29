@@ -2,18 +2,24 @@
 
 namespace App\Filament\Resources\Cctvs;
 
-use App\Filament\Resources\Cctvs\Pages\CreateCctv;
-use App\Filament\Resources\Cctvs\Pages\EditCctv;
-use App\Filament\Resources\Cctvs\Pages\ListCctvs;
-use App\Filament\Resources\Cctvs\Pages\LiveStream;
-use App\Filament\Resources\Cctvs\Pages\ViewCctv;
-use App\Filament\Resources\Cctvs\Schemas\CctvForm;
-use App\Filament\Resources\Cctvs\Schemas\CctvInfolist;
-use App\Filament\Resources\Cctvs\Tables\CctvsTable;
+use App\Filament\Resources\Cctvs\Pages\ManageCctvs;
 use App\Models\Cctv;
+use BackedEnum;
+use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\ViewAction;
+use Filament\Actions\Action;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use App\Filament\Resources\Cctvs\Pages\LiveStream;
 use UnitEnum;
 
 class CctvResource extends Resource
@@ -32,49 +38,152 @@ class CctvResource extends Resource
 
     public static function form(Schema $schema): Schema
     {
-        return CctvForm::configure($schema);
-    }
-
-    public static function infolist(Schema $schema): Schema
-    {
-        return CctvInfolist::configure($schema);
+        return $schema
+            ->components([
+                Select::make('building_id')
+                    ->relationship('building', 'name')
+                    ->required(),
+                Select::make('room_id')
+                    ->relationship('room', 'name')
+                    ->required(),
+                TextInput::make('name')
+                    ->required(),
+                TextInput::make('stream_username')
+                    ->default('admin'),
+                TextInput::make('stream_password')
+                    ->password()
+                    ->default('password.123')
+                    ->revealable(),
+                TextInput::make('ip_rtsp')
+                    ->required(),
+                TextInput::make('port')
+                    ->required()
+                    ->numeric()
+                    ->default(554),
+                Select::make('connection_type')
+                    ->options([
+                        'wired' => 'Wired (LAN Cable)',
+                        'wireless' => 'Wireless (Wi-Fi)'
+                    ])
+                    ->default('wired')
+                    ->required(),
+                Select::make('status')
+                    ->options([
+                        'online' => 'Online',
+                        'offline' => 'Offline',
+                        'maintenance' => 'Maintenance'
+                    ])
+                    ->default('offline')
+                    ->required()
+                    ->disabled(),
+                DateTimePicker::make('last_seen_at')
+                    ->disabled(), // Make it disabled since it should be automatically updated
+            ]);
     }
 
     public static function table(Table $table): Table
     {
-        return CctvsTable::configure($table);
-    }
-
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
+        return $table
+            ->columns([
+                TextColumn::make('building.name')
+                    ->searchable(),
+                TextColumn::make('room.name')
+                    ->searchable(),
+                TextColumn::make('name')
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('stream_username')
+                    ->searchable(),
+                TextColumn::make('ip_rtsp')
+                    ->searchable(),
+                TextColumn::make('port')
+                    ->formatStateUsing(fn (string $state): string => number_format((float) $state))
+                    ->sortable(),
+                TextColumn::make('connection_type')
+                    ->formatStateUsing(fn (string $state): string => ucfirst($state))
+                    ->badge()
+                    ->color(fn (string $state): string => $state === 'wired' ? 'success' : 'info'),
+                TextColumn::make('status')
+                    ->badge(),
+                TextColumn::make('recording')
+                    ->formatStateUsing(fn (bool $state): string => $state ? 'Yes' : 'No')
+                    ->badge()
+                    ->color(fn (bool $state): string => $state ? 'success' : 'danger'),
+                TextColumn::make('last_seen_at')
+                    ->dateTime()
+                    ->sortable(),
+                TextColumn::make('created_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('updated_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+            ])
+            ->filters([
+                //
+            ])
+            ->recordActions([
+                ViewAction::make()
+                    ->button()
+                    ->color('info')
+                    ->size('xl')
+                    ->extraAttributes([
+                        'class' => 'shadow-lg',
+                    ]),
+                EditAction::make()
+                    ->button()
+                    ->color('warning')
+                    ->size('xl')
+                    ->extraAttributes([
+                        'class' => 'shadow-lg',
+                    ]),
+                DeleteAction::make()
+                    ->button()
+                    ->color('danger')
+                    ->size('xl')
+                    ->extraAttributes([
+                        'class' => 'shadow-lg',
+                    ]),
+                Action::make('live_stream')
+                    ->icon('heroicon-o-video-camera')
+                    ->color('success')
+                    ->size('xl')
+                    ->button()
+                    ->extraAttributes([
+                        'class' => 'shadow-lg',
+                    ])
+                    ->url(fn ($record) => \App\Filament\Resources\Cctvs\CctvResource::getUrl('live-stream', ['record' => $record])),
+            ])
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
+                ]),
+            ]);
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => ListCctvs::route('/'),
-            'create' => CreateCctv::route('/create'),
-            'view' => ViewCctv::route('/{record}'),
-            'edit' => EditCctv::route('/{record}/edit'),
+            'index' => ManageCctvs::route('/'),
             'live-stream' => LiveStream::route('/{record}/live-stream'),
         ];
     }
 
-    public static function getNavigationBadge(): ?string
+        public static function getNavigationBadge(): ?string
     {
         return static::$model::count();
     }
-
-    public static function getNavigationBadgeColor(): ?string
+    
+        public static function getNavigationBadgeColor(): ?string
     {
         return static::getModel()::count() > 10 ? 'warning' : 'primary';
     }
 
     public static function getNavigationBadgeTooltip(): ?string
     {
-        return 'The number of CCTVs';
+        return 'The number of CCTV';
     }
+
 }

@@ -3,13 +3,12 @@
 namespace App\Filament\Resources\Users\Pages;
 
 use App\Filament\Resources\Users\UserResource;
-use App\Filament\Resources\Users\Widgets\UserStatsChart;
 use App\Filament\Exports\UserExporter;
 use Filament\Actions\CreateAction;
 use Filament\Actions\ExportAction;
-use Filament\Resources\Pages\ListRecords;
+use Filament\Resources\Pages\ManageRecords;
 
-class ListUsers extends ListRecords
+class ManageUsers extends ManageRecords
 {
     protected static string $resource = UserResource::class;
 
@@ -17,7 +16,7 @@ class ListUsers extends ListRecords
     {
         return [
             CreateAction::make(),
-            ExportAction::make()
+                ExportAction::make()
                 ->exporter(UserExporter::class)
                 ->columnMapping(false),
         ];
@@ -26,12 +25,5 @@ class ListUsers extends ListRecords
     public function getPollingInterval(): ?string
     {
         return '5s';
-    }
-
-    protected function getHeaderWidgets(): array
-    {
-        return [
-            UserStatsChart::class,
-        ];
     }
 }
