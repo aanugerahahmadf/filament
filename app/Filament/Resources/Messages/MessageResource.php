@@ -28,6 +28,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Filters\TrashedFilter;
+use Filament\Forms\Components\MarkdownEditor;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -66,22 +67,10 @@ class MessageResource extends Resource
                     ->required()
                     ->searchable()
                     ->label('To User'),
-                Textarea::make('body')
+                MarkdownEditor::make('body')
                     ->required()
                     ->columnSpanFull()
                     ->label('Message Content'),
-                TextInput::make('subject')
-                    ->label('Subject'),
-                TextInput::make('type')
-                    ->required()
-                    ->default('message')
-                    ->label('Message Type')
-                    ->readOnly(),
-                TextInput::make('priority')
-                    ->required()
-                    ->default('medium')
-                    ->label('Priority')
-                    ->readOnly(),
                 DateTimePicker::make('read_at')
                     ->label('Read At')
                     ->readOnly(),
@@ -108,16 +97,8 @@ class MessageResource extends Resource
                 TextColumn::make('body')
                     ->limit(50)
                     ->searchable()
+                    ->markdown()
                     ->label('Message'),
-                TextColumn::make('subject')
-                    ->searchable()
-                    ->toggleable(isToggledHiddenByDefault: false),
-                TextColumn::make('type')
-                    ->searchable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('priority')
-                    ->searchable()
-                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('read_at')
                     ->dateTime()
                     ->sortable()

@@ -17,8 +17,7 @@ class ManageRooms extends ManageRecords
         return [
             CreateAction::make(),
             ExportAction::make()
-                ->exporter(RoomExporter::class)
-                ->columnMapping(false),
+                ->exporter(RoomExporter::class),
         ];
     }
 

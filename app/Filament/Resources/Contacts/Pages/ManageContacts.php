@@ -17,8 +17,8 @@ class ManageContacts extends ManageRecords
         return [
             CreateAction::make(),
                 ExportAction::make()
-                ->exporter(ContactExporter::class)
-                ->columnMapping(false),
+                ->exporter(ContactExporter::class),
+                
         ];
     }
 

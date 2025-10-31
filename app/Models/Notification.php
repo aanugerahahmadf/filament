@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Events\NotificationCreated;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\DatabaseNotification;
@@ -31,6 +32,10 @@ class Notification extends DatabaseNotification
         'data' => 'array',
         'read_at' => 'datetime',
         'archived_at' => 'datetime',
+    ];
+
+    protected $dispatchesEvents = [
+        'created' => NotificationCreated::class,
     ];
 
     protected static function boot()

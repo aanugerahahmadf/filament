@@ -17,8 +17,7 @@ class ManageBuildings extends ManageRecords
         return [
             CreateAction::make(),
             ExportAction::make()
-                ->exporter(BuildingExporter::class)
-                ->columnMapping(false),
+                ->exporter(BuildingExporter::class),
         ];
     }
 

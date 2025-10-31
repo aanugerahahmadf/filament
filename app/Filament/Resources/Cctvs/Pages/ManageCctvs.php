@@ -16,9 +16,8 @@ class ManageCctvs extends ManageRecords
     {
         return [
             CreateAction::make(),
-                 ExportAction::make()
-                ->exporter(CctvExporter::class)
-                ->columnMapping(false),
+            ExportAction::make()
+                ->exporter(CctvExporter::class),
         ];
     }
 

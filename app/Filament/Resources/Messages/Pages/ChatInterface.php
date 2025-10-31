@@ -99,6 +99,9 @@ class ChatInterface extends Page implements HasForms
             ->where('to_user_id', Auth::id())
             ->whereNull('read_at')
             ->update(['read_at' => now()]);
+
+        // Dispatch event for real-time updates
+        $this->dispatch('messages-loaded');
     }
 
     public function selectUser(int $userId): void
@@ -121,7 +124,15 @@ class ChatInterface extends Page implements HasForms
 
         $data = $this->form->getState();
 
-        Message::create([
+        if (empty($data['message'])) {
+            Notification::make()
+                ->title('Please enter a message')
+                ->danger()
+                ->send();
+            return;
+        }
+
+        $message = Message::create([
             'from_user_id' => Auth::id(),
             'to_user_id' => $this->selectedUserId,
             'body' => $data['message'],
@@ -136,12 +147,13 @@ class ChatInterface extends Page implements HasForms
         // Reload messages
         $this->loadMessages();
 
+        // Send real-time notification
         Notification::make()
             ->title('Message sent successfully')
             ->success()
             ->send();
 
-        $this->dispatch('message-sent');
+        $this->dispatch('message-sent', messageId: $message->id);
     }
 
     public function deleteMessage(int $messageId): void
@@ -173,6 +185,13 @@ class ChatInterface extends Page implements HasForms
             ->title('Message deleted successfully')
             ->success()
             ->send();
+    }
+
+    public function getOnlineUsersProperty(): array
+    {
+        // In a real application, you would check user status
+        // For now, we'll return all users except the current one
+        return User::where('id', '!=', Auth::id())->get()->toArray();
     }
 
     protected function getHeaderActions(): array

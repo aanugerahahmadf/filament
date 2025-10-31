@@ -21,7 +21,6 @@ class DatabaseSeeder extends Seeder
             SettingsSeeder::class,
             SuperAdminSeeder::class,
             TestUserSeeder::class,
-            RoleSeeder::class,
         ]);
     }
 }

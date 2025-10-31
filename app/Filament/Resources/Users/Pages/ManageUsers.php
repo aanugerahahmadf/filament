@@ -17,8 +17,8 @@ class ManageUsers extends ManageRecords
         return [
             CreateAction::make(),
                 ExportAction::make()
-                ->exporter(UserExporter::class)
-                ->columnMapping(false),
+                ->exporter(UserExporter::class),
+                
         ];
     }
 

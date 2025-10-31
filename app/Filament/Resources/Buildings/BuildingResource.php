@@ -40,9 +40,9 @@ class BuildingResource extends Resource
                 TextInput::make('name')
                     ->required(),
                 TextInput::make('latitude')
-                    ->numeric(),
+                    ->required(),
                 TextInput::make('longitude')
-                    ->numeric(),
+                    ->required(),
                 TextInput::make('marker_icon')
                     ->label('Marker Icon URL (opsional)')
                     ->placeholder('https://.../icon.png')

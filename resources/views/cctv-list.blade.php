@@ -2,7 +2,7 @@
     <div class="w-full">
         <div class="max-w-screen-xl mx-auto px-6 py-6">
             <div class="flex items-center justify-between gap-4">
-                <h1 class="text-3xl md:text-4xl font-extrabold text-zinc-800 dark:text-white system:text-zinc-900">CCTV</h1>
+                <h1 class="text-3xl md:text-4xl font-extrabold text-zinc-800 dark:text-white system:text-zinc-900">Playlist CCTV</h1>
                 <div class="flex items-center gap-2">
                     <a id="back-rooms" href="#" class="btn btn-primary glow">Kembali ke Rooms</a>
                 </div>
@@ -122,7 +122,7 @@
                 e.preventDefault();
                 const id = parseInt(live.getAttribute('data-live'));
 
-                // Redirect to the new dedicated stream page
+                // Redirect to the new dedicated stream page using named route
                 window.location.href = `/cctv/stream/${id}`;
 
                 return false;

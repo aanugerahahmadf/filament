@@ -1,18 +1,18 @@
 <x-layouts.app :title="__('Live Stream - ' . $cctv->name)">
     <div class="page-wrapper">
         <div class="max-w-screen-xl mx-auto px-6 py-6 page-content-area">
-            <div class="flex items-center justify-between gap-4 mb-6">
-                <h1 class="text-3xl md:text-4xl font-extrabold text-zinc-800 dark:text-white">
+            <div class="flex items-center justify-between gap-4 mb-6 live-stream-header">
+                <h1 class="text-3xl md:text-4xl font-extrabold text-zinc-800 dark:text-white live-stream-title">
                     Live Stream - {{ $cctv->name }}
                 </h1>
                 <div class="flex items-center gap-2">
-                    <a href="{{ url()->previous() }}" class="btn btn-primary glow">Kembali</a>
+                    <a href="{{ url()->previous() }}" class="btn btn-primary glow live-stream-back-btn">Kembali</a>
                 </div>
             </div>
 
             <!-- MAIN LIVE STREAM DISPLAY -->
-            <div style="display: flex; justify-content: center; align-items: center; min-height: 800px; padding: 2rem;">
-                <div id="stream-container" style="width: 100%; max-width: 1152px; background-color: #000; border-radius: 0.75rem; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); cursor: pointer;">
+            <div style="display: flex; justify-content: center; align-items: center; min-height: 800px; padding: 2rem;" class="live-stream-container">
+                <div id="stream-container" style="width: 100%; max-width: 1152px; background-color: #000; border-radius: 0.75rem; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); cursor: pointer;" class="live-stream-player">
                     <!-- Video player area -->
                     @if($hlsUrl)
                         <div style="position: relative; padding-top: 56.25%;">
@@ -31,7 +31,7 @@
                         <div style="position: relative; padding-top: 56.25%; background-color: #111827;">
                             <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
                                 <div style="text-align: center; color: #fff;">
-                                    <div style="width: 384px; height: 384px; background-color: #dc2626; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem;">
+                                    <div style="width: 384px; height: 384px; background-color: #dc2626; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem;" class="live-stream-no-stream">
                                         <i class="bx bx-video-off" style="font-size: 9rem;"></i>
                                     </div>
                                     <h2 style="font-size: 1.5rem; font-weight: 700; color: #d1d5db;">No Stream Available</h2>
@@ -110,6 +110,57 @@
             }
             .live-stream-no-stream p {
                 font-size: 0.75rem !important;
+            }
+        }
+
+        /* Tablet specific styles */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .page-content-area {
+                padding: 1.5rem !important;
+            }
+            .live-stream-header h1 {
+                font-size: 2.5rem !important;
+            }
+            #stream-container {
+                max-width: 90% !important;
+                min-height: 650px !important;
+            }
+        }
+
+        /* Desktop specific styles */
+        @media (min-width: 1025px) {
+            .page-content-area {
+                padding: 2rem !important;
+            }
+            #stream-container {
+                max-width: 1152px !important;
+                min-height: 800px !important;
+            }
+        }
+
+        /* Large desktop */
+        @media (min-width: 1440px) {
+            .page-content-area {
+                padding: 2.5rem !important;
+                max-width: 1400px !important;
+                margin: 0 auto !important;
+            }
+            #stream-container {
+                max-width: 1280px !important;
+                min-height: 850px !important;
+            }
+        }
+
+        /* Ensure video is responsive */
+        #live-stream-player {
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+        /* Fix for aspect ratio on all devices */
+        @media (max-aspect-ratio: 1/1) {
+            #stream-container {
+                min-height: 60vh !important;
             }
         }
     </style>

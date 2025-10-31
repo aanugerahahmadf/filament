@@ -53,23 +53,9 @@ class RoomResource extends Resource
                 Grid::make()
                     ->schema([
                         TextInput::make('latitude')
-                            ->numeric()
-                            ->step(0.00000001)
-                            ->minValue(-90)
-                            ->maxValue(90)
-                            ->placeholder('e.g. -6.917464')
-                            ->label('Latitude')
-                            ->readOnly()
-                            ->default(fn ($get) => $get('building_id') ? \App\Models\Building::find($get('building_id'))?->latitude : null),
+                            ->required(),
                         TextInput::make('longitude')
-                            ->numeric()
-                            ->step(0.00000001)
-                            ->minValue(-180)
-                            ->maxValue(180)
-                            ->placeholder('e.g. 108.619123')
-                            ->label('Longitude')
-                            ->readOnly()
-                            ->default(fn ($get) => $get('building_id') ? \App\Models\Building::find($get('building_id'))?->longitude : null),
+                            ->required(),
                     ])
                     ->columns(2),
                 TextInput::make('marker_icon')

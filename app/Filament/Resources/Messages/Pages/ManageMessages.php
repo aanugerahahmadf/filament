@@ -17,8 +17,7 @@ class ManageMessages extends ManageRecords
         return [
             CreateAction::make(),
                ExportAction::make()
-                ->exporter(MessageExporter::class)
-                ->columnMapping(false),
+                ->exporter(MessageExporter::class),
         ];
     }
 

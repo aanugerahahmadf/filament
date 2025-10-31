@@ -4,7 +4,6 @@ namespace App\Filament\Resources\Users;
 
 use App\Filament\Resources\Users\Pages\ManageUsers;
 use App\Models\User;
-use BackedEnum;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\FileUpload;
@@ -19,14 +18,24 @@ use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
-use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static ?string $recordTitleAttribute = 'name';
+
+    protected static string|UnitEnum|null $navigationGroup = 'User Interface';
+
+    protected static ?string $navigationLabel = 'User';
+
+    protected static ?string $modelLabel = 'User';
+
+    protected static ?string $pluralModelLabel = 'User';
+
+    protected static ?int $navigationSort = 1;
 
     public static function form(Schema $schema): Schema
     {
@@ -63,10 +72,6 @@ class UserResource extends Resource
                 TextInput::make('status')
                     ->required()
                     ->default('offline'),
-                TextInput::make('department'),
-                TextInput::make('position'),
-                DateTimePicker::make('last_seen_at'),
-                DateTimePicker::make('email_verified_at'),
             ]);
     }
 
@@ -103,16 +108,6 @@ class UserResource extends Resource
                     ->searchable(),
                 TextColumn::make('status')
                     ->searchable(),
-                TextColumn::make('department')
-                    ->searchable(),
-                TextColumn::make('position')
-                    ->searchable(),
-                TextColumn::make('last_seen_at')
-                    ->dateTime()
-                    ->sortable(),
-                TextColumn::make('email_verified_at')
-                    ->dateTime()
-                    ->sortable(),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

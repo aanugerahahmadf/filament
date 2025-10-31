@@ -7,6 +7,11 @@ use Illuminate\Http\Request;
 
 class MapController extends Controller
 {
+    public function index()
+    {
+        return view('maps');
+    }
+
     public function data(Request $request)
     {
         // Return full attributes so UI can use marker_icon/icon_url and coordinates

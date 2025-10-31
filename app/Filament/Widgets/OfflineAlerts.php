@@ -26,10 +26,14 @@ class OfflineAlerts extends BaseWidget
                     ->latest('updated_at')
             )
             ->columns([
-                TextColumn::make('building.name')->label('Building'),
-                TextColumn::make('room.name')->label('Room'),
-                TextColumn::make('ip_rtsp')->label('CCTV IP'), // Changed from 'name' to 'ip_rtsp'
-                TextColumn::make('last_seen_at')->dateTime()->label('Last Seen'),
+                TextColumn::make('building.name')->label('Building')
+                    ->searchable(),
+                TextColumn::make('room.name')->label('Room')
+                    ->searchable(),
+                TextColumn::make('ip_rtsp')->label('CCTV IP')   
+                    ->searchable(),
+                TextColumn::make('last_seen_at')->dateTime()->label('Last Seen')
+                    ->searchable(),
             ])
             ->paginated([5, 10, 25, 50]);
     }

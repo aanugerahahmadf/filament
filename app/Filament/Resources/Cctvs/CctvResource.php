@@ -42,10 +42,20 @@ class CctvResource extends Resource
             ->components([
                 Select::make('building_id')
                     ->relationship('building', 'name')
-                    ->required(),
+                    ->searchable()
+                    ->preload()
+                    ->native(false)
+                    ->searchPrompt('Search Building...')
+                    ->required()
+                    ->live(),
                 Select::make('room_id')
                     ->relationship('room', 'name')
-                    ->required(),
+                    ->searchable()
+                    ->preload()
+                    ->native(false)
+                    ->searchPrompt('Search Room...')
+                    ->required()
+                    ->live(),
                 TextInput::make('name')
                     ->required(),
                 TextInput::make('stream_username')
@@ -105,10 +115,6 @@ class CctvResource extends Resource
                     ->color(fn (string $state): string => $state === 'wired' ? 'success' : 'info'),
                 TextColumn::make('status')
                     ->badge(),
-                TextColumn::make('recording')
-                    ->formatStateUsing(fn (bool $state): string => $state ? 'Yes' : 'No')
-                    ->badge()
-                    ->color(fn (bool $state): string => $state ? 'success' : 'danger'),
                 TextColumn::make('last_seen_at')
                     ->dateTime()
                     ->sortable(),
@@ -175,7 +181,7 @@ class CctvResource extends Resource
     {
         return static::$model::count();
     }
-    
+
         public static function getNavigationBadgeColor(): ?string
     {
         return static::getModel()::count() > 10 ? 'warning' : 'primary';
