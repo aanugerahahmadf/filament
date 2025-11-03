@@ -57,6 +57,9 @@
             width: 100%;
             margin: 0 auto;
             padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .live-stream-header {
@@ -100,6 +103,9 @@
             background-color: transparent;
             border-radius: 0;
             overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         /* Desktop styles */
@@ -234,6 +240,8 @@
         #live-stream-player {
             width: 100% !important;
             height: 100% !important;
+            max-width: 100%;
+            max-height: 100%;
         }
 
         /* Landscape orientation for mobile */
@@ -262,6 +270,20 @@
             .live-stream-title-container {
                 padding-right: 120px; /* More space for the button on large screens */
             }
+        }
+
+        /* Center the video player */
+        .video-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+
+        .video-container {
+            width: 100%;
+            max-width: 1200px; /* Adjust this value as needed */
+            margin: 0 auto;
         }
     </style>
 
