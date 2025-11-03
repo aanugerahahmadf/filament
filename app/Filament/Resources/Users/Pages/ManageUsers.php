@@ -15,10 +15,12 @@ class ManageUsers extends ManageRecords
     protected function getHeaderActions(): array
     {
         return [
-            CreateAction::make(),
-                ExportAction::make()
-                ->exporter(UserExporter::class),
-                
+            CreateAction::make()
+                ->label('New User'),
+            ExportAction::make()
+                ->exporter(UserExporter::class)
+                ->label('Export User'),
+
         ];
     }
 

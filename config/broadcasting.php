@@ -8,16 +8,16 @@ return [
 
         'pusher' => [
             'driver' => 'pusher',
-            'key' => env('PUSHER_APP_KEY', '238e99fba712c4216292'),
-            'secret' => env('PUSHER_APP_SECRET', 'a88169403b750fe6359d'),
-            'app_id' => env('PUSHER_APP_ID', '2069100'),
+            'key' => env('PUSHER_APP_KEY'),
+            'secret' => env('PUSHER_APP_SECRET'),
+            'app_id' => env('PUSHER_APP_ID'),
             'options' => [
-                'cluster' => env('PUSHER_APP_CLUSTER', 'ap1'),
+                'cluster' => env('PUSHER_APP_CLUSTER'),
                 'useTLS' => env('PUSHER_SCHEME', 'https') === 'https',
                 'encrypted' => env('PUSHER_SCHEME', 'https') === 'https',
-                'host' => env('PUSHER_HOST') ?: 'api-'.env('PUSHER_APP_CLUSTER', 'ap1').'.pusher.com',
-                'port' => env('PUSHER_PORT', 80),
-                'scheme' => env('PUSHER_SCHEME', 'http'),
+                'host' => env('PUSHER_HOST'),
+                'port' => env('PUSHER_PORT', 443),
+                'scheme' => env('PUSHER_SCHEME', 'https'),
                 'curl_options' => [
                     CURLOPT_SSL_VERIFYPEER => false,
                     CURLOPT_SSL_VERIFYHOST => false,

@@ -15,9 +15,11 @@ class ManageMessages extends ManageRecords
     protected function getHeaderActions(): array
     {
         return [
-            CreateAction::make(),
-               ExportAction::make()
-                ->exporter(MessageExporter::class),
+            CreateAction::make()
+                ->label('New Message'),
+            ExportAction::make()
+                ->exporter(MessageExporter::class)
+                ->label('Export Message'),
         ];
     }
 

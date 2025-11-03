@@ -89,7 +89,7 @@ class AdminPanelProvider extends PanelProvider
             ->databaseNotifications(CustomDatabaseNotifications::class)
             ->databaseNotificationsPolling('5s')
             ->sidebarCollapsibleOnDesktop()
-            ->sidebarWidth('17rem')
+            ->sidebarWidth('16rem')
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,

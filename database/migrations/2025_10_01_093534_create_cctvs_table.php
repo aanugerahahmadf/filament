@@ -23,8 +23,6 @@ return new class extends Migration
             $table->enum('status', ['online', 'offline', 'maintenance'])->default('offline');
             $table->string('hls_path')->nullable();
             $table->timestamp('last_seen_at')->nullable();
-            // Adding recording field
-            $table->boolean('recording')->default(false);
             $table->timestamps();
         });
     }

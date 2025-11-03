@@ -71,20 +71,28 @@ class NotificationCreated implements ShouldBroadcast
     private function getMessageFromNotification()
     {
         // Check if message is directly in the notification
-        if ($this->notification->message) {
-            return $this->notification->message;
+        if (!empty($this->notification->message)) {
+            return (string) $this->notification->message;
         }
 
         // Check if message is in the data object
         if ($this->notification->data && is_array($this->notification->data)) {
             if (isset($this->notification->data['message'])) {
-                return $this->notification->data['message'];
+                return (string) $this->notification->data['message'];
             }
 
             // If data contains other fields, create a message from them
             $dataKeys = array_keys($this->notification->data);
             if (count($dataKeys) > 0) {
-                return $dataKeys[0] . ': ' . $this->notification->data[$dataKeys[0]];
+                $firstKey = $dataKeys[0];
+                $firstValue = $this->notification->data[$firstKey];
+
+                // Handle array values properly
+                if (is_array($firstValue)) {
+                    return $firstKey . ': ' . json_encode($firstValue);
+                }
+
+                return $firstKey . ': ' . (string) $firstValue;
             }
         }
 
