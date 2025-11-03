@@ -8,7 +8,7 @@ use App\Http\Controllers\Api\MaintenanceApiController;
 use App\Http\Controllers\Api\NotificationApiController;
 use App\Http\Controllers\Api\RoomApiController;
 use App\Http\Controllers\HealthCheckController;
-use App\Http\Controllers\StreamController;
+use App\Http\Controllers\LocationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -25,6 +25,24 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
+});
+
+// Add a simple health check endpoint
+Route::get('/health', function () {
+    return response()->json([
+        'status' => 'ok',
+        'timestamp' => now()->toISOString(),
+        'service' => 'Filament API'
+    ]);
+});
+
+// Add a version endpoint
+Route::get('/version', function () {
+    return response()->json([
+        'version' => '1.0.0',
+        'framework' => 'Laravel ' . app()->version(),
+        'php' => phpversion()
+    ]);
 });
 
 // Health check routes
@@ -113,7 +131,7 @@ Route::prefix('stream')->name('api.stream.')->middleware(['auth:sanctum'])->grou
         }
     })->name('initialize');
 
-    Route::delete('/{streamId}/stop', [StreamController::class, 'stopAdvancedStream'])->name('stop');
+    Route::delete('/{streamId}/stop', [LocationController::class, 'stopAdvancedStream'])->name('stop');
 
     Route::get('/{streamId}/metrics', function ($streamId) {
         try {

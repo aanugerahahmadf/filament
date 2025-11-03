@@ -3,7 +3,7 @@
     <div class="w-full">
         <div class="max-w-screen-xl mx-auto px-6 py-6">
             <div class="flex items-center justify-between gap-4">
-            <h1 class="text-3xl md:text-4xl font-extrabold text-zinc-800 dark:text-white system:text-zinc-900">Location</h1>
+            <h1 class="text-3xl md:text-4xl font-extrabold text-zinc-800 dark:text-white system:text-zinc-900">Playlist Building</h1>
                 <div class="flex items-center gap-2 relative">
                     <div class="relative">
                         <input id="q" class="px-3 py-2 rounded-lg bg-white/5 border-2 border-gray-300 dark:border-white/10 system:border-zinc-400 pr-10 text-gray-900 dark:text-white system:text-zinc-900 placeholder-gray-500 dark:placeholder-white/50 system:placeholder-zinc-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Cari gedung..." />
@@ -21,7 +21,7 @@
                     </div>
                 </div>
             </div>
-            <div id="buildings" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6"></div>
+            <div id="buildings" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6 buildings-grid"></div>
         </div>
     </div>
 
@@ -78,6 +78,44 @@
                 font-size: 0.625rem !important;
             }
         }
+
+        /* Tablet specific styles */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .location-container {
+                padding: 1.5rem !important;
+            }
+            .buildings-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 1.5rem !important;
+            }
+            .location-header h1 {
+                font-size: 2.5rem !important;
+            }
+        }
+
+        /* Desktop specific styles */
+        @media (min-width: 1025px) {
+            .location-container {
+                padding: 2rem !important;
+            }
+            .buildings-grid {
+                grid-template-columns: repeat(3, 1fr) !important;
+                gap: 2rem !important;
+            }
+        }
+
+        /* Large desktop */
+        @media (min-width: 1440px) {
+            .location-container {
+                padding: 2.5rem !important;
+                max-width: 1400px !important;
+                margin: 0 auto !important;
+            }
+            .buildings-grid {
+                grid-template-columns: repeat(3, 1fr) !important;
+                gap: 2.5rem !important;
+            }
+        }
     </style>
 
     <script>
@@ -117,7 +155,7 @@
             items.forEach(b => {
                 const card = el(`<div class="rounded-xl p-4 bg-white/5 border border-white/10 card-3d fade-in">
                     <div class="font-semibold text-zinc-800 dark:text-white system:text-zinc-900">${b.name}</div>
-                    <div class="text-white/60 text-sm mt-1 text-zinc-600 dark:text-zinc-300 system:text-zinc-700">Rooms: ${b.rooms_count||0} | CCTVs: ${b.cctvs_count||0}</div>
+                    <div class="text-white/60 text-sm mt-1 text-zinc-600 dark:text-zinc-300 system:text-zinc-700">Room : ${b.rooms_count||0} | CCTV : ${b.cctvs_count||0}</div>
                     <div class="mt-3 flex gap-2">
                         <a href="/rooms?building=${b.id}" class="block px-4 py-3 rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white text-sm font-semibold tracking-wide text-center shadow-lg hover:shadow-blue-500/25 transition-all duration-300 border border-blue-400/50 w-full">Rooms</a>
                         <a href="/maps" class="px-4 py-2 rounded-lg bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white text-sm font-medium shadow-lg hover:shadow-green-500/25 transform hover:scale-105 transition-all duration-300 cursor-pointer border border-green-400/50">

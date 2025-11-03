@@ -15,8 +15,9 @@ class RoomExporter extends Exporter
     public static function getColumns(): array
     {
         return [
-            ExportColumn::make('id'),
-            ExportColumn::make('building_id'),
+            ExportColumn::make('id')
+                ->label('ID'),
+            ExportColumn::make('building.name'),
             ExportColumn::make('name'),
             ExportColumn::make('marker_icon'),
             ExportColumn::make('latitude'),

@@ -28,7 +28,6 @@ class Cctv extends Model
         'port',
         'connection_type',
         'status',
-        'recording',
         'last_seen_at',
         'stream_username',
         'stream_password',
@@ -36,7 +35,6 @@ class Cctv extends Model
 
     protected $casts = [
         'last_seen_at' => 'datetime',
-        'recording' => 'boolean',
         'port' => 'integer',
     ];
 
@@ -105,14 +103,6 @@ class Cctv extends Model
     public function scopeMaintenance($query)
     {
         return $query->where('status', self::STATUS_MAINTENANCE);
-    }
-
-    /**
-     * Scope a query to only include recording CCTVs.
-     */
-    public function scopeRecording($query)
-    {
-        return $query->where('recording', true);
     }
 
     /**

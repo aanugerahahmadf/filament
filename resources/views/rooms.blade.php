@@ -2,7 +2,7 @@
     <div class="w-full">
         <div class="max-w-screen-xl mx-auto px-6 py-6">
             <div class="flex items-center justify-between gap-4">
-                <h1 class="text-3xl md:text-4xl font-extrabold text-zinc-800 dark:text-white">Room</h1>
+                <h1 class="text-3xl md:text-4xl font-extrabold text-zinc-800 dark:text-white">Playlist Room</h1>
                 <div class="flex items-center gap-2">
                     <a href="/locations" class="btn btn-primary glow">Kembali ke Locations</a>
                 </div>
@@ -102,9 +102,9 @@
             (building.rooms||[]).forEach(r => {
                 const card = el(`<div class="rounded-xl p-4 bg-white/5 border border-white/10 card-3d">
                     <div class="font-semibold text-zinc-800 dark:text-white system:text-zinc-900">${r.name}</div>
-                    <div class="text-zinc-600 dark:text-zinc-300 system:text-zinc-700 text-sm mt-1">CCTVs: ${(r.cctvs||[]).length}</div>
+                    <div class="text-zinc-600 dark:text-zinc-300 system:text-zinc-700 text-sm mt-1">CCTV : ${(r.cctvs||[]).length}</div>
                     <div class="mt-3">
-                        <a href="/cctv?building=${building.id}&room=${r.id}" class="block w-full px-4 py-3 rounded-lg bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white text-sm font-semibold tracking-wide text-center shadow-lg hover:shadow-purple-500/25 transition-all duration-300 border border-purple-400/50">Buka CCTV</a>
+                        <a href="/cctv-list?building=${building.id}&room=${r.id}" class="block w-full px-4 py-3 rounded-lg bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white text-sm font-semibold tracking-wide text-center shadow-lg hover:shadow-purple-500/25 transition-all duration-300 border border-purple-400/50">Buka CCTV</a>
                     </div>
                 </div>`);
                 wrap.appendChild(card);

@@ -30,9 +30,6 @@ return new class extends Migration
             if (!Schema::hasColumn('cctvs', 'fps')) {
                 $table->integer('fps')->default(30)->after('resolution');
             }
-            if (!Schema::hasColumn('cctvs', 'recording_schedule')) {
-                $table->string('recording_schedule')->nullable()->after('recording');
-            }
         });
     }
 
@@ -42,7 +39,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('cctvs', function (Blueprint $table) {
-            $columns = ['model', 'serial_number', 'firmware_version', 'port', 'resolution', 'fps', 'recording_schedule'];
+            $columns = ['model', 'serial_number', 'firmware_version', 'port', 'resolution', 'fps'];
             $existingColumns = array_filter($columns, function ($column) {
                 return Schema::hasColumn('cctvs', $column);
             });

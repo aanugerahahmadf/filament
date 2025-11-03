@@ -15,17 +15,16 @@ class CctvExporter extends Exporter
     public static function getColumns(): array
     {
         return [
-            ExportColumn::make('id'),
-            ExportColumn::make('building_id'),
-            ExportColumn::make('room_id'),
+            ExportColumn::make('id')
+                ->label('ID'),
+            ExportColumn::make('building.name'),
+            ExportColumn::make('room.name'),
             ExportColumn::make('name'),
+            ExportColumn::make('stream_username'),
             ExportColumn::make('ip_rtsp'),
             ExportColumn::make('port'),
             ExportColumn::make('connection_type'),
             ExportColumn::make('status'),
-            ExportColumn::make('recording'),
-            ExportColumn::make('last_seen_at'),
-            ExportColumn::make('stream_username'),
             ExportColumn::make('created_at'),
             ExportColumn::make('updated_at'),
         ];

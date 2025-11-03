@@ -27,23 +27,23 @@ class CctvOperationalTable extends BaseWidget
                     ->latest('updated_at')
             )
             ->columns([
-                TextColumn::make('building.name')->label('Building')->searchable(),
-                TextColumn::make('room.name')->label('Room')->searchable(),
-                TextColumn::make('name')->label('CCTV')->searchable(),
+                TextColumn::make('building.name')->label('Building')->searchable()
+                    ->searchable(),
+                TextColumn::make('room.name')->label('Room')->searchable()
+                    ->searchable(),
+                TextColumn::make('name')->label('CCTV')->searchable()
+                    ->searchable(),
                 TextColumn::make('status')->badge()->colors([
                     'success' => 'online',
                     'danger' => 'offline',
                     'warning' => 'maintenance',
-                ]),
-                TextColumn::make('last_seen_at')->dateTime()->label('Last Seen')->sortable(),
+                ])
+                    ->searchable(),
+                TextColumn::make('last_seen_at')->dateTime()->label('Last Seen')->sortable()
+                    ->searchable(),
             ])
             ->filters([
-                Tables\Filters\SelectFilter::make('status')
-                    ->options([
-                        'online' => 'Online',
-                        'offline' => 'Offline',
-                        'maintenance' => 'Maintenance',
-                    ]),
+                    //
             ])
             ->actions([
                 Action::make('start')
