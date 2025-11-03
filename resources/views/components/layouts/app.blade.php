@@ -311,7 +311,7 @@
                 function updateToggleIcon() {
                     const openIcon = document.getElementById('sidebar-open-icon');
                     const closeIcon = document.getElementById('sidebar-close-icon');
-                    
+
                     if (openIcon && closeIcon) {
                         if (sidebarVisible) {
                             openIcon.classList.add('hidden');
@@ -322,7 +322,7 @@
                         }
                     }
                 }
-                
+
                 // Initialize icon state
                 updateToggleIcon();
 
@@ -364,7 +364,7 @@
                                 console.log('✅ Desktop Sidebar VISIBLE');
                             }
                         }
-                        
+
                         // Update icon based on sidebar state
                         updateToggleIcon();
                     } else {
@@ -406,7 +406,7 @@
                             mainContent.style.cssText = 'width: auto !important; flex: 1 !important;';
                         }
                     }
-                    
+
                     // Update icon state
                     updateToggleIcon();
                 }
@@ -448,7 +448,7 @@
 
                 <footer class="py-4 text-center text-sm text-zinc-600 dark:text-zinc-400 w-full border-t border-zinc-300 dark:border-zinc-700 bg-white/50 dark:bg-zinc-900/50 backdrop-blur-sm flex-shrink-0">
                     <div class="container mx-auto px-4">
-                        &copy; {{ date('Y') }} PT. Kilang Pertamina Internasional - Refinery Unit VI Balongan
+                        &copy; {{ date('Y') }} PT Kilang Pertamina Internasional - Refinery Unit VI Balongan
                     </div>
                 </footer>
             </div>

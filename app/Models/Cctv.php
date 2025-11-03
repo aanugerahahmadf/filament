@@ -31,11 +31,19 @@ class Cctv extends Model
         'last_seen_at',
         'stream_username',
         'stream_password',
+        'description',
+        'model',
+        'serial_number',
+        'firmware_version',
+        'resolution',
+        'fps',
+        'recording_schedule',
     ];
 
     protected $casts = [
         'last_seen_at' => 'datetime',
         'port' => 'integer',
+        'fps' => 'integer',
     ];
 
     public function building(): BelongsTo

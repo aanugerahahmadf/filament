@@ -28,11 +28,11 @@ class CctvResource extends Resource
 
     protected static string|UnitEnum|null $navigationGroup = 'Playlist And Maps';
 
-    protected static ?string $navigationLabel = 'CCTV';
+    protected static ?string $navigationLabel = 'Cctv';
 
-    protected static ?string $modelLabel = 'CCTV';
+    protected static ?string $modelLabel = 'Cctv';
 
-    protected static ?string $pluralModelLabel = 'CCTV';
+    protected static ?string $pluralModelLabel = 'Cctv';
 
     protected static ?int $navigationSort = 3;
 
@@ -86,8 +86,8 @@ class CctvResource extends Resource
                     ->default('offline')
                     ->required()
                     ->disabled(),
-                DateTimePicker::make('last_seen_at')
-                    ->disabled(), // Make it disabled since it should be automatically updated
+                //DateTimePicker::make('last_seen_at')
+                    //->disabled(), // Make it disabled since it should be automatically updated
             ]);
     }
 
@@ -107,17 +107,17 @@ class CctvResource extends Resource
                 TextColumn::make('ip_rtsp')
                     ->searchable(),
                 TextColumn::make('port')
-                    ->formatStateUsing(fn (string $state): string => number_format((float) $state))
-                    ->sortable(),
+                    ->formatStateUsing(fn (string $state): string => number_format((float) $state)),
+                    //->sortable(),
                 TextColumn::make('connection_type')
                     ->formatStateUsing(fn (string $state): string => ucfirst($state))
                     ->badge()
                     ->color(fn (string $state): string => $state === 'wired' ? 'success' : 'info'),
                 TextColumn::make('status')
                     ->badge(),
-                TextColumn::make('last_seen_at')
-                    ->dateTime()
-                    ->sortable(),
+                //TextColumn::make('last_seen_at')
+                    //->dateTime()
+                    //->sortable(),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

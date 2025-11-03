@@ -224,7 +224,7 @@
             .nav-center { position:absolute; left:50%; transform:translateX(-50%); display:none; gap:28px; color:#fff; font-size:14px; opacity:.95; }
             .nav-center a { color:inherit; text-decoration:none; }
             @media (min-width: 960px) { .nav-center { display:flex; } }
-            
+
             /* Mobile Header Responsive */
             @media (max-width: 768px) {
                 .nav { padding: 12px 0; }
@@ -275,7 +275,7 @@
             @media (min-width: 960px) { .headline { font-size:64px; } }
             .sub { margin-top:12px; font-size:14px; opacity:.85; }
             .cta { margin-top:24px; display:flex; justify-content:center; gap:12px; }
-            
+
             /* Mobile Hero Responsive */
             @media (max-width: 768px) {
                 .hero { height: 70vh; min-height: 400px; }
@@ -299,7 +299,7 @@
             .card:hover { box-shadow:0 0 0 1px var(--ring), 0 8px 26px rgba(0,0,0,.08); transform: translateY(-2px); }
             .card h4 { margin:8px 0 6px; font-weight:600; }
             .muted { color: var(--muted); font-size:14px; }
-            
+
             /* Mobile Cards Responsive */
             @media (max-width: 768px) {
                 .section { padding: 32px 0; }
@@ -320,7 +320,7 @@
             @media (min-width: 960px) { .stats { grid-template-columns: repeat(4, minmax(0,1fr)); } }
             .stat { background: var(--card); border-radius:14px; padding:22px; box-shadow:0 0 0 1px var(--ring); text-align:center; }
             .stat .num { font-size:28px; font-weight:700; }
-            
+
             /* Mobile Stats Responsive */
             @media (max-width: 768px) {
                 .stats { grid-template-columns: repeat(2, minmax(0,1fr)); gap: 16px; }
@@ -338,7 +338,7 @@
             @media (min-width: 960px) { .about { grid-template-columns: 1.1fr .9fr; align-items:center; } }
             .img-box { border-radius:16px; overflow:hidden; box-shadow:0 0 0 1px var(--ring); }
             .img-box img { width:100%; height:100%; object-fit:cover; }
-            
+
             /* Mobile About Responsive */
             @media (max-width: 768px) {
                 .about { grid-template-columns: 1fr; gap: 16px; }
@@ -654,7 +654,7 @@
         </section>
 
         <footer class="site-footer">
-            &copy; {{ date('Y') }} PT. Kilang Pertamina Internasional - Refinery Unit VI Balongan
+            &copy; {{ date('Y') }} PT Kilang Pertamina Internasional - Refinery Unit VI Balongan
         </footer>
 
             <!-- Real-time Status Indicator -->

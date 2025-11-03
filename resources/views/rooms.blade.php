@@ -8,6 +8,13 @@
                 </div>
             </div>
 
+            <div class="flex items-center justify-between gap-4 mt-4">
+                <div class="relative w-full max-w-md">
+                    <input id="q" class="w-full sm:w-64 md:w-72 px-3 py-2 rounded-lg bg-white/5 border-2 border-gray-300 dark:border-white/10 system:border-zinc-400 pr-10 text-gray-900 dark:text-white system:text-zinc-900 placeholder-gray-500 dark:placeholder-white/50 system:placeholder-zinc-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Search for Room..." />
+                    <i class="bx bx-search absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-white/70 system:text-zinc-700"></i>
+                </div>
+            </div>
+
             <div id="info" class="text-zinc-600 dark:text-zinc-300 mt-2 text-zinc-600 dark:text-zinc-300 system:text-zinc-700">Building: <span class="font-semibold text-zinc-800 dark:text-white system:text-zinc-900">Building Name</span></div>
             <div id="rooms" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6"></div>
         </div>
@@ -99,7 +106,16 @@
         function renderRooms(building){
             const wrap = document.getElementById('rooms');
             wrap.innerHTML = '';
-            (building.rooms||[]).forEach(r => {
+
+            // Get search term if exists
+            const searchTerm = document.getElementById('q')?.value.toLowerCase() || '';
+
+            // Filter rooms based on search term
+            const roomsToDisplay = searchTerm
+                ? (building.rooms || []).filter(r => r.name.toLowerCase().includes(searchTerm))
+                : building.rooms || [];
+
+            roomsToDisplay.forEach(r => {
                 const card = el(`<div class="rounded-xl p-4 bg-white/5 border border-white/10 card-3d">
                     <div class="font-semibold text-zinc-800 dark:text-white system:text-zinc-900">${r.name}</div>
                     <div class="text-zinc-600 dark:text-zinc-300 system:text-zinc-700 text-sm mt-1">CCTV : ${(r.cctvs||[]).length}</div>
@@ -111,6 +127,23 @@
             });
             if (!wrap.children.length){ wrap.innerHTML = '<div class="text-zinc-600 dark:text-zinc-300 system:text-zinc-700">Belum ada Room.</div>'; }
         }
+
+        // Add search functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('q');
+            if (searchInput) {
+                searchInput.addEventListener('input', function(e) {
+                    const params = new URLSearchParams(location.search);
+                    buildingId = parseInt(params.get('building')) || null;
+                    if (buildingId) {
+                        const building = (DATA.buildings||[]).find(b => b.id === buildingId);
+                        if (building) {
+                            renderRooms(building);
+                        }
+                    }
+                });
+            }
+        });
 
         load();
     </script>

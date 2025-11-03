@@ -12,9 +12,12 @@ class Building extends Model
 
     protected $fillable = [
         'name',
+        'description',
+        'address',
         'latitude',
         'longitude',
         'marker_icon',
+        'contact_person',
     ];
 
     public function rooms(): HasMany
