@@ -3,9 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Building;
 use App\Models\Cctv;
-use App\Models\Room;
 use App\Services\CctvService;
 use Illuminate\Http\JsonResponse;
 
@@ -19,125 +17,43 @@ class CctvApiController extends Controller
     }
 
     /**
-     * Get all CCTVs with their status
-     */
-    public function index(): JsonResponse
-    {
-        $cctvs = Cctv::with(['building', 'room'])
-            ->select(['id', 'building_id', 'room_id', 'name', 'status', 'latitude', 'longitude', 'last_seen_at'])
-            ->get();
-
-        return response()->json([
-            'success' => true,
-            'data' => $cctvs,
-        ]);
-    }
-
-    /**
-     * Get a specific CCTV with detailed information
-     */
-    public function show(Cctv $cctv): JsonResponse
-    {
-        $cctv->load(['building', 'room', 'maintenances']);
-
-        return response()->json([
-            'success' => true,
-            'data' => $cctv,
-        ]);
-    }
-
-    /**
-     * Get CCTVs by building
-     */
-    public function byBuilding(Building $building): JsonResponse
-    {
-        $cctvs = $building->cctvs()
-            ->with(['room'])
-            ->select(['id', 'building_id', 'room_id', 'name', 'status', 'latitude', 'longitude', 'last_seen_at'])
-            ->get();
-
-        return response()->json([
-            'success' => true,
-            'data' => $cctvs,
-        ]);
-    }
-
-    /**
-     * Get CCTVs by room
-     */
-    public function byRoom(Room $room): JsonResponse
-    {
-        $cctvs = $room->cctvs()
-            ->select(['id', 'building_id', 'room_id', 'name', 'status', 'latitude', 'longitude', 'last_seen_at'])
-            ->get();
-
-        return response()->json([
-            'success' => true,
-            'data' => $cctvs,
-        ]);
-    }
-
-    /**
-     * Get status statistics
+     * Get detailed statistics for all CCTVs
      */
     public function statistics(): JsonResponse
     {
-        $statistics = $this->cctvService->getStatusStatistics();
-
-        return response()->json([
-            'success' => true,
-            'data' => $statistics,
-        ]);
-    }
-
-    /**
-     * Get detailed real-time statistics with trends
-     */
-    public function detailedStatistics(): JsonResponse
-    {
         try {
-            // Get basic statistics
-            $statistics = $this->cctvService->getStatusStatistics();
+            // Get overall statistics
+            $statistics = Cctv::select('status')
+                ->selectRaw('count(*) as count')
+                ->groupBy('status')
+                ->get()
+                ->keyBy('status');
 
-            // Get recently offline CCTVs (last 24 hours)
+            // Get recently offline CCTVs
             $recentlyOffline = Cctv::offline()
-                ->where('last_seen_at', '>=', now()->subDay())
-                ->with(['building', 'room'])
+                ->whereNotNull('last_seen_at')
                 ->orderBy('last_seen_at', 'desc')
+                ->limit(5)
+                ->get(['id', 'name', 'last_seen_at', 'building_id', 'room_id'])
+                ->load(['building', 'room']);
+
+            // Get CCTVs that need attention (offline for more than 24 hours)
+            $needsAttention = Cctv::offline()
+                ->where('last_seen_at', '<', now()->subDay())
+                ->orderBy('last_seen_at', 'asc')
                 ->limit(10)
-                ->get();
+                ->get(['id', 'name', 'last_seen_at', 'building_id', 'room_id'])
+                ->load(['building', 'room']);
 
-            // Get CCTVs needing attention (offline or maintenance)
-            $needsAttention = Cctv::whereIn('status', ['offline', 'maintenance'])
-                ->with(['building', 'room'])
-                ->orderBy('updated_at', 'desc')
-                ->limit(15)
+            // Get statistics by building
+            $buildingStats = Cctv::with('building')
+                ->select('building_id')
+                ->selectRaw('count(*) as total')
+                ->selectRaw("count(case when status = 'online' then 1 end) as online_count")
+                ->selectRaw("count(case when status = 'offline' then 1 end) as offline_count")
+                ->selectRaw("count(case when status = 'maintenance' then 1 end) as maintenance_count")
+                ->groupBy('building_id')
                 ->get();
-
-            // Get status distribution by building
-            $buildingStats = Building::withCount([
-                'cctvs as total_cctvs',
-                'cctvs as online_cctvs' => function ($query) {
-                    $query->where('status', 'online');
-                },
-                'cctvs as offline_cctvs' => function ($query) {
-                    $query->where('status', 'offline');
-                },
-                'cctvs as maintenance_cctvs' => function ($query) {
-                    $query->where('status', 'maintenance');
-                }
-            ])->get()->map(function ($building) {
-                return [
-                    'id' => $building->id,
-                    'name' => $building->name,
-                    'total_cctvs' => $building->total_cctvs,
-                    'online_cctvs' => $building->online_cctvs,
-                    'offline_cctvs' => $building->offline_cctvs,
-                    'maintenance_cctvs' => $building->maintenance_cctvs,
-                    'online_percentage' => $building->total_cctvs > 0 ?
-                        round(($building->online_cctvs / $building->total_cctvs) * 100, 2) : 0,
-                ];
-            });
 
             // Get connection type statistics
             $connectionStats = Cctv::select('connection_type')
@@ -148,11 +64,6 @@ class CctvApiController extends Controller
                 ->groupBy('connection_type')
                 ->get();
 
-            // Get recording statistics
-            $recordingStats = Cctv::selectRaw('count(*) as total')
-                ->selectRaw('count(case when recording = 1 then 1 end) as recording')
-                ->first();
-
             return response()->json([
                 'success' => true,
                 'data' => [
@@ -161,11 +72,6 @@ class CctvApiController extends Controller
                     'needs_attention' => $needsAttention,
                     'by_building' => $buildingStats,
                     'by_connection_type' => $connectionStats,
-                    'recording' => [
-                        'total' => $recordingStats->total ?? 0,
-                        'recording' => $recordingStats->recording ?? 0,
-                        'not_recording' => ($recordingStats->total ?? 0) - ($recordingStats->recording ?? 0),
-                    ],
                 ],
             ]);
         } catch (\Exception $e) {
@@ -262,11 +168,14 @@ class CctvApiController extends Controller
     {
         try {
             $cctvs = Cctv::with(['building', 'room'])
-                ->whereNotNull('latitude')
-                ->whereNotNull('longitude')
                 ->get();
 
             $features = $cctvs->map(function ($cctv) {
+                // Skip CCTVs without location data
+                if (!$cctv->building || !$cctv->building->latitude || !$cctv->building->longitude) {
+                    return null;
+                }
+
                 return [
                     'type' => 'Feature',
                     'properties' => [
@@ -280,12 +189,12 @@ class CctvApiController extends Controller
                     'geometry' => [
                         'type' => 'Point',
                         'coordinates' => [
-                            (float) $cctv->longitude,
-                            (float) $cctv->latitude,
+                            (float) $cctv->building->longitude,
+                            (float) $cctv->building->latitude,
                         ],
                     ],
                 ];
-            });
+            })->filter(); // Remove null values
 
             return response()->json([
                 'success' => true,

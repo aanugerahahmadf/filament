@@ -74,7 +74,7 @@ class AdminPanelProvider extends PanelProvider
             ->navigationGroups([
                 NavigationGroup::make()
                     ->label('User Interface')
-                    ->icon('bxs-user-detail'),
+                    ->icon('heroicon-m-user-group'),
                 NavigationGroup::make()
                     ->label('Playlist And Maps')
                     ->icon('bxs-map-pin'),
@@ -89,8 +89,7 @@ class AdminPanelProvider extends PanelProvider
             ->databaseNotifications(CustomDatabaseNotifications::class)
             ->databaseNotificationsPolling('5s')
             ->sidebarCollapsibleOnDesktop()
-            ->collapsedSidebarWidth('9rem')
-            ->sidebarWidth('17rem')
+            ->sidebarWidth('16rem')
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,

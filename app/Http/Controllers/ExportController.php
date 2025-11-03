@@ -35,12 +35,20 @@ class ExportController extends Controller
         {
             public function collection()
             {
-                return Room::select('id', 'building_id', 'name', 'latitude', 'longitude')->get();
+                return Room::with('building')->get()->map(function ($room) {
+                    return [
+                        'ID' => $room->id,
+                        'Building' => $room->building->name ?? '',
+                        'Name' => $room->name,
+                        'Latitude' => $room->latitude,
+                        'Longitude' => $room->longitude,
+                    ];
+                });
             }
 
             public function headings(): array
             {
-                return ['ID', 'Building ID', 'Name', 'Latitude', 'Longitude'];
+                return ['ID', 'Building', 'Name', 'Latitude', 'Longitude'];
             }
         }, 'rooms.xlsx');
     }
@@ -51,12 +59,21 @@ class ExportController extends Controller
         {
             public function collection()
             {
-                return Cctv::select('id', 'building_id', 'room_id', 'name', 'ip_rtsp', 'status', 'latitude', 'longitude')->get();
+                return Cctv::with(['building', 'room'])->get()->map(function ($cctv) {
+                    return [
+                        'ID' => $cctv->id,
+                        'Building' => $cctv->building->name ?? '',
+                        'Room' => $cctv->room->name ?? '',
+                        'Name' => $cctv->name,
+                        'RTSP' => $cctv->ip_rtsp,
+                        'Status' => $cctv->status,
+                    ];
+                });
             }
 
             public function headings(): array
             {
-                return ['ID', 'Building ID', 'Room ID', 'Name', 'RTSP', 'Status', 'Latitude', 'Longitude'];
+                return ['ID', 'Building', 'Room', 'Name', 'RTSP', 'Status'];
             }
         }, 'cctvs.xlsx');
     }

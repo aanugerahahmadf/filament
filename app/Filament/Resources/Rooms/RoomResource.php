@@ -2,16 +2,21 @@
 
 namespace App\Filament\Resources\Rooms;
 
-use App\Filament\Resources\Rooms\Pages\CreateRoom;
-use App\Filament\Resources\Rooms\Pages\EditRoom;
-use App\Filament\Resources\Rooms\Pages\ListRooms;
-use App\Filament\Resources\Rooms\Pages\ViewRoom;
-use App\Filament\Resources\Rooms\Schemas\RoomForm;
-use App\Filament\Resources\Rooms\Schemas\RoomInfolist;
-use App\Filament\Resources\Rooms\Tables\RoomsTable;
+use App\Filament\Resources\Rooms\Pages\ManageRooms;
 use App\Models\Room;
+use BackedEnum;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\ViewAction;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Resources\Resource;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Grid;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use UnitEnum;
 
@@ -19,7 +24,7 @@ class RoomResource extends Resource
 {
     protected static ?string $model = Room::class;
 
-    protected static ?string $recordTitleAttribute = 'name';
+     protected static ?string $recordTitleAttribute = 'name';
 
     protected static string|UnitEnum|null $navigationGroup = 'Playlist And Maps';
 
@@ -33,15 +38,97 @@ class RoomResource extends Resource
 
     public static function form(Schema $schema): Schema
     {
-        return RoomForm::configure($schema);
+        return $schema
+            ->components([
+                Select::make('building_id')
+                    ->relationship('building', 'name')
+                    ->searchable()
+                    ->preload()
+                    ->native(false)
+                    ->searchPrompt('Cari gedung...')
+                    ->required()
+                    ->live(),
+                TextInput::make('name')
+                    ->required(),
+                Grid::make()
+                    ->schema([
+                        TextInput::make('latitude')
+                            ->required(),
+                        TextInput::make('longitude')
+                            ->required(),
+                    ])
+                    ->columns(2),
+                TextInput::make('marker_icon')
+                    ->label('Marker Icon URL (opsional)')
+                    ->placeholder('https://.../icon.png')
+                    ->default('https://cdn.jsdelivr.net/gh/atisawd/boxicons/svg/solid/bxs-cctv.svg')
+                    ->helperText('Kosongkan untuk pakai ikon CCTV bulat bawaan. Jika diisi, gunakan URL ikon kustom.'),
+            ]);
     }
 
-    public static function getNavigationBadge(): ?string
+    public static function table(Table $table): Table
+    {
+        return $table
+            ->columns([
+                TextColumn::make('building.name')
+                    ->searchable(),
+                TextColumn::make('name')
+                    ->searchable(),
+                TextColumn::make('latitude')
+                    ->searchable()
+                    ->toggleable(),
+                TextColumn::make('longitude')
+                    ->searchable()
+                    ->toggleable(),
+                TextColumn::make('marker_icon')
+                    ->searchable()
+                    ->toggleable(),
+                TextColumn::make('created_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('updated_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+            ])
+            ->filters([
+                //
+            ])
+            ->recordActions([
+                ViewAction::make()
+                    ->button()
+                    ->color('info')
+                    ->size('lg'),
+                EditAction::make()
+                    ->button()
+                    ->color('warning')
+                    ->size('lg'),
+                DeleteAction::make()
+                    ->button()
+                    ->color('danger')
+                    ->size('lg'),
+            ])
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
+                ]),
+            ]);
+    }
+
+    public static function getPages(): array
+    {
+        return [
+            'index' => ManageRooms::route('/'),
+        ];
+    }
+
+        public static function getNavigationBadge(): ?string
     {
         return static::$model::count();
     }
 
-    public static function getNavigationBadgeColor(): ?string
+        public static function getNavigationBadgeColor(): ?string
     {
         return static::getModel()::count() > 10 ? 'warning' : 'primary';
     }
@@ -49,32 +136,5 @@ class RoomResource extends Resource
     public static function getNavigationBadgeTooltip(): ?string
     {
         return 'The number of rooms';
-    }
-
-    public static function infolist(Schema $schema): Schema
-    {
-        return RoomInfolist::configure($schema);
-    }
-
-    public static function table(Table $table): Table
-    {
-        return RoomsTable::configure($table);
-    }
-
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
-    }
-
-    public static function getPages(): array
-    {
-        return [
-            'index' => ListRooms::route('/'),
-            'create' => CreateRoom::route('/create'),
-            'view' => ViewRoom::route('/{record}'),
-            'edit' => EditRoom::route('/{record}/edit'),
-        ];
     }
 }

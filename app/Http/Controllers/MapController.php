@@ -7,6 +7,11 @@ use Illuminate\Http\Request;
 
 class MapController extends Controller
 {
+    public function index()
+    {
+        return view('maps');
+    }
+
     public function data(Request $request)
     {
         // Return full attributes so UI can use marker_icon/icon_url and coordinates
@@ -26,12 +31,12 @@ class MapController extends Controller
                     }
                 });
 
-                // Add coordinates to building CCTVs if not set
+                // Add coordinates to building CCTVs using building coordinates
                 $building->cctvs->each(function ($cctv) use ($building) {
-                    if (! $cctv->latitude || ! $cctv->longitude) {
-                        $cctv->latitude = $building->latitude + (rand(-50, 50) / 10000);
-                        $cctv->longitude = $building->longitude + (rand(-50, 50) / 10000);
-                    }
+                    // CCTVs don't have their own coordinates, use building coordinates
+                    // with a small random offset to separate multiple CCTVs
+                    $cctv->latitude = $building->latitude + (rand(-50, 50) / 10000);
+                    $cctv->longitude = $building->longitude + (rand(-50, 50) / 10000);
                 });
 
                 return $building;

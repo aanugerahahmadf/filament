@@ -46,7 +46,6 @@ class SearchService
     protected function searchBuildings(string $query, int $perPage): LengthAwarePaginator
     {
         return Building::where('name', 'like', "%{$query}%")
-            ->orWhere('address', 'like', "%{$query}%")
             ->orWhere('description', 'like', "%{$query}%")
             ->orWhere('contact_person', 'like', "%{$query}%")
             ->withCount(['rooms', 'cctvs'])
@@ -56,7 +55,6 @@ class SearchService
     protected function searchRooms(string $query, int $perPage): LengthAwarePaginator
     {
         return Room::where('name', 'like', "%{$query}%")
-            ->orWhere('description', 'like', "%{$query}%")
             ->with(['building'])
             ->paginate($perPage, ['*'], 'rooms_page');
     }
@@ -67,7 +65,6 @@ class SearchService
             ->orWhere('model', 'like', "%{$query}%")
             ->orWhere('serial_number', 'like', "%{$query}%")
             ->orWhere('ip_rtsp', 'like', "%{$query}%")
-            ->orWhere('description', 'like', "%{$query}%")
             ->with(['building', 'room'])
             ->paginate($perPage, ['*'], 'cctvs_page');
     }

@@ -56,9 +56,9 @@
                                             @php
                                                 $url = '#';
                                                 if($type === 'buildings') {
-                                                    $url = route('location') . '?building=' . $item->id;
+                                                    $url = route('locations') . '?building=' . $item->id;
                                                 } elseif($type === 'rooms') {
-                                                    $url = route('location') . '?building=' . $item->building_id . '&room=' . $item->id;
+                                                    $url = route('locations') . '?building=' . $item->building_id . '&room=' . $item->id;
                                                 } elseif($type === 'cctvs') {
                                                     $url = route('cctv.stream', $item->id);
                                                 } elseif($type === 'users') {
@@ -81,7 +81,7 @@
                                                         @if($type === 'buildings')
                                                             <flux:icon name="home" class="h-5 w-5 text-gray-500" />
                                                         @elseif($type === 'rooms')
-                                                            <flux:icon name="door-open" class="h-5 w-5 text-gray-500" />
+                                                            <flux:icon name="map-pin" class="h-5 w-5 text-gray-500" />
                                                         @elseif($type === 'cctvs')
                                                             <flux:icon name="camera" class="h-5 w-5 text-gray-500" />
                                                         @elseif($type === 'users')
@@ -141,7 +141,7 @@
             </div>
         @endif
     </div>
-    
+
     <!-- Mobile Search Responsive -->
     <style>
         @media (max-width: 768px) {

@@ -2,9 +2,16 @@
     <div class="w-full">
         <div class="max-w-screen-xl mx-auto px-6 py-6">
             <div class="flex items-center justify-between gap-4">
-                <h1 class="text-3xl md:text-4xl font-extrabold text-zinc-800 dark:text-white">Room</h1>
+                <h1 class="text-3xl md:text-4xl font-extrabold text-zinc-800 dark:text-white">Playlist Room</h1>
                 <div class="flex items-center gap-2">
                     <a href="/locations" class="btn btn-primary glow">Kembali ke Locations</a>
+                </div>
+            </div>
+
+            <div class="flex items-center justify-between gap-4 mt-4">
+                <div class="relative w-full max-w-md">
+                    <input id="q" class="w-full sm:w-64 md:w-72 px-3 py-2 rounded-lg bg-white/5 border-2 border-gray-300 dark:border-white/10 system:border-zinc-400 pr-10 text-gray-900 dark:text-white system:text-zinc-900 placeholder-gray-500 dark:placeholder-white/50 system:placeholder-zinc-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Search for Room..." />
+                    <i class="bx bx-search absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-white/70 system:text-zinc-700"></i>
                 </div>
             </div>
 
@@ -99,18 +106,44 @@
         function renderRooms(building){
             const wrap = document.getElementById('rooms');
             wrap.innerHTML = '';
-            (building.rooms||[]).forEach(r => {
+
+            // Get search term if exists
+            const searchTerm = document.getElementById('q')?.value.toLowerCase() || '';
+
+            // Filter rooms based on search term
+            const roomsToDisplay = searchTerm
+                ? (building.rooms || []).filter(r => r.name.toLowerCase().includes(searchTerm))
+                : building.rooms || [];
+
+            roomsToDisplay.forEach(r => {
                 const card = el(`<div class="rounded-xl p-4 bg-white/5 border border-white/10 card-3d">
                     <div class="font-semibold text-zinc-800 dark:text-white system:text-zinc-900">${r.name}</div>
-                    <div class="text-zinc-600 dark:text-zinc-300 system:text-zinc-700 text-sm mt-1">CCTVs: ${(r.cctvs||[]).length}</div>
+                    <div class="text-zinc-600 dark:text-zinc-300 system:text-zinc-700 text-sm mt-1">CCTV : ${(r.cctvs||[]).length}</div>
                     <div class="mt-3">
-                        <a href="/cctv?building=${building.id}&room=${r.id}" class="block w-full px-4 py-3 rounded-lg bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white text-sm font-semibold tracking-wide text-center shadow-lg hover:shadow-purple-500/25 transition-all duration-300 border border-purple-400/50">Buka CCTV</a>
+                        <a href="/cctv-list?building=${building.id}&room=${r.id}" class="block w-full px-4 py-3 rounded-lg bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white text-sm font-semibold tracking-wide text-center shadow-lg hover:shadow-purple-500/25 transition-all duration-300 border border-purple-400/50">Buka CCTV</a>
                     </div>
                 </div>`);
                 wrap.appendChild(card);
             });
             if (!wrap.children.length){ wrap.innerHTML = '<div class="text-zinc-600 dark:text-zinc-300 system:text-zinc-700">Belum ada Room.</div>'; }
         }
+
+        // Add search functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('q');
+            if (searchInput) {
+                searchInput.addEventListener('input', function(e) {
+                    const params = new URLSearchParams(location.search);
+                    buildingId = parseInt(params.get('building')) || null;
+                    if (buildingId) {
+                        const building = (DATA.buildings||[]).find(b => b.id === buildingId);
+                        if (building) {
+                            renderRooms(building);
+                        }
+                    }
+                });
+            }
+        });
 
         load();
     </script>
