@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Rooms;
 
 use App\Filament\Resources\Rooms\Pages\ManageRooms;
 use App\Models\Room;
+use App\Models\Building;
 use BackedEnum;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
@@ -41,11 +42,12 @@ class RoomResource extends Resource
         return $schema
             ->components([
                 Select::make('building_id')
-                    ->relationship('building', 'name')
+                    ->label('Building')
+                    ->options(Building::pluck('name', 'id')->unique())
                     ->searchable()
                     ->preload()
                     ->native(false)
-                    ->searchPrompt('Cari gedung...')
+                    ->searchPrompt('Search Building...')
                     ->required()
                     ->live(),
                 TextInput::make('name')

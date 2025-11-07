@@ -96,12 +96,12 @@ class ContactResource extends Resource
         ];
     }
 
-        public static function getNavigationBadge(): ?string
+    public static function getNavigationBadge(): ?string
     {
         return static::$model::count();
     }
 
-        public static function getNavigationBadgeColor(): ?string
+    public static function getNavigationBadgeColor(): ?string
     {
         return static::getModel()::count() > 10 ? 'warning' : 'primary';
     }

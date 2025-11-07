@@ -4,6 +4,8 @@ namespace App\Filament\Resources\Cctvs;
 
 use App\Filament\Resources\Cctvs\Pages\ManageCctvs;
 use App\Models\Cctv;
+use App\Models\Building;
+use App\Models\Room;
 use BackedEnum;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Select;
@@ -41,7 +43,8 @@ class CctvResource extends Resource
         return $schema
             ->components([
                 Select::make('building_id')
-                    ->relationship('building', 'name')
+                    ->label('Building')
+                    ->options(Building::pluck('name', 'id')->unique())
                     ->searchable()
                     ->preload()
                     ->native(false)
@@ -49,7 +52,8 @@ class CctvResource extends Resource
                     ->required()
                     ->live(),
                 Select::make('room_id')
-                    ->relationship('room', 'name')
+                    ->label('Room')
+                    ->options(Room::pluck('name', 'id')->unique())
                     ->searchable()
                     ->preload()
                     ->native(false)
@@ -177,12 +181,12 @@ class CctvResource extends Resource
         ];
     }
 
-        public static function getNavigationBadge(): ?string
+    public static function getNavigationBadge(): ?string
     {
         return static::$model::count();
     }
 
-        public static function getNavigationBadgeColor(): ?string
+    public static function getNavigationBadgeColor(): ?string
     {
         return static::getModel()::count() > 10 ? 'warning' : 'primary';
     }
