@@ -22,7 +22,7 @@
 
             <!-- Footer -->
             <footer class="py-3 text-center text-xs text-zinc-500 dark:text-white/60 w-full border-t border-zinc-200 dark:border-zinc-700">
-                © {{ date('Y') }} PT. Kilang Pertamina Internasional - Refinery Unit VI Balongan
+                © {{ date('Y') }} PT Kilang Pertamina Internasional - Refinery Unit VI Balongan
             </footer>
         </div>
 

@@ -1,14 +1,42 @@
 import Echo from 'laravel-echo';
 
+// Use Pusher configuration as default since it's already set up
 window.Echo = new Echo({
-	broadcaster: 'reverb',
-	key: import.meta.env.VITE_REVERB_APP_KEY,
-	wsHost: import.meta.env.VITE_REVERB_HOST,
-	wsPort: import.meta.env.VITE_REVERB_PORT ?? 80,
-	wssPort: import.meta.env.VITE_REVERB_PORT ?? 443,
-	forceTLS: (import.meta.env.VITE_REVERB_SCHEME ?? 'https') === 'https',
-	enabledTransports: ['ws', 'wss'],
+    broadcaster: 'pusher',
+    key: import.meta.env.VITE_PUSHER_APP_KEY,
+    cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
+    wsHost: import.meta.env.VITE_PUSHER_HOST,
+    wsPort: import.meta.env.VITE_PUSHER_PORT ?? 80,
+    wssPort: import.meta.env.VITE_PUSHER_PORT ?? 443,
+    forceTLS: (import.meta.env.VITE_PUSHER_SCHEME ?? 'https') === 'https',
+    enabledTransports: ['ws', 'wss'],
 });
+
+// Global interceptor for authentication errors
+window.addEventListener('fetch', function(event) {
+	// This is for demonstration only - actual fetch interception requires a service worker
+});
+
+// Add global error handling for fetch requests
+const originalFetch = window.fetch;
+window.fetch = function(input, init = {}) {
+	// Add credentials to all fetch requests
+	if (!init.credentials) {
+		init.credentials = 'include';
+	}
+
+	return originalFetch(input, init).then(response => {
+		// Handle 401 Unauthorized responses globally
+		if (response.status === 401) {
+			// Redirect to login page
+			window.location.href = '/login';
+		}
+		return response;
+	}).catch(error => {
+		console.error('Fetch error:', error);
+		throw error;
+	});
+};
 
 // CCTV status updates (support both channel/event variants)
 try {
@@ -154,15 +182,15 @@ function ensureUiUnreadBadge() {
         badge.style.cursor = 'pointer';
         badge.style.transition = 'all 0.2s ease';
         badge.innerHTML = `<i class="bx bxs-bell" style="font-size:16px"></i><span id="ui-unread-count">0</span>`;
-        
+
         // Initially hide badge (only show when there are notifications)
         badge.style.display = 'none';
-        
-        // Hide on mobile (< 768px) 
+
+        // Hide on mobile (< 768px)
         const handleBadgeResize = () => {
             const badgeElement = document.getElementById('ui-unread-badge');
             if (!badgeElement) return;
-            
+
             if (window.innerWidth < 768) {
                 badgeElement.style.display = 'none';
             } else {
@@ -173,22 +201,22 @@ function ensureUiUnreadBadge() {
                 }
             }
         };
-        
+
         // Check on load and on resize
         handleBadgeResize();
         window.addEventListener('resize', handleBadgeResize);
-        
+
         // Add hover effect
         badge.addEventListener('mouseenter', () => {
             badge.style.transform = 'scale(1.05)';
             badge.style.boxShadow = '0 12px 30px rgba(34, 197, 94, 0.4)';
         });
-        
+
         badge.addEventListener('mouseleave', () => {
             badge.style.transform = 'scale(1)';
             badge.style.boxShadow = '0 10px 25px rgba(0,0,0,0.35)';
         });
-        
+
         document.body.appendChild(badge);
     }
     return badge;
@@ -270,7 +298,7 @@ function ensureMuteButton() {
         btn.style.backdropFilter = 'blur(6px)';
         btn.style.cursor = 'pointer';
         btn.style.transition = 'all 0.2s ease';
-        
+
         // Hide on mobile (< 768px)
         const handleResize = () => {
             if (window.innerWidth < 768) {
@@ -279,22 +307,22 @@ function ensureMuteButton() {
                 btn.style.display = 'flex';
             }
         };
-        
+
         // Check on load and on resize
         handleResize();
         window.addEventListener('resize', handleResize);
-        
+
         // Add hover effect
         btn.addEventListener('mouseenter', () => {
             btn.style.transform = 'scale(1.05)';
             btn.style.boxShadow = '0 12px 30px rgba(107, 114, 128, 0.4)';
         });
-        
+
         btn.addEventListener('mouseleave', () => {
             btn.style.transform = 'scale(1)';
             btn.style.boxShadow = '0 10px 25px rgba(0,0,0,0.35)';
         });
-        
+
         document.body.appendChild(btn);
         btn.addEventListener('click', () => {
             const muted = !getMuteState();

@@ -2,9 +2,16 @@
     <div class="w-full">
         <div class="max-w-screen-xl mx-auto px-6 py-6">
             <div class="flex items-center justify-between gap-4">
-                <h1 class="text-3xl md:text-4xl font-extrabold text-zinc-800 dark:text-white system:text-zinc-900">CCTV</h1>
+                <h1 class="text-3xl md:text-4xl font-extrabold text-zinc-800 dark:text-white system:text-zinc-900">Playlist CCTV</h1>
                 <div class="flex items-center gap-2">
                     <a id="back-rooms" href="#" class="btn btn-primary glow">Kembali ke Rooms</a>
+                </div>
+            </div>
+
+            <div class="flex items-center justify-between gap-4 mt-4">
+                <div class="relative w-full max-w-md">
+                    <input id="q" class="w-full sm:w-64 md:w-72 px-3 py-2 rounded-lg bg-white/5 border-2 border-gray-300 dark:border-white/10 system:border-zinc-400 pr-10 text-gray-900 dark:text-white system:text-zinc-900 placeholder-gray-500 dark:placeholder-white/50 system:placeholder-zinc-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Search for Cctv..." />
+                    <i class="bx bx-search absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-white/70 system:text-zinc-700"></i>
                 </div>
             </div>
 
@@ -103,7 +110,16 @@
         function renderCctvs(room){
             const wrap = document.getElementById('cctvs');
             wrap.innerHTML = '';
-            (room.cctvs||[]).forEach(c => {
+
+            // Get search term if exists
+            const searchTerm = document.getElementById('q')?.value.toLowerCase() || '';
+
+            // Filter CCTVs based on search term
+            const cctvsToDisplay = searchTerm
+                ? (room.cctvs || []).filter(c => (c.name || 'CCTV').toLowerCase().includes(searchTerm))
+                : room.cctvs || [];
+
+            cctvsToDisplay.forEach(c => {
                 const card = el(`<div class="rounded-xl p-4 bg-white/5 border border-white/10 card-3d">
                     <div class="font-semibold text-zinc-800 dark:text-white system:text-zinc-900">${c.name||'CCTV'}</div>
                     <div class="text-zinc-600 dark:text-zinc-300 system:text-zinc-700 text-sm mt-1">Status: ${c.status||'-'}</div>
@@ -116,13 +132,32 @@
             if (!wrap.children.length){ wrap.innerHTML = '<div class="text-zinc-600 dark:text-zinc-300 system:text-zinc-700">Belum ada CCTV.</div>'; }
         }
 
+        // Add search functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('q');
+            if (searchInput) {
+                searchInput.addEventListener('input', function(e) {
+                    const params = new URLSearchParams(location.search);
+                    buildingId = parseInt(params.get('building')) || null;
+                    roomId = parseInt(params.get('room')) || null;
+                    if (buildingId && roomId) {
+                        const building = (DATA.buildings||[]).find(b => b.id === buildingId);
+                        const room = building?.rooms?.find(r => r.id === roomId);
+                        if (room) {
+                            renderCctvs(room);
+                        }
+                    }
+                });
+            }
+        });
+
         document.addEventListener('click', async (e)=>{
             const live = e.target.closest('[data-live]');
             if (live){
                 e.preventDefault();
                 const id = parseInt(live.getAttribute('data-live'));
 
-                // Redirect to the new dedicated stream page
+                // Redirect to the new dedicated stream page using named route
                 window.location.href = `/cctv/stream/${id}`;
 
                 return false;

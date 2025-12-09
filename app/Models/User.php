@@ -13,12 +13,13 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Laravel\Fortify\TwoFactorAuthenticatable;
+use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, HasRoles, Notifiable, TwoFactorAuthenticatable;
+    use HasApiTokens, HasFactory, HasRoles, Notifiable, TwoFactorAuthenticatable;
 
     /**
      * The attributes that are mass assignable.
@@ -152,6 +153,39 @@ class User extends Authenticatable
     public function unreadNotifications()
     {
         return $this->notifications()->whereNull('read_at');
+    }
+
+    /**
+     * Get messages sent by the user
+     */
+    public function sentMessages(): HasMany
+    {
+        return $this->hasMany(Message::class, 'from_user_id');
+    }
+
+    /**
+     * Get messages received by the user
+     */
+    public function receivedMessages(): HasMany
+    {
+        return $this->hasMany(Message::class, 'to_user_id');
+    }
+
+    /**
+     * Get all messages (sent and received) for the user
+     */
+    public function messages(): HasMany
+    {
+        return $this->hasMany(Message::class, 'from_user_id')
+            ->orWhere('to_user_id', $this->id);
+    }
+
+    /**
+     * Get unread messages for the user
+     */
+    public function unreadMessages()
+    {
+        return $this->receivedMessages()->whereNull('read_at');
     }
 
     /**

@@ -28,16 +28,22 @@ class Cctv extends Model
         'port',
         'connection_type',
         'status',
-        'recording',
         'last_seen_at',
         'stream_username',
         'stream_password',
+        'description',
+        'model',
+        'serial_number',
+        'firmware_version',
+        'resolution',
+        'fps',
+        'recording_schedule',
     ];
 
     protected $casts = [
         'last_seen_at' => 'datetime',
-        'recording' => 'boolean',
         'port' => 'integer',
+        'fps' => 'integer',
     ];
 
     public function building(): BelongsTo
@@ -105,14 +111,6 @@ class Cctv extends Model
     public function scopeMaintenance($query)
     {
         return $query->where('status', self::STATUS_MAINTENANCE);
-    }
-
-    /**
-     * Scope a query to only include recording CCTVs.
-     */
-    public function scopeRecording($query)
-    {
-        return $query->where('recording', true);
     }
 
     /**
